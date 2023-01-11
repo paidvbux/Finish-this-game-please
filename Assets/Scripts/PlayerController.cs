@@ -43,11 +43,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     void LateUpdate()
     {
-        UpdateMouseLook();
         UpdateMovement();
+        UpdateMouseLook();
     }
 
     void UpdateMouseLook()
