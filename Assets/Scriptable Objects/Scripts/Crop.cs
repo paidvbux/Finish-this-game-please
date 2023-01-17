@@ -5,12 +5,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Crop", menuName = "Scriptable Objects/Crop")]
 public class Crop : ScriptableObject
 {
+    [Header("General Settings")]
     public string name;
 
+    [Header("Display Settings")]
+    public GameObject grabbableCropObject;
     public GameObject cropObject;
-    public CropItem cropItem;
 
+    [Header("Harvest Settings")]
     public float cropGrowTime = 30.0f;
-    public Vector2 cropDimensions = new Vector2 (3, 3);
-    public Vector2 cropMargins = new Vector2 (0.1f, 0.1f);
+    public int minHarvestCount;
+    public int maxHarvestCount;
+
+    [Header("Storage Settings")]
+    public float mass;
+    public int maxCrateStorage;
 }

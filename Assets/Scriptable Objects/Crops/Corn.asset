@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: Corn
   m_EditorClassIdentifier: 
   name: Corn
+  grabbableCropObject: {fileID: 2674817404406123266, guid: b9b0be6c456802d42b91783b612faedc, type: 3}
   cropObject: {fileID: 7039810372250389003, guid: 256c7a36ffe6a94409a948681e388ee2, type: 3}
-  cropItem: {fileID: 11400000, guid: 4acca7cebad8aa84aac94791db2da5da, type: 2}
-  cropGrowTime: 30
-  cropDimensions: {x: 5, y: 5}
-  cropMargins: {x: 0.25, y: 0.25}
+  cropGrowTime: 5
+  minHarvestCount: 4
+  maxHarvestCount: 6
+  mass: 1
+  maxCrateStorage: 15
