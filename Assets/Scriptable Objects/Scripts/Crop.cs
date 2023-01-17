@@ -3,21 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Crop", menuName = "Scriptable Objects/Crop")]
-public class Crop : ScriptableObject
+public class Crop : Item
 {
-    [Header("General Settings")]
-    public string name;
-
-    [Header("Display Settings")]
-    public GameObject grabbableCropObject;
-    public GameObject cropObject;
-
-    [Header("Harvest Settings")]
+    [Header("Crop Settings")]
     public float cropGrowTime = 30.0f;
-    public int minHarvestCount;
-    public int maxHarvestCount;
-
-    [Header("Storage Settings")]
-    public float mass;
-    public int maxCrateStorage;
 }

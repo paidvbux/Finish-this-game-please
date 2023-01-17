@@ -405,7 +405,7 @@ MonoBehaviour:
     outlineMode: 1
     color: {r: 1, g: 1, b: 1, a: 1}
     outlineWidth: 5
-  storedCrop: {fileID: 0}
+  storedItem: {fileID: 0}
   storedAmount: 0
 --- !u!54 &425101490
 Rigidbody:
@@ -979,10 +979,11 @@ GameObject:
   - component: {fileID: 566316188}
   - component: {fileID: 566316187}
   - component: {fileID: 566316186}
+  - component: {fileID: 566316190}
   - component: {fileID: 566316185}
   - component: {fileID: 566316183}
   - component: {fileID: 566316189}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sell Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1328,6 +1329,19 @@ MonoBehaviour:
   - Crate
   - Dropped Item
   storeObjects: 1
+--- !u!65 &566316190
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566316181}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 0.1, z: 1}
+  m_Center: {x: 0, y: 0.05, z: 0}
 --- !u!1 &644881668
 GameObject:
   m_ObjectHideFlags: 0
@@ -3838,7 +3852,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-22064080
+  m_Name: pb_Mesh27752
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4002,7 +4016,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-1990398
+  m_Name: pb_Mesh27720
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4330,7 +4344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 51
   maxReach: 5
 --- !u!114 &1070787856
 MonoBehaviour:
@@ -4347,7 +4361,7 @@ MonoBehaviour:
   maxGrabDistance: 5
   grabbableLayers:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 51
   speed: 5
 --- !u!43 &1196775288
 Mesh:
@@ -5347,7 +5361,7 @@ GameObject:
   - component: {fileID: 1351937446}
   - component: {fileID: 1351937447}
   - component: {fileID: 1351937448}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Interact Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5427,6 +5441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cfb3ca1c5c15104f833d79d401ad308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coins: 0
 --- !u!4 &1505093918
 Transform:
   m_ObjectHideFlags: 0
@@ -5451,6 +5466,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1552514517}
+  - component: {fileID: 1552514518}
   m_Layer: 0
   m_Name: Sell Station
   m_TagString: Untagged
@@ -5476,6 +5492,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1552514518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552514516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6da649e056e29794d9198abc74ac13b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stationType: 0
+  playerInteractTrigger: {fileID: 1351937448}
+  inputTrigger: {fileID: 566316189}
+  crates: []
+  droppedItems: []
 --- !u!1 &1687258581
 GameObject:
   m_ObjectHideFlags: 0

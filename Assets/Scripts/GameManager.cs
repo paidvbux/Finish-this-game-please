@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
 
     public static List<CropScript> crops;
 
+    [Header("Important Player Variables")]
+    public int coins;
+
     void Awake()
     {
         singleton = this;

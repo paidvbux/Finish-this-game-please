@@ -9,17 +9,29 @@ public class TriggerScript : MonoBehaviour
 
     [Header("Object Storage Settings")]
     public bool storeObjects;
-    public Dictionary<string, GameObject> storedObjects;
+    public Dictionary<GameObject, string> storedObjects;
+
+    int numObjectsInTrigger;
+
+    void Awake()
+    {
+        storedObjects = new Dictionary<GameObject, string>();
+    }
+
+    void Update()
+    {
+        inTrigger = numObjectsInTrigger > 0;
+    }
 
     void OnTriggerEnter(Collider other)
     {
         foreach (string tagToCheck in tagsToCheck) 
         { 
-            if (other.gameObject.CompareTag(tagToCheck))
+            if (other.gameObject.CompareTag(tagToCheck) && !other.isTrigger)
             {
                 if (storeObjects)
-                    storedObjects.Add(other.tag, other.gameObject);
-                inTrigger = true;
+                    storedObjects.Add(other.gameObject, other.tag);
+                numObjectsInTrigger++;
             }
         }
     }
@@ -31,8 +43,8 @@ public class TriggerScript : MonoBehaviour
             if (other.gameObject.CompareTag(tagToCheck))
             {
                 if (storeObjects)
-                    storedObjects.Remove(other.tag);
-                inTrigger = false;
+                    storedObjects.Remove(other.gameObject);
+                numObjectsInTrigger--;
             }
         }
     }

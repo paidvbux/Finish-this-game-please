@@ -378,4 +378,5 @@ MonoBehaviour:
     outlineMode: 1
     color: {r: 1, g: 1, b: 1, a: 1}
     outlineWidth: 5
+  item: {fileID: 11400000, guid: cd3b1fbb746acf3479d4886643c6e15e, type: 2}
   crop: {fileID: 11400000, guid: cd3b1fbb746acf3479d4886643c6e15e, type: 2}
