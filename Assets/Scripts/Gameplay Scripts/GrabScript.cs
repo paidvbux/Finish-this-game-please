@@ -11,16 +11,20 @@ public class GrabScript : MonoBehaviour
     #region General Settings
     [Header("General Settings")]
     [SerializeField] LayerMask grabbableLayers;
-
     [SerializeField] float speed = 5f;
+
+    [SerializeField] float rotationLerpTime;
     #endregion
 
     #region Hidden/Private Variables
     int storedLayerIndex;
     float desiredDistanceFromPlayer;
     Vector3 desiredObjectPosition;
-
+    
     Rigidbody heldRigidbody;
+    bool lerpingRotation;
+
+    Vector3 rotationVelocity = Vector3.zero;
     #endregion
 
     /*******************************************************************/
@@ -50,6 +54,8 @@ public class GrabScript : MonoBehaviour
             //  Return early if they do decide to drop the object.
             if (!holdingObject) return;
 
+            //  Check if player wants to rotate the object.
+            RotateTowardsPlayer();
 
            /*
             * Calculate the position that 
@@ -137,6 +143,18 @@ public class GrabScript : MonoBehaviour
 
         //  Multiplies by mass so heavy objects do not slow down too much
         heldRigidbody.AddForce((desiredObjectPosition - heldRigidbody.transform.position) * speed * heldRigidbody.mass);
+    }
+
+    void RotateTowardsPlayer()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse2))
+            heldRigidbody.transform.forward = new Vector3(transform.position.x - heldRigidbody.transform.position.x,
+                heldRigidbody.transform.position.y, transform.position.z - heldRigidbody.transform.position.z);
+    }
+
+    void Rotate()
+    {
+
     }
     #endregion
 }
