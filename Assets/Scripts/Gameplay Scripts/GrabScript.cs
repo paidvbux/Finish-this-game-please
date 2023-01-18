@@ -13,7 +13,7 @@ public class GrabScript : MonoBehaviour
     [SerializeField] LayerMask grabbableLayers;
     [SerializeField] float speed = 5f;
 
-    [SerializeField] float rotationLerpTime;
+    [SerializeField] float rotationLerpSpeed;
     #endregion
 
     #region Hidden/Private Variables
@@ -22,6 +22,8 @@ public class GrabScript : MonoBehaviour
     Vector3 desiredObjectPosition;
     
     Rigidbody heldRigidbody;
+
+    Quaternion toRotation;
     bool lerpingRotation;
 
     Vector3 rotationVelocity = Vector3.zero;
@@ -145,14 +147,26 @@ public class GrabScript : MonoBehaviour
         heldRigidbody.AddForce((desiredObjectPosition - heldRigidbody.transform.position) * speed * heldRigidbody.mass);
     }
 
+   /*
+    *   Rotates the object so that
+    *   it is facing the player.
+    */
     void RotateTowardsPlayer()
     {
+        if (lerpingRotation)
+        {
+            heldRigidbody.rotation = Quaternion.Lerp(heldRigidbody.rotation, toRotation, rotationLerpSpeed * Time.deltaTime * 100);
+
+        }
         if (Input.GetKeyDown(KeyCode.Mouse2))
-            heldRigidbody.transform.forward = new Vector3(transform.position.x - heldRigidbody.transform.position.x,
-                heldRigidbody.transform.position.y, transform.position.z - heldRigidbody.transform.position.z);
+        {
+            Vector3 dir = new Vector3(transform.position.x, 2 * heldRigidbody.position.y, transform.position.z) - heldRigidbody.position;
+            toRotation = Quaternion.FromToRotation(heldRigidbody.position, dir);
+            lerpingRotation = true;
+        }
     }
 
-    void Rotate()
+    public void Rotate(Vector2 currentMouseDelta, float cameraPitch)
     {
 
     }

@@ -12,11 +12,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float mouseSensitivity = 1.0f;
     [SerializeField] bool lockCursor = true;
 
-    Vector2 currentMouseDelta = Vector2.zero;
-    Vector2 currentMouseDeltaVelocity = Vector2.zero;
-    
-    float cameraPitch = 0.0f;
-
     #endregion
 
     #region Movement Variables/Settings
@@ -30,7 +25,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField][Range(30.0f, 150f)] float walkFOV = 60f;
     [SerializeField][Range(60.0f, 180f)] float runFOV = 90f;
     [SerializeField][Range(0.0f, 1f)] float lerpSpeed = 0.1f;
+    #endregion
+
+    #region Hidden/Private Variables
+    GrabScript grabScript => GetComponent<GrabScript>();
     Rigidbody rigidBody => GetComponent<Rigidbody>();
+
+    Vector2 currentMouseDelta = Vector2.zero;
+    Vector2 currentMouseDeltaVelocity = Vector2.zero;
+    
+    float cameraPitch = 0.0f;
+
+    /*-----------------------------------------------------------------*/
+
     float velocityY = 0.0f;
 
     Vector2 currentDir = Vector2.zero;
@@ -78,6 +85,12 @@ public class PlayerController : MonoBehaviour
         //  Changes the camera pitch by how much the mouse moves up and down. Clamps it to straight up and straight down.
         cameraPitch -= currentMouseDelta.y * mouseSensitivity;
         cameraPitch = Mathf.Clamp(cameraPitch, -90.0f, 90.0f);
+
+        //  Check if the player is trying to rotate the object they are holding
+        if (GrabScript.holdingObject && Input.GetKey(KeyCode.Mouse0))
+        {
+
+        }
 
         //  Updates the calculated camera rotation.
         playerCamera.localEulerAngles = Vector3.right * cameraPitch;
