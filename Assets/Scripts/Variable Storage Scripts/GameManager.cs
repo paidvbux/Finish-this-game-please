@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager singleton;
-
+    #region Classes
     [System.Serializable]
     public class OutlineParams
     {
@@ -13,12 +12,19 @@ public class GameManager : MonoBehaviour
         public Color color = Color.white;
         [Range(0, 10)] public float outlineWidth = 5;
     }
+    #endregion
 
+    #region Static Variables
+    public static GameManager singleton;
+    public static Transform Player => GameManager.singleton.player;
     public static List<CropScript> crops;
-    public Shader litShader;
+    #endregion
 
+    #region Other Variables
     [Header("Important Player Variables")]
+    public Transform player;
     public int coins;
+    #endregion
 
     void Awake()
     {

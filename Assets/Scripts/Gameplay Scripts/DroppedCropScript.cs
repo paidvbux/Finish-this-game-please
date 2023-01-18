@@ -4,25 +4,42 @@ using UnityEngine;
 
 public class DroppedCropScript : DroppedItemScript
 {
+    #region Crop Variables/Settings
     [Header("Crop Settings")]
     public Crop crop;
+    #endregion
 
-    // Start is called before the first frame update
+    /*******************************************************************/
+
+    #region Unity Runtime Functions
     void Start()
     {
+        //  Sets the mass of the object
         rigidBody.mass = crop.mass;
+
+        //  Sets the tag to "Dropped Item" to prevent any bugs
         gameObject.tag = "Dropped Item";
+
+        //  Runs the derived initialization
         Initialize();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        //  Runs the highlight function from its derived class
         CheckForHighlight();
     }
 
     void OnTriggerEnter(Collider other)
     {
+        /*
+         *  Checks if the trigger it enters has
+         *  enough space, the same item type as
+         *  this, and if it is a crate.
+         *  If it meets the conditions above, it
+         *  will add itself to said crate.
+         */
         AddToCrate(other);
     }
+    #endregion
 }

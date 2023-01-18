@@ -27,8 +27,10 @@ public class TriggerScript : MonoBehaviour
     {
         foreach (string tagToCheck in tagsToCheck) 
         { 
-            if (other.gameObject.CompareTag(tagToCheck) && !other.isTrigger)
+            if (other.gameObject.CompareTag(tagToCheck))
             {
+                if (tagToCheck == "Crate" && storedObjects.ContainsKey(other.gameObject))
+                    continue;
                 if (storeObjects)
                     storedObjects.Add(other.gameObject, other.tag);
                 numObjectsInTrigger++;
@@ -42,6 +44,8 @@ public class TriggerScript : MonoBehaviour
         {
             if (other.gameObject.CompareTag(tagToCheck))
             {
+                if (tagToCheck == "Crate" && !storedObjects.ContainsKey(other.gameObject))
+                    continue;
                 if (storeObjects)
                     storedObjects.Remove(other.gameObject);
                 numObjectsInTrigger--;

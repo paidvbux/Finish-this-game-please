@@ -4,25 +4,41 @@ using UnityEngine;
 
 public class UIToQuadScript : MonoBehaviour
 {
-    public Camera screenshotCamera;
+    [Header("General Settings")]
+    public GameObject cameraPrefab;
+    public GameObject uiElement;
+
+    [Header("Dimensions")]
     public int width = 1080;
     public int height = 1080;
 
     MeshRenderer meshRenderer => GetComponent<MeshRenderer>();
+    Camera screenshotCamera;
 
     void Start()
     {
-        UpdateTexture();    
+        meshRenderer.material.color = Color.white;
+        UpdateTexture("Other/Empty");
     }
 
-    public void UpdateTexture()
+    public void UpdateTexture(string filename)
     {
-        Texture2D tex = TakeScreenshot("UI Images\\");
+        uiElement.SetActive(true);
+        screenshotCamera = Instantiate(cameraPrefab, transform.forward * -2 + transform.position, Quaternion.identity).GetComponent<Camera>();
+        screenshotCamera.transform.forward = transform.position - screenshotCamera.transform.position;
+
+        Texture2D tex = TakeScreenshot("UI Images/" + filename);
         meshRenderer.material.mainTexture = tex;
+
+        Destroy(screenshotCamera.gameObject);
+        uiElement.SetActive(false);
     }
 
     public Texture2D TakeScreenshot(string pathToResource)
     {
+        Texture2D tex = Resources.Load(pathToResource) as Texture2D;
+        if (tex != null) return tex;
+
         RenderTexture rt = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32);
         screenshotCamera.targetTexture = rt;
         Texture2D screenShot = new Texture2D(width, height, TextureFormat.ARGB32, false);
@@ -35,12 +51,10 @@ public class UIToQuadScript : MonoBehaviour
         RenderTexture.active = null;
 
         byte[] bytes = screenShot.EncodeToPNG();
-        string filename = "Assets\\Resources\\" + pathToResource + "test.png";
+        string filename = "Assets/Resources/" + pathToResource + ".png";
         System.IO.File.WriteAllBytes(filename, bytes);
 
-        Texture2D tex = Resources.Load(pathToResource + "test.png") as Texture2D;
-
-        print(Resources.Load(pathToResource + "test.png"));
+        tex = Resources.Load(pathToResource) as Texture2D;
 
         Destroy(rt);
         return tex;
