@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CropScript : MonoBehaviour
 {
-    #region General/Other Variables/Settings
+    #region General Variables/Settings
     [SerializeField] GameManager.OutlineParams outlineParameters;
     #endregion
 

@@ -19,6 +19,11 @@ public class UpdateUIInfo : MonoBehaviour
         [HideInInspector] public Sprite oldSprite;
         [HideInInspector] public Color oldColor;
 
+       /*
+        *   Checks if the value of the variable 
+        *   has changed, if so change it and set
+        *   the old one to the new one.
+        */
         public void UpdateChanges()
         {
             if (oldSprite != sprite)
@@ -52,6 +57,11 @@ public class UpdateUIInfo : MonoBehaviour
         [HideInInspector] public Color oldColor;
         [HideInInspector] public string oldInfo;
 
+       /*
+        *   Checks if the value of the variable 
+        *   has changed, if so change it and set
+        *   the old one to the new one.
+        */
         public void UpdateChanges()
         {
             if (oldColor != color)
@@ -74,11 +84,20 @@ public class UpdateUIInfo : MonoBehaviour
     }
     #endregion
 
+    #region General Variables/Settings
+    [Header("General Settings")]
     public ImageInfo[] imagesToUpdate;
     public TMPInfo[] textToUpdate;
 
     public UIToQuadScript quadDisplay;
+    #endregion
 
+    /*******************************************************************/
+
+    #region Custom Functions
+   /*  
+    *   Updates all UI elements. 
+    */
     public void UpdateUIElements()
     {
         foreach (ImageInfo imageInfo in imagesToUpdate)
@@ -91,4 +110,5 @@ public class UpdateUIInfo : MonoBehaviour
             textInfo.UpdateChanges();
         }
     }
+    #endregion
 }

@@ -26,19 +26,37 @@ public class GameManager : MonoBehaviour
     public int coins;
     #endregion
 
+    /*******************************************************************/
+
+    #region Unity Runtime Functions
     void Awake()
     {
+        //  Sets the singleton to this.
         singleton = this;
+
+        //  Initializes the list of crops.
         crops = new List<CropScript>();
     }
+    #endregion
 
+    #region Custom Functions
+   /*
+    *   Adds an outline to the specified object.
+    *   The outlines settings can be tweaked from
+    *   when it is called.
+    */
     public static Outline AddOutline(GameObject obj, OutlineParams outlineParams)
     {
+        //  Adds the component.
         Outline outline = obj.AddComponent<Outline>();
+
+        //  Changes the settings of the outline.
         outline.OutlineMode = outlineParams.outlineMode;
         outline.OutlineColor = outlineParams.color;
         outline.OutlineWidth = outlineParams.outlineWidth;
+
+        //  Returns the component.
         return outline;
     }
-
+    #endregion
 }

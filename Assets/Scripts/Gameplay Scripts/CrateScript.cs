@@ -62,7 +62,6 @@ public class CrateScript : GrabbableObjectScript
     }
     #endregion
 
-
     #region Custom Functions
    /*
     *   Empties the crate so that the player can replace the 
@@ -95,8 +94,11 @@ public class CrateScript : GrabbableObjectScript
             //  Resets some values to prevent bugs.
             storedItem = null;
             storedAmount = 0;
-            
+
             //  Resets the crate's display to be empty.
+            nameInfo.ChangeValue(Color.white, "Empty");
+            countInfo.ChangeValue(Color.white, "- / -");
+            uiInfo.UpdateUIElements();
             uiInfo.quadDisplay.UpdateTexture("Other/Empty");
         }
     }
@@ -120,7 +122,7 @@ public class CrateScript : GrabbableObjectScript
         if (storedItem == null)
         {
             storedItem = item;
-            nameInfo.text.text = storedItem.name;
+            nameInfo.ChangeValue(nameInfo.color, storedItem.name);
             storedAmount = 0;
         }
 
@@ -129,7 +131,8 @@ public class CrateScript : GrabbableObjectScript
         storedAmount++;
 
         //  Updates the number of items stored.
-        countInfo.text.text = storedAmount + " / " + storedItem.maxCrateStorage;
+        countInfo.ChangeValue(isFull() ? Color.red : Color.white, storedAmount + " / " + storedItem.maxCrateStorage);
+        uiInfo.UpdateUIElements();
         uiInfo.quadDisplay.UpdateTexture(storedItem.name + "/" + storedItem.name + " " + storedAmount.ToString());
     }
 
