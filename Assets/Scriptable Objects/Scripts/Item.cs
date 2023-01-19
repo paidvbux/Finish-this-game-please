@@ -7,7 +7,7 @@ public class Item : ScriptableObject
 {
     #region General Variables/Settings
     [Header("General Settings")]
-    public string name;
+    public string itemName;
     #endregion
 
     #region Display Variables/Settings

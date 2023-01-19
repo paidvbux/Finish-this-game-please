@@ -19,8 +19,10 @@ public class GrabbableObjectScript : MonoBehaviour
     #region Unity Runtime Functions
     void Awake()
     {
+        #region Initialization
         //  Changes the tag to "Grabbable" to prevent bugs.
         gameObject.tag = "Grabbable";
+        #endregion
     }
 
     void Update()
@@ -42,18 +44,22 @@ public class GrabbableObjectScript : MonoBehaviour
         //  Checks if the selected GameObject is this GameObject.
         if (HoverScript.selectedGameObject == gameObject)
         {
+            #region Add Outline
             //  If there is not outline, add one.
             if (outline == null)
                 outline = GameManager.AddOutline(gameObject, outlineParameters);
+            #endregion
         }
         else
         {
+            #region Delete Outline
             //  Deletes the outline if it is not selected and there is an outline still active.
             if (outline != null)
             {
                 Destroy(outline);
                 outline = null;
             }
+            #endregion
         }
     }
     #endregion

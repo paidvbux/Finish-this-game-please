@@ -20,6 +20,7 @@ public class PlotScript : MonoBehaviour
     #region Unity Runtime Functions
     void Update()
     {
+        #region Crop Change
         //  Checks if there is a crop planted on the plot.
         if (plantedCrop != null)
         {
@@ -42,7 +43,7 @@ public class PlotScript : MonoBehaviour
             //  Run a function to increase the scale of the crop.
             GrowCrops();
         }
-
+        #endregion
     }
     #endregion
 
@@ -57,28 +58,31 @@ public class PlotScript : MonoBehaviour
         //  Decreases the timer if the timer is more or equal to zero.
         timer -= timer >= 0 ? Time.deltaTime : 0;
 
-       /*
-        *   If the timer is less or equal to 0 then 
-        *   allow for the hover outline to be shown.
-        *   If not, change the scale of the object.
-        */
+        #region Update Scale & Hover
+        /*
+         *   If the timer is less or equal to 0 then 
+         *   allow for the hover outline to be shown.
+         *   If not, change the scale of the object.
+         */
         if (timer <= 0) summonedCrop.Hover();
         else
         {
             float lerpAmount = (plantedCrop.cropGrowTime - timer) / plantedCrop.cropGrowTime;
             summonedCrop.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, lerpAmount);
         }
+        #endregion
     }
 
-   /*
-    *   Instantiates the crop and sets up 
-    *   some variables for later use.
-    */
+    /*
+     *   Instantiates the crop and sets up 
+     *   some variables for later use.
+     */
     void SummonCrop()
-    {   
+    {
         //  Instantiate the crop object.
         GameObject cropObject = Instantiate(plantedCrop.cropObject, transform.position, Quaternion.identity);
-        
+
+        #region Initialization
         //  Start the scale of the object at zero and set the parent to this. (Parented to remove clutter from the hierarchy)
         cropObject.transform.localScale = Vector3.zero;
         cropObject.transform.SetParent(transform);
@@ -89,6 +93,7 @@ public class PlotScript : MonoBehaviour
 
         //  Sets a variable for later use.
         summonedCrop.plotScript = this;
+        #endregion
     }
 
    /*
@@ -98,6 +103,7 @@ public class PlotScript : MonoBehaviour
     */
     public void Harvest()
     {
+        #region Instantiate Drops
         //  Instantiates the drops.
         for (int i = 0; i < Random.Range(plantedCrop.minHarvestCount, plantedCrop.maxHarvestCount + 1); i++)
         {
@@ -106,7 +112,9 @@ public class PlotScript : MonoBehaviour
             //  Reduce clutter in the hierarchy
             droppedCrop.transform.SetParent(GameManager.singleton.transform);
         }
+        #endregion
 
+        #region Remove Crop
         //  Removes the summonedCrop from the global list and destroys it.
         GameManager.crops.Remove(summonedCrop);
         Destroy(summonedCrop.gameObject);
@@ -114,6 +122,7 @@ public class PlotScript : MonoBehaviour
         //  Reset some values.
         summonedCrop = null;
         plantedCrop = null;
+        #endregion
     }
     #endregion
 }

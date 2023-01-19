@@ -100,15 +100,19 @@ public class UpdateUIInfo : MonoBehaviour
     */
     public void UpdateUIElements()
     {
+        #region Update Images
         foreach (ImageInfo imageInfo in imagesToUpdate)
         {
             imageInfo.UpdateChanges();
         }
+        #endregion
 
+        #region Update Text
         foreach (TMPInfo textInfo in textToUpdate)
         {
             textInfo.UpdateChanges();
         }
+        #endregion
     }
     #endregion
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78c41763aea52c4497bc9aac396ccc4, type: 3}
   m_Name: Corn
   m_EditorClassIdentifier: 
-  name: Corn
+  itemName: Corn
   grabbableCropObject: {fileID: 2674817404406123266, guid: b9b0be6c456802d42b91783b612faedc, type: 3}
   cropObject: {fileID: 7039810372250389003, guid: 256c7a36ffe6a94409a948681e388ee2, type: 3}
   minHarvestCount: 4

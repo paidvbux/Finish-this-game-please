@@ -18,12 +18,14 @@ public class HoverScript : MonoBehaviour
     #region Unity Runtime Functions
     void Update()
     {
+        #region Update Selected Object
         //  Selects the object that the raycast hits, returns null when the raycast hits nothing.
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxReach, layerMask))
             selectedGameObject = hit.collider.gameObject;
         else
             selectedGameObject = null;
+        #endregion
     }
     #endregion
 }

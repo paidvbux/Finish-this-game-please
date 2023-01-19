@@ -14,6 +14,7 @@ public class DroppedCropScript : DroppedItemScript
     #region Unity Runtime Functions
     void Start()
     {
+        #region Initialization
         //  Sets the mass of the object
         rigidBody.mass = crop.mass;
 
@@ -22,6 +23,7 @@ public class DroppedCropScript : DroppedItemScript
 
         //  Runs the derived initialization
         Initialize();
+        #endregion
     }
 
     void Update()

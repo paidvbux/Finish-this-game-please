@@ -37,6 +37,7 @@ public class TriggerScript : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        #region Add Items/Crates
         //  Check each tag for enter collision.
         foreach (string tagToCheck in tagsToCheck) 
         { 
@@ -54,10 +55,12 @@ public class TriggerScript : MonoBehaviour
                 numObjectsInTrigger++;
             }
         }
+        #endregion
     }
 
     void OnTriggerExit(Collider other)
     {
+        #region Remove Items/Crates
         //  Check each tag for exit collision.
         foreach (string tagToCheck in tagsToCheck)
         {
@@ -75,6 +78,7 @@ public class TriggerScript : MonoBehaviour
                 numObjectsInTrigger--;
             }
         }
+        #endregion
     }
     #endregion
 }

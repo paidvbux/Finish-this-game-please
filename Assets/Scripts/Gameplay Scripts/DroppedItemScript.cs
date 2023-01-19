@@ -14,6 +14,7 @@ public class DroppedItemScript : GrabbableObjectScript
     #region Unity Runtime Functions
     void Start()
     {
+        #region Initialization
         //  Sets the mass of the object
         rigidBody.mass = item.mass;
 
@@ -22,6 +23,7 @@ public class DroppedItemScript : GrabbableObjectScript
 
         //  Runs the derived initialization
         Initialize();
+        #endregion
     }
 
     void Update()
@@ -55,11 +57,13 @@ public class DroppedItemScript : GrabbableObjectScript
         */
         if (other.gameObject.CompareTag("Crate") && other.gameObject.TryGetComponent<CrateScript>(out CrateScript crateScript) && !crateScript.isFull())
         {
+            #region Add to Crate
             //Adds the item to the crate and resets some variables.
             crateScript.AddItem(item);
             HoverScript.selectedGameObject = null;
             GrabScript.holdingObject = false;
             Destroy(gameObject);
+            #endregion 
         }
     }
     #endregion

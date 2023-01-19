@@ -12,21 +12,19 @@ public class GrabScript : MonoBehaviour
     [Header("General Settings")]
     [SerializeField] LayerMask grabbableLayers;
     [SerializeField] float speed = 5f;
+    #endregion
 
-    [SerializeField] float rotationLerpSpeed;
+    #region Rotation Settings
+    [Header("Rotation Settings")]
+    [SerializeField] float rotationSensitivity = 1.0f;
     #endregion
 
     #region Hidden/Private Variables
     int storedLayerIndex;
     float desiredDistanceFromPlayer;
     Vector3 desiredObjectPosition;
-    
+
     Rigidbody heldRigidbody;
-
-    Quaternion toRotation;
-    bool lerpingRotation;
-
-    Vector3 rotationVelocity = Vector3.zero;
     #endregion
 
     /*******************************************************************/
@@ -40,13 +38,16 @@ public class GrabScript : MonoBehaviour
 
     void Update()
     {
+        #region Pickup
         //  Checks if the selected GameObject is not empty and is a grabbable object.
         if (HoverScript.selectedGameObject != null && (HoverScript.selectedGameObject.CompareTag("Grabbable") || HoverScript.selectedGameObject.CompareTag("Dropped Item") || HoverScript.selectedGameObject.CompareTag("Crate")))
         {
             //  Pickup the object
             PickupObject();
         }
+        #endregion
 
+        #region Drop
         //  Checks if the player is holding an object already.
         if (holdingObject)
         {
@@ -56,8 +57,6 @@ public class GrabScript : MonoBehaviour
             //  Return early if they do decide to drop the object.
             if (!holdingObject) return;
 
-            //  Check if player wants to rotate the object.
-            RotateTowardsPlayer();
 
            /*
             * Calculate the position that 
@@ -68,15 +67,22 @@ public class GrabScript : MonoBehaviour
             CalculateDesiredPosition();
             UpdateObjectPosition();
         }
+        #endregion
+
+        #region Rotate Object
+        //  Check if player wants to rotate the object.
+        if (holdingObject)
+            Rotate();
+        #endregion
     }
     #endregion
 
     #region Custom Functions
 
-   /*
-    *   Determines where the player
-    *   wants the object to be.
-    */
+    /*
+     *   Determines where the player
+     *   wants the object to be.
+     */
     void CalculateDesiredPosition()
     {
        /*
@@ -97,20 +103,24 @@ public class GrabScript : MonoBehaviour
         {
             //  Stores the current object.
             heldRigidbody = HoverScript.selectedGameObject.GetComponent<Rigidbody>();
-            
+
+            #region Calculate Position
+            //  Sets the desired distance to the current distance from the player to the object.
+            //  Calculate the position afterwards.
+            desiredDistanceFromPlayer = Vector3.Distance(Camera.main.transform.position, HoverScript.selectedGameObject.transform.position);
+            CalculateDesiredPosition();
+            #endregion
+
+            #region Change Parameters
             //  Changes the drag, layer, and stores the layer for future reference.
             storedLayerIndex = heldRigidbody.gameObject.layer;
             heldRigidbody.gameObject.layer = 6;
             heldRigidbody.drag = 3.5f;
 
-            //  Sets the desired distance to the current distance from the player to the object.
-            //  Calculate the position afterwards.
-            desiredDistanceFromPlayer = Vector3.Distance(Camera.main.transform.position, HoverScript.selectedGameObject.transform.position);
-            CalculateDesiredPosition();
-
             //  Remove gravity
             heldRigidbody.useGravity = false;
             holdingObject = true;
+            #endregion
         }
     }
 
@@ -126,11 +136,13 @@ public class GrabScript : MonoBehaviour
             return;
         if (Input.GetKeyUp(KeyCode.Mouse1))
         {
+            #region Reset Parameters
             heldRigidbody.gameObject.layer = storedLayerIndex;
             heldRigidbody.drag = 1;
             heldRigidbody.useGravity = true;
             heldRigidbody = null;
             holdingObject = false;
+            #endregion
         }
     }
 
@@ -153,22 +165,46 @@ public class GrabScript : MonoBehaviour
     */
     void RotateTowardsPlayer()
     {
-        if (lerpingRotation)
-        {
-            heldRigidbody.rotation = Quaternion.Lerp(heldRigidbody.rotation, toRotation, rotationLerpSpeed * Time.deltaTime * 100);
-
-        }
         if (Input.GetKeyDown(KeyCode.Mouse2))
         {
-            Vector3 dir = new Vector3(transform.position.x, 2 * heldRigidbody.position.y, transform.position.z) - heldRigidbody.position;
-            toRotation = Quaternion.FromToRotation(heldRigidbody.position, dir);
-            lerpingRotation = true;
+            #region Calculate Rotation
+            //  Calculate the direction for the crate to look.
+            Vector3 rotationDirection = transform.position - heldRigidbody.position;
+            rotationDirection.y = 0;
+            rotationDirection.Normalize();
+
+            heldRigidbody.transform.forward = rotationDirection;
+            #endregion 
         }
     }
 
-    public void Rotate(Vector2 currentMouseDelta, float cameraPitch)
+    void Rotate()
     {
+        RotateTowardsPlayer();
 
+        #region Rotate w/ Mouse
+        if (holdingObject)
+        {
+            //  Checks if the player is trying to rotate the object.
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                //  Disables the camera movement on the PlayerController.
+                PlayerController.rotatingObject = true;
+
+                //  Gets the mouse input.
+                Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+                //  Rotates the object.
+                heldRigidbody.transform.Rotate(Vector3.right * targetMouseDelta.y * rotationSensitivity);
+                heldRigidbody.transform.Rotate(Vector3.up * targetMouseDelta.x * rotationSensitivity);
+            }
+            else
+            {
+                //  Re-enables the camera movement on the PlayerController.
+                PlayerController.rotatingObject = false;
+            }
+        }
+    #endregion
     }
     #endregion
 }

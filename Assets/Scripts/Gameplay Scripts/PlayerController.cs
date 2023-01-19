@@ -5,13 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    #region Static Variables
+    public static bool rotatingObject;
+    #endregion
+
     #region Camera Variables/Settings
     [Header("Camera Settings")]
     [SerializeField] Transform playerCamera = null;
     [SerializeField] Vector3 cameraOffset;
     [SerializeField] float mouseSensitivity = 1.0f;
     [SerializeField] bool lockCursor = true;
-
     #endregion
 
     #region Movement Variables/Settings
@@ -28,7 +31,6 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Hidden/Private Variables
-    GrabScript grabScript => GetComponent<GrabScript>();
     Rigidbody rigidBody => GetComponent<Rigidbody>();
 
     Vector2 currentMouseDelta = Vector2.zero;
@@ -49,19 +51,29 @@ public class PlayerController : MonoBehaviour
     #region Unity Runtime Functions
     void Start()
     {
+        #region Initialization
+        rotatingObject = false;
+
         //  Checks whether or not to lock the cursor or not.
         if (lockCursor)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+        #endregion
     }
 
     void LateUpdate()
     {
+        #region Update Movement & Camera
         //  Updates movement and camera direction.
         UpdateMovement();
-        UpdateMouseLook();
+        if (!rotatingObject)
+        {
+            UpdateMouseLook();
+        }
+        #endregion
+
     }
     #endregion
 
@@ -74,11 +86,14 @@ public class PlayerController : MonoBehaviour
         //  Get the mouse position input.
         Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
+        #region Change FOV
         //  Change the FOV depending if the player is sprinting or not.
         float currentFOV = playerCamera.GetComponent<Camera>().fieldOfView;
         if (Input.GetKey(KeyCode.LeftShift)) playerCamera.GetComponent<Camera>().fieldOfView = Mathf.Lerp(currentFOV, runFOV, lerpSpeed);
         else playerCamera.GetComponent<Camera>().fieldOfView = Mathf.Lerp(currentFOV, walkFOV, lerpSpeed);
+        #endregion
 
+        #region Rotate
         //  Smoothly moves the mouse position from its position to its new position.
         currentMouseDelta = Vector2.SmoothDamp(currentMouseDelta, targetMouseDelta, ref currentMouseDeltaVelocity, mouseSmoothTime);
 
@@ -86,15 +101,10 @@ public class PlayerController : MonoBehaviour
         cameraPitch -= currentMouseDelta.y * mouseSensitivity;
         cameraPitch = Mathf.Clamp(cameraPitch, -90.0f, 90.0f);
 
-        //  Check if the player is trying to rotate the object they are holding
-        if (GrabScript.holdingObject && Input.GetKey(KeyCode.Mouse0))
-        {
-
-        }
-
         //  Updates the calculated camera rotation.
         playerCamera.localEulerAngles = Vector3.right * cameraPitch;
         transform.Rotate(Vector3.up * currentMouseDelta.x * mouseSensitivity);
+        #endregion
     }
 
    /*
@@ -103,42 +113,54 @@ public class PlayerController : MonoBehaviour
     */
     void UpdateMovement()
     {
+        #region Get Movement Input
         //  Gets inputs of the player, normalizes it and stores it as a 2D vector.
         Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         targetDir.Normalize();
 
         Vector3 velocity;
+        #endregion
 
         //  Checks if the player is touching the ground.
         if (isGrounded())
         {
+            #region Calculate Velocity
             //  Gets the current direction and calculates the current velocity.
             currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, moveSmoothTime);
             velocity = (transform.forward * currentDir.y + transform.right * currentDir.x);
+            #endregion
 
+            #region Update Velocity
             //  Moves the velocity by walkSpeed if the player is walking. Moves by runSpeed otherwise.
             if (Input.GetKey(KeyCode.LeftShift)) velocity = velocity * runSpeed + Vector3.up * velocityY;
             else velocity = velocity * walkSpeed + Vector3.up * velocityY;
             
             //  Resets the Y velocity to prevent buildup in the negative Y axis.
             velocityY = 0.0f;
+            #endregion
 
+            #region Jump
             //  Checks if the player wants to jump and jumps if they do.
             if (Input.GetButton("Jump"))
                 velocityY = initialJumpSpeed;
+            #endregion
         }
         else
         {
+            #region Calculate Velocity
             //  Gets the current direction and calculates the current velocity.
             currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, 0.6f);
             velocity = (transform.forward * currentDir.y + transform.right * currentDir.x);
             
             //  Adds downwards velocity to account for gravity.
             velocityY -= 9.8f * Time.deltaTime;
+            #endregion
 
+            #region Update Velocity
             //  Moves the velocity by walkSpeed if the player is walking. Moves by runSpeed otherwise.
             if (Input.GetKey(KeyCode.LeftShift)) velocity = velocity * runSpeed + Vector3.up * velocityY;
             else velocity = velocity * walkSpeed + Vector3.up * velocityY;
+            #endregion
         }
 
         //  Sets the velocity.

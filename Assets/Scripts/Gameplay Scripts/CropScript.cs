@@ -25,20 +25,26 @@ public class CropScript : MonoBehaviour
     {
         if (HoverScript.selectedGameObject == gameObject)
         {
+            #region Harvest Crop
             //  Harvests if the player wants to.
             if (Input.GetKeyDown(KeyCode.E)) plotScript.Harvest();
+            #endregion
 
+            #region Add Outline
             //  Prevents adding multiple outlines.
             if (outline == null)
                 outline = GameManager.AddOutline(gameObject, outlineParameters);
+            #endregion
         }
         else
         {
+            #region Delete Outline
             if (outline != null)
             {
                 Destroy(outline);
                 outline = null;
             }
+            #endregion
         }
     }
     #endregion
