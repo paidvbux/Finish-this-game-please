@@ -68,12 +68,11 @@ public class PlayerController : MonoBehaviour
         #region Update Movement & Camera
         //  Updates movement and camera direction.
         UpdateMovement();
-        if (!rotatingObject)
+        if (!rotatingObject && !GameManager.dialogueActive)
         {
             UpdateMouseLook();
         }
         #endregion
-
     }
     #endregion
 

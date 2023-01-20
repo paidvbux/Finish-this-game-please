@@ -388,7 +388,6 @@ GameObject:
   - component: {fileID: 1854620433177300977}
   - component: {fileID: 1854620433177300982}
   - component: {fileID: 1854620433177300983}
-  - component: {fileID: 1854620433177300980}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -2521,20 +2520,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1854620433177300938}
   m_Mesh: {fileID: 0}
---- !u!64 &1854620433177300980
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1854620433177300938}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &1854620433561365802
 GameObject:
   m_ObjectHideFlags: 0
@@ -3048,6 +3033,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stationType: 0
+  button: {fileID: 1854620433561365802}
   playerInteractTrigger: {fileID: 1854620433887996989}
   inputTrigger: {fileID: 1854620433069280520}
   crates: []
@@ -3078,7 +3064,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1854620433887996976}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: -1}
+  m_LocalPosition: {x: -0.5, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3096,7 +3082,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Size: {x: 4, y: 2, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1854620433887996989
 MonoBehaviour:

@@ -38,6 +38,10 @@ public class GrabScript : MonoBehaviour
 
     void Update()
     {
+        //  Prevents any bugs from occuring when talking to a NPC while holding an object.
+        if (GameManager.dialogueActive)
+            return;
+
         #region Pickup
         //  Checks if the selected GameObject is not empty and is a grabbable object.
         if (HoverScript.selectedGameObject != null && (HoverScript.selectedGameObject.CompareTag("Grabbable") || HoverScript.selectedGameObject.CompareTag("Dropped Item") || HoverScript.selectedGameObject.CompareTag("Crate")))

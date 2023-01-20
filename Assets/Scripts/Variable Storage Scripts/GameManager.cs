@@ -30,8 +30,13 @@ public class GameManager : MonoBehaviour
 
     #region Static Variables
     public static GameManager singleton;
-    public static Transform Player => GameManager.singleton.player;
     public static List<CropScript> crops;
+    public static bool dialogueActive;
+
+    public static Transform Player => singleton.player;
+
+    public static TextMeshProUGUI DialogueName => singleton.dialogueName;
+    public static TextMeshProUGUI DialogueText => singleton.dialogueText;
     #endregion
 
     #region General Variables
@@ -43,10 +48,12 @@ public class GameManager : MonoBehaviour
     [Header("UI Settings")]
     [SerializeField] GameObject interactUI;
     [SerializeField] TextMeshProUGUI interactText;
+    [SerializeField] TextMeshProUGUI dialogueName;
+    [SerializeField] TextMeshProUGUI dialogueText;
     #endregion
 
     #region Hidden/Private Variables
-    [HideInInspector] public List<InteractableObject> interactableObjects;
+    InteractableObject interactableObject;
     #endregion
 
     /*******************************************************************/
@@ -55,13 +62,15 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         #region Initialization
+        //  Initialize classes.
+        interactableObject = new InteractableObject("", null);
+
         //  Start with the interact UI disabled.
         DisableInteractUI();
         //  Sets the singleton to this.
         singleton = this;
 
         //  Initialize lists
-        interactableObjects = new List<InteractableObject>();
         crops = new List<CropScript>();
         #endregion
     }
@@ -70,10 +79,10 @@ public class GameManager : MonoBehaviour
     {
         #region Update Interact UI
         //  Update the interact UI with the text.
-        if (interactableObjects.Count == 0)
+        if (interactableObject.gameObject == null)
             DisableInteractUI();
         else
-            UpdateInteractUI(interactableObjects[0].text);
+            UpdateInteractUI(interactableObject.text);
         #endregion       
     }
     #endregion
@@ -100,25 +109,30 @@ public class GameManager : MonoBehaviour
         return outline;
     }
 
-    public void AddToInteractableObjects(string text, GameObject gameObjectToAdd)
+    //  Sets the object to the selected object.
+    public void SetInteractableObject(string text, GameObject gameObjectToAdd)
     {
-        //  Adds the object to the list.
-        interactableObjects.Add(new InteractableObject(text, gameObjectToAdd));
+        interactableObject = new InteractableObject(text, gameObjectToAdd);
     }
 
-    public void RemoveFromInteractableObjects(GameObject gameObjectToRemove)
+    //  Empty the interactableObject variable.
+    public void SetInteractableObject()
     {
-        InteractableObject objectToRemove = null;
+        interactableObject.text = "";
+        interactableObject.gameObject = null;
+    }
 
-        //  Find the object to remove from the list and remove it.
-        foreach (InteractableObject interactableObject in interactableObjects)
-        {
-            if (interactableObject.gameObject == gameObjectToRemove)
-                objectToRemove = interactableObject;
-        }
+    //  Returns if the current value is the same as the given value.
+    public bool isInteractableObject(GameObject gameObjectToCheck)
+    {
+        if (isEmpty()) return false; 
+        return interactableObject.gameObject == gameObjectToCheck;
+    }
 
-        //  Removes it from the list.
-        interactableObjects.Remove(objectToRemove);
+    //  Returns if the value is empty.
+    public bool isEmpty()
+    {
+        return interactableObject.gameObject == null;
     }
 
    /*

@@ -19,9 +19,6 @@ public class CrateScript : GrabbableObjectScript
 
     #region Private/Hidden Variables
     float startingMass;
-
-    bool addedToInteractableObjects; 
-    bool removedFromInteractableObjects; 
     #endregion
 
     /*******************************************************************/
@@ -47,10 +44,6 @@ public class CrateScript : GrabbableObjectScript
         #endregion
 
         #region Initialization
-        //  Resets the boolean to only add itself to the list only once.
-        addedToInteractableObjects = false;
-        removedFromInteractableObjects = true;
-
         //  Sets its tag to "Crate" to allow for the GrabScript to properly interact with it.
         gameObject.tag = "Crate";
         startingMass = rigidBody.mass;
@@ -63,24 +56,20 @@ public class CrateScript : GrabbableObjectScript
     void Update()
     {
         #region Empty Contents
+
         //  Checks if the crate can be emptied or not
-        if (storedItem != null && storedAmount > 0 && HoverScript.selectedGameObject == gameObject && removedFromInteractableObjects && !addedToInteractableObjects)
+        if (storedItem != null && storedAmount > 0 && HoverScript.selectedGameObject == gameObject && !GameManager.singleton.isInteractableObject(gameObject) && GameManager.singleton.isEmpty())
         {
-            //  Adds the gameObject to the list.
-            GameManager.singleton.AddToInteractableObjects("Empty Crate", gameObject);
-            removedFromInteractableObjects = false;
-            addedToInteractableObjects = true;
-            
+            //  Sets the UI to display this gameObject.
+            GameManager.singleton.SetInteractableObject("Empty Crate", gameObject);
         }
-        else if ((storedItem == null || storedAmount == 0 || HoverScript.selectedGameObject != gameObject) && !removedFromInteractableObjects && addedToInteractableObjects)
+        else if ((storedItem == null || storedAmount == 0 || HoverScript.selectedGameObject != gameObject) && GameManager.singleton.isInteractableObject(gameObject))
         {
-            //  Removes the gameObject to the list.
-            GameManager.singleton.RemoveFromInteractableObjects(gameObject);
-            removedFromInteractableObjects = true;
-            addedToInteractableObjects = false;
+            //  Removes the UI to display.
+            GameManager.singleton.SetInteractableObject();
         }
 
-        if (addedToInteractableObjects)
+        if (GameManager.singleton.isInteractableObject(gameObject))
             EmptyCrate(true);
         #endregion
 

@@ -9,6 +9,10 @@ public class DroppedItemScript : GrabbableObjectScript
     public Item item;
     #endregion
 
+    #region Hidden/Private Variables
+    [HideInInspector] public List<TriggerScript> triggers;
+    #endregion
+
     /*******************************************************************/
 
     #region Unity Runtime Functions
@@ -42,6 +46,20 @@ public class DroppedItemScript : GrabbableObjectScript
         *  will add itself to said crate.
         */
         AddToCrate(other);
+    }
+
+    //  Makes sure that anything it was assigned to is not broken.
+    void OnDestroy()
+    {
+        //  Check if it is currently in one or more triggers.
+        if (triggers.Count > 0)
+        {
+            //  Remove itself from each trigger's storedObjects list.
+            foreach (TriggerScript trigger in triggers)
+            {
+                trigger.storedObjects.Remove(gameObject);
+            }
+        }
     }
     #endregion
 

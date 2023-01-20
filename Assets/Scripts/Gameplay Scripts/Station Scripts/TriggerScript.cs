@@ -51,6 +51,10 @@ public class TriggerScript : MonoBehaviour
                 if (storeObjects)
                     storedObjects.Add(other.gameObject, other.tag);
 
+                //  Add itself to the objects' stored triggers.
+                if (tagToCheck == "Dropped Item")
+                    other.gameObject.GetComponent<DroppedItemScript>().triggers.Add(this);
+
                 //  Increase the amount of objects in the trigger by one.
                 numObjectsInTrigger++;
             }
@@ -73,6 +77,10 @@ public class TriggerScript : MonoBehaviour
                 //  Removes the objects from the dictionary.
                 if (storeObjects)
                     storedObjects.Remove(other.gameObject);
+
+                //  Remove itself to the objects' stored triggers.
+                if (tagToCheck == "Dropped Item")
+                    other.gameObject.GetComponent<DroppedItemScript>().triggers.Remove(this);
 
                 //  Decreases the amount of objects in the trigger by one.
                 numObjectsInTrigger--;

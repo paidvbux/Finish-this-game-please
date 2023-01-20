@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class StationScript : MonoBehaviour
 {
-    #region Other Variables
+    #region Classes & Enums
     enum StationType { Sell, Buy }
+    #endregion
+
+    #region General Variables
+    [Header("General Settings")]
     [SerializeField] StationType stationType;
+    [SerializeField] GameObject button;
     #endregion
 
     #region Trigger Areas
@@ -28,18 +33,11 @@ public class StationScript : MonoBehaviour
     /*******************************************************************/
 
     #region Unity Runtime Functions
-    void Awake()
-    {
-        //  Resets the boolean to only add itself to the list only once.
-        addedToInteractableObjects = false;
-        removedFromInteractableObjects = true;
-    }
-
     void Update()
     {
         #region Interact
         //  Checks if the player is trying to interact with the station.
-        if (playerInteractTrigger.inTrigger && Input.GetKeyDown(KeyCode.E))
+        if (GameManager.singleton.isInteractableObject(gameObject) && Input.GetKeyDown(KeyCode.E))
         {
             //  Determine what type of operation the player is doing.
             if (stationType == StationType.Sell)
@@ -50,19 +48,15 @@ public class StationScript : MonoBehaviour
 
         if (stationType == StationType.Sell)
         {
-            if (playerInteractTrigger.inTrigger && !addedToInteractableObjects && removedFromInteractableObjects)
+            if (playerInteractTrigger.inTrigger && HoverScript.selectedGameObject == button && !GameManager.singleton.isInteractableObject(gameObject) && GameManager.singleton.isEmpty())
             {
                 //  Adds the gameObject to the list.
-                GameManager.singleton.AddToInteractableObjects("Sell Items", gameObject);
-                removedFromInteractableObjects = false;
-                addedToInteractableObjects = true;
+                GameManager.singleton.SetInteractableObject("Sell Items", gameObject);
             }
-            else if (!playerInteractTrigger.inTrigger && !removedFromInteractableObjects && addedToInteractableObjects)
+            else if ((!playerInteractTrigger.inTrigger || HoverScript.selectedGameObject != button) && GameManager.singleton.isInteractableObject(gameObject))
             {
                 //  Removes the gameObject to the list.
-                GameManager.singleton.RemoveFromInteractableObjects(gameObject);
-                removedFromInteractableObjects = true;
-                addedToInteractableObjects = false;
+                GameManager.singleton.SetInteractableObject();
             }
         }
         #endregion
