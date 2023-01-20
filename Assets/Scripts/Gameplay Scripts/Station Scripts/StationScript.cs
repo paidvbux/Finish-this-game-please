@@ -16,7 +16,6 @@ public class StationScript : MonoBehaviour
 
     #region Trigger Areas
     [Header("Trigger Areas")]
-    public TriggerScript playerInteractTrigger;
     public TriggerScript inputTrigger;
     #endregion
 
@@ -37,7 +36,7 @@ public class StationScript : MonoBehaviour
     {
         #region Interact
         //  Checks if the player is trying to interact with the station.
-        if (GameManager.singleton.isInteractableObject(gameObject) && Input.GetKeyDown(KeyCode.E))
+        if (GameManager.isInteractableObject(gameObject) && Input.GetKeyDown(KeyCode.E))
         {
             //  Determine what type of operation the player is doing.
             if (stationType == StationType.Sell)
@@ -48,15 +47,15 @@ public class StationScript : MonoBehaviour
 
         if (stationType == StationType.Sell)
         {
-            if (playerInteractTrigger.inTrigger && HoverScript.selectedGameObject == button && !GameManager.singleton.isInteractableObject(gameObject) && GameManager.singleton.isEmpty())
+            if (HoverScript.selectedGameObject == button && !GameManager.isInteractableObject(button) && GameManager.isEmpty())
             {
                 //  Adds the gameObject to the list.
-                GameManager.singleton.SetInteractableObject("Sell Items", gameObject);
+                GameManager.SetInteractableObject("Sell Items", button);
             }
-            else if ((!playerInteractTrigger.inTrigger || HoverScript.selectedGameObject != button) && GameManager.singleton.isInteractableObject(gameObject))
+            else if ((HoverScript.selectedGameObject != button) && GameManager.isInteractableObject(button))
             {
                 //  Removes the gameObject to the list.
-                GameManager.singleton.SetInteractableObject();
+                GameManager.SetInteractableObject();
             }
         }
         #endregion

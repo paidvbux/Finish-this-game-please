@@ -6,6 +6,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     #region Classes
+    #region Other Classes
     [System.Serializable]
     public class OutlineParams
     {
@@ -27,6 +28,7 @@ public class GameManager : MonoBehaviour
         }
     }
     #endregion
+    #endregion
 
     #region Static Variables
     public static GameManager singleton;
@@ -35,8 +37,15 @@ public class GameManager : MonoBehaviour
 
     public static Transform Player => singleton.player;
 
-    public static TextMeshProUGUI DialogueName => singleton.dialogueName;
-    public static TextMeshProUGUI DialogueText => singleton.dialogueText;
+    //  Interactable Objects
+    public static GameObject interactUI => singleton._interactUI;
+    public static TextMeshProUGUI interactText => singleton._interactText;
+    public static InteractableObject interactableObject => singleton._interactableObject;
+
+    //  Dialogue UI
+    public static GameObject DialogueUI => singleton._dialogueUI;
+    public static TextMeshProUGUI DialogueName => singleton._dialogueName;
+    public static TextMeshProUGUI DialogueText => singleton._dialogueText;
     #endregion
 
     #region General Variables
@@ -44,16 +53,21 @@ public class GameManager : MonoBehaviour
     public Transform player;
     public PlayerController playerController => player.GetComponent<PlayerController>();
     public int coins;
+    #endregion
 
+    #region UI Variables/Settings
     [Header("UI Settings")]
-    [SerializeField] GameObject interactUI;
-    [SerializeField] TextMeshProUGUI interactText;
-    [SerializeField] TextMeshProUGUI dialogueName;
-    [SerializeField] TextMeshProUGUI dialogueText;
+    [SerializeField] GameObject _interactUI;
+    [SerializeField] TextMeshProUGUI _interactText;
+
+    [Space()]
+    [SerializeField] GameObject _dialogueUI;
+    [SerializeField] TextMeshProUGUI _dialogueName;
+    [SerializeField] TextMeshProUGUI _dialogueText;
     #endregion
 
     #region Hidden/Private Variables
-    InteractableObject interactableObject;
+    [HideInInspector] public InteractableObject _interactableObject;
     #endregion
 
     /*******************************************************************/
@@ -63,7 +77,7 @@ public class GameManager : MonoBehaviour
     {
         #region Initialization
         //  Initialize classes.
-        interactableObject = new InteractableObject("", null);
+        _interactableObject = new InteractableObject("", null);
 
         //  Start with the interact UI disabled.
         DisableInteractUI();
@@ -79,10 +93,10 @@ public class GameManager : MonoBehaviour
     {
         #region Update Interact UI
         //  Update the interact UI with the text.
-        if (interactableObject.gameObject == null)
+        if (_interactableObject.gameObject == null)
             DisableInteractUI();
         else
-            UpdateInteractUI(interactableObject.text);
+            UpdateInteractUI(_interactableObject.text);
         #endregion       
     }
     #endregion
@@ -109,44 +123,72 @@ public class GameManager : MonoBehaviour
         return outline;
     }
 
+    #region Interactable Object Functions
     //  Sets the object to the selected object.
-    public void SetInteractableObject(string text, GameObject gameObjectToAdd)
+    public static void SetInteractableObject(string text, GameObject gameObjectToAdd)
     {
-        interactableObject = new InteractableObject(text, gameObjectToAdd);
+        interactableObject.text = text;
+        interactableObject.gameObject = gameObjectToAdd;
     }
 
     //  Empty the interactableObject variable.
-    public void SetInteractableObject()
+    public static void SetInteractableObject()
     {
         interactableObject.text = "";
         interactableObject.gameObject = null;
     }
 
     //  Returns if the current value is the same as the given value.
-    public bool isInteractableObject(GameObject gameObjectToCheck)
+    public static bool isInteractableObject(GameObject gameObjectToCheck)
     {
         if (isEmpty()) return false; 
         return interactableObject.gameObject == gameObjectToCheck;
     }
 
     //  Returns if the value is empty.
-    public bool isEmpty()
+    public static bool isEmpty()
     {
         return interactableObject.gameObject == null;
     }
+    #endregion
 
-   /*
-    *   Toggles the UI that shows how to interact
-    *   with objects. Changes text from input.
-    */
+    #region UI Functions
+    #region Interact UI
+    /*
+     *   Toggles the UI that shows how to interact
+     *   with objects. Changes text from input.
+     */
     void UpdateInteractUI(string text)
     {
         interactUI.SetActive(true);
-        interactText.text = "[E] " + text;
+        _interactText.text = "[E] " + text;
     }
     void DisableInteractUI()
     {
         interactUI.SetActive(false);
     }
+    #endregion
+
+    #region Dialogue UI
+   /*
+    *   Toggles the active state
+    *   of the dialogue UI.
+    */
+    public static void ToggleDialogueUI(bool dialogueActive, string speakerName = "")
+    {
+        DialogueUI.SetActive(dialogueActive);
+        DialogueName.text = dialogueActive ? speakerName : "";
+    }
+
+   /*
+    *   Updates the 
+    *   dialogue's text.
+    */
+    public static void UpdateDialogueUI(string text)
+    {
+        DialogueText.text = text;
+    }
+    #endregion
+    #endregion
     #endregion
 }

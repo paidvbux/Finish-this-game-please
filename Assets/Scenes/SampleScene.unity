@@ -259,7 +259,7 @@ PrefabInstance:
       objectReference: {fileID: 1982637481}
     - target: {fileID: 1854620433069280521, guid: a4e48cb0192ca6f4cbe70cb71ec39c48, type: 3}
       propertyPath: m_VersionIndex
-      value: 44
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 1854620433069280524, guid: a4e48cb0192ca6f4cbe70cb71ec39c48, type: 3}
       propertyPath: m_Mesh
@@ -271,7 +271,7 @@ PrefabInstance:
       objectReference: {fileID: 1883353507}
     - target: {fileID: 1854620433177300976, guid: a4e48cb0192ca6f4cbe70cb71ec39c48, type: 3}
       propertyPath: m_VersionIndex
-      value: 33
+      value: 39
       objectReference: {fileID: 0}
     - target: {fileID: 1854620433177300980, guid: a4e48cb0192ca6f4cbe70cb71ec39c48, type: 3}
       propertyPath: m_Mesh
@@ -287,7 +287,7 @@ PrefabInstance:
       objectReference: {fileID: 920270648}
     - target: {fileID: 1854620433561365840, guid: a4e48cb0192ca6f4cbe70cb71ec39c48, type: 3}
       propertyPath: m_VersionIndex
-      value: 1129
+      value: 1135
       objectReference: {fileID: 0}
     - target: {fileID: 1854620433561365844, guid: a4e48cb0192ca6f4cbe70cb71ec39c48, type: 3}
       propertyPath: m_Mesh
@@ -1956,6 +1956,7 @@ MonoBehaviour:
   coins: 0
   interactUI: {fileID: 967481469}
   interactText: {fileID: 838038224}
+  dialogueUI: {fileID: 0}
   dialogueName: {fileID: 0}
   dialogueText: {fileID: 0}
 --- !u!4 &1505093918

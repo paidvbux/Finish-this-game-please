@@ -58,18 +58,18 @@ public class CrateScript : GrabbableObjectScript
         #region Empty Contents
 
         //  Checks if the crate can be emptied or not
-        if (storedItem != null && storedAmount > 0 && HoverScript.selectedGameObject == gameObject && !GameManager.singleton.isInteractableObject(gameObject) && GameManager.singleton.isEmpty())
+        if (storedItem != null && storedAmount > 0 && HoverScript.selectedGameObject == gameObject && !GameManager.isInteractableObject(gameObject) && GameManager.isEmpty())
         {
             //  Sets the UI to display this gameObject.
-            GameManager.singleton.SetInteractableObject("Empty Crate", gameObject);
+            GameManager.SetInteractableObject("Empty Crate", gameObject);
         }
-        else if ((storedItem == null || storedAmount == 0 || HoverScript.selectedGameObject != gameObject) && GameManager.singleton.isInteractableObject(gameObject))
+        else if ((storedItem == null || storedAmount == 0 || HoverScript.selectedGameObject != gameObject) && GameManager.isInteractableObject(gameObject))
         {
             //  Removes the UI to display.
-            GameManager.singleton.SetInteractableObject();
+            GameManager.SetInteractableObject();
         }
 
-        if (GameManager.singleton.isInteractableObject(gameObject))
+        if (GameManager.isInteractableObject(gameObject))
             EmptyCrate(true);
         #endregion
 
