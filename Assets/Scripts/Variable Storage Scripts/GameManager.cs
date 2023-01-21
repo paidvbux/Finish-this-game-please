@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public static GameManager singleton;
     public static List<CropScript> crops;
     public static bool dialogueActive;
+    public static Item[] items => singleton._items;
 
     public static Transform Player => singleton.player;
 
@@ -68,6 +69,7 @@ public class GameManager : MonoBehaviour
 
     #region Hidden/Private Variables
     [HideInInspector] public InteractableObject _interactableObject;
+    [HideInInspector] public Item[] _items;
     #endregion
 
     /*******************************************************************/
@@ -84,8 +86,9 @@ public class GameManager : MonoBehaviour
         //  Sets the singleton to this.
         singleton = this;
 
-        //  Initialize lists
+        //  Initialize lists/arrays.
         crops = new List<CropScript>();
+        _items = Resources.LoadAll<Item>("Items");
         #endregion
     }
 

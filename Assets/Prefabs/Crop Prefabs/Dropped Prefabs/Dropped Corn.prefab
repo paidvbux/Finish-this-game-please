@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: -8673777223745091832}
   m_Layer: 0
   m_Name: Dropped Corn
-  m_TagString: Untagged
+  m_TagString: Dropped Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -379,4 +379,4 @@ MonoBehaviour:
     color: {r: 1, g: 1, b: 1, a: 1}
     outlineWidth: 5
   item: {fileID: 11400000, guid: cd3b1fbb746acf3479d4886643c6e15e, type: 2}
-  crop: {fileID: 11400000, guid: cd3b1fbb746acf3479d4886643c6e15e, type: 2}
+  triggers: []

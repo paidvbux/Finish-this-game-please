@@ -4,19 +4,12 @@ using UnityEngine;
 
 public class DroppedCropScript : DroppedItemScript
 {
-    #region Crop Variables/Settings
-    [Header("Crop Settings")]
-    public Crop crop;
-    #endregion
-
-    /*******************************************************************/
-
     #region Unity Runtime Functions
     void Start()
     {
         #region Initialization
         //  Sets the mass of the object
-        rigidBody.mass = crop.mass;
+        rigidBody.mass = item.mass;
 
         //  Sets the tag to "Dropped Item" to prevent any bugs
         gameObject.tag = "Dropped Item";

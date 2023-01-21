@@ -11,11 +11,19 @@ public class HoverScript : MonoBehaviour
 
     #region Static Variables
     public static GameObject selectedGameObject;
+
+    public static HoverScript singleton;
+    public static float MaxReach => singleton.maxReach;
     #endregion
 
     /*******************************************************************/
 
     #region Unity Runtime Functions
+    void Awake()
+    {
+        singleton = this;    
+    }
+
     void Update()
     {
         #region Update Selected Object

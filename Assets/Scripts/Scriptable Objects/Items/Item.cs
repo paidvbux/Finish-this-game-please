@@ -8,6 +8,7 @@ public class Item : ScriptableObject
     #region General Variables/Settings
     [Header("General Settings")]
     public string itemName;
+    public string pluralItemName;
     #endregion
 
     #region Display Variables/Settings
@@ -32,5 +33,11 @@ public class Item : ScriptableObject
     [Header("Buy/Sell Settings")]
     public int buyCost;
     public int sellCost;
+    #endregion
+
+    #region Quest Variables/Settings
+    [Header("Quest Settings")]
+    public int minQuestRequirement;
+    public int maxQuestRequirement;
     #endregion
 }

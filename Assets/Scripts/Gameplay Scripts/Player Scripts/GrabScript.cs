@@ -14,9 +14,10 @@ public class GrabScript : MonoBehaviour
     [SerializeField] float speed = 5f;
     #endregion
 
-    #region Rotation Settings
-    [Header("Rotation Settings")]
+    #region Sensitivity Variables/Settings
+    [Header("Sensitivity Settings")]
     [SerializeField] float rotationSensitivity = 1.0f;
+    [SerializeField] float scrollSensitivity = 1.0f;
     #endregion
 
     #region Hidden/Private Variables
@@ -89,6 +90,19 @@ public class GrabScript : MonoBehaviour
      */
     void CalculateDesiredPosition()
     {
+        //  Change the desired distance by scroll wheel.
+        if (Input.mouseScrollDelta.y > 0)
+        {
+            desiredDistanceFromPlayer += scrollSensitivity * Time.deltaTime * 100;
+        }
+        else if (Input.mouseScrollDelta.y < 0)
+        {
+            desiredDistanceFromPlayer -= scrollSensitivity * Time.deltaTime * 100;
+        }
+
+        //  Clamp the distance minimum distance to the max distance.
+        desiredDistanceFromPlayer = Mathf.Clamp(desiredDistanceFromPlayer, 2f, HoverScript.MaxReach);
+
        /*
         *   Sets the desired position of the object to be the 
         *   forward vector of the camera multiplied by the 
@@ -160,7 +174,7 @@ public class GrabScript : MonoBehaviour
             return;
 
         //  Multiplies by mass so heavy objects do not slow down too much
-        heldRigidbody.AddForce((desiredObjectPosition - heldRigidbody.transform.position) * speed * heldRigidbody.mass * Time.deltaTime * 1000);
+        heldRigidbody.AddForce((desiredObjectPosition - heldRigidbody.transform.position) * speed * heldRigidbody.mass * Time.deltaTime * 250);
     }
 
    /*
