@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2138677392}
-  m_IndirectSpecularColor: {r: 0.28502667, g: 0.37139323, b: 0.49600998, a: 1}
+  m_IndirectSpecularColor: {r: 0.2850269, g: 0.3713935, b: 0.49601045, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1954,11 +1954,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1070787852}
   coins: 0
-  interactUI: {fileID: 967481469}
-  interactText: {fileID: 838038224}
-  dialogueUI: {fileID: 0}
-  dialogueName: {fileID: 0}
-  dialogueText: {fileID: 0}
+  _interactUI: {fileID: 967481469}
+  _interactText: {fileID: 838038224}
+  _dialogueUI: {fileID: 0}
+  _dialogueName: {fileID: 0}
+  _dialogueText: {fileID: 0}
+  _interactableObject:
+    text: 
+    gameObject: {fileID: 0}
 --- !u!4 &1505093918
 Transform:
   m_ObjectHideFlags: 0

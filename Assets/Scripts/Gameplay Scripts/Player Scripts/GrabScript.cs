@@ -160,7 +160,7 @@ public class GrabScript : MonoBehaviour
             return;
 
         //  Multiplies by mass so heavy objects do not slow down too much
-        heldRigidbody.AddForce((desiredObjectPosition - heldRigidbody.transform.position) * speed * heldRigidbody.mass);
+        heldRigidbody.AddForce((desiredObjectPosition - heldRigidbody.transform.position) * speed * heldRigidbody.mass * Time.deltaTime * 1000);
     }
 
    /*

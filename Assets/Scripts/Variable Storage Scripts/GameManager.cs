@@ -160,12 +160,12 @@ public class GameManager : MonoBehaviour
      */
     void UpdateInteractUI(string text)
     {
-        interactUI.SetActive(true);
+        _interactUI.SetActive(true);
         _interactText.text = "[E] " + text;
     }
     void DisableInteractUI()
     {
-        interactUI.SetActive(false);
+        _interactUI.SetActive(false);
     }
     #endregion
 
