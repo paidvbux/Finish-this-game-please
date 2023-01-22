@@ -11,7 +11,7 @@ public class QuestBoardScript : Dialogue
     {
         if (HoverScript.selectedGameObject == interactableObject && !GameManager.isInteractableObject(interactableObject))
         {
-
+            GameManager.SetInteractableObject("Chat", interactableObject);
         }
     }
     #endregion

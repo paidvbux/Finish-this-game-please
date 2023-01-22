@@ -10,10 +10,10 @@ public class Dialogue : MonoBehaviour
     public string[] dialogue;
     #endregion
 
-    #region Hidden/Private 
-    public string current;
+    #region Hidden/Private Variables
+    string current = "";
     #endregion
-
+    
     /*******************************************************************/
 
     #region Custom Functions

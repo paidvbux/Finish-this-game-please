@@ -173,7 +173,7 @@ public class GrabScript : MonoBehaviour
         if (heldRigidbody == null) 
             return;
 
-        //  Multiplies by mass so heavy objects do not slow down too much
+        //  Multiplies by mass so heavy objects do not slow down too much.
         heldRigidbody.AddForce((desiredObjectPosition - heldRigidbody.transform.position) * speed * heldRigidbody.mass * Time.deltaTime * 250);
     }
 
@@ -185,6 +185,9 @@ public class GrabScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse2))
         {
+            //  Remove any angular velocity to make sure that it does not overshoot.
+            heldRigidbody.angularVelocity = Vector3.zero;
+
             #region Calculate Rotation
             //  Calculate the direction for the crate to look.
             Vector3 rotationDirection = transform.position - heldRigidbody.position;

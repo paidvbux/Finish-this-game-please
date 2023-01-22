@@ -36,7 +36,7 @@ public class StationScript : MonoBehaviour
     {
         #region Interact
         //  Checks if the player is trying to interact with the station.
-        if (GameManager.isInteractableObject(gameObject) && Input.GetKeyDown(KeyCode.E))
+        if (GameManager.isInteractableObject(button) && Input.GetKeyDown(KeyCode.E))
         {
             //  Determine what type of operation the player is doing.
             if (stationType == StationType.Sell)

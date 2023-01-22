@@ -1,10 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class CustomFunctions
 {
+    /*******************************************************************/
+
+    #region Custom Functions
     public static IEnumerator LerpText(string a, string b, float t, Action<string> callback)
     {
         while (a != b)
@@ -20,6 +24,5 @@ public class CustomFunctions
             yield return new WaitForSeconds(t);
         }
     }
-
-
+    #endregion
 }

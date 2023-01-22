@@ -18,7 +18,7 @@ MonoBehaviour:
   questAnswerDialogue: []
   isItem: 0
   item: {fileID: 0}
-  coinAmount: 16
+  coinAmount: 100
   isRandom: 1
   requiredItem: {fileID: 11400000, guid: c20e75f1fba794c48bf8bec99493723b, type: 2}
-  amountRequired: 4
+  amountRequired: 5

@@ -1865,7 +1865,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a8e84e976a1daa43bb05253ae414c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quests: []
+  questBoards: []
 --- !u!1001 &1306043923
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2057,7 +2057,6 @@ MonoBehaviour:
   dialogue:
   - 1234243trdvhre5reghbrtefhbfrt
   - amongus
-  current: 
 --- !u!4 &1683279117
 Transform:
   m_ObjectHideFlags: 0
