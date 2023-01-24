@@ -8,7 +8,7 @@ public class QuestLoader : MonoBehaviour
     public static Quest[] allQuests;
     public static Quest[] allRandomQuests;
     public static List<Quest> availableQuests;
-    public static List<Quest> dailyQuests;
+    public List<Quest> dailyQuests;
 
     public static int dailyQuestsAvailable;
     #endregion
@@ -20,6 +20,8 @@ public class QuestLoader : MonoBehaviour
     #region Hidden/Private Variables
     List<string> dailyQuestNames;
     #endregion
+
+    public QuestBoardScript questBoard;
 
     /*******************************************************************/
 
@@ -39,6 +41,8 @@ public class QuestLoader : MonoBehaviour
     void Start()
     {
         GenerateDailyQuests();
+
+        questBoard.selectedQuest = dailyQuests[0];
     }
     #endregion
 

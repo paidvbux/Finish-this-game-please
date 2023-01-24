@@ -48,15 +48,11 @@ public class StationScript : MonoBehaviour
         if (stationType == StationType.Sell)
         {
             if (HoverScript.selectedGameObject == button && !GameManager.isInteractableObject(button) && GameManager.isEmpty())
-            {
                 //  Adds the gameObject to the list.
                 GameManager.SetInteractableObject("Sell Items", button);
-            }
             else if ((HoverScript.selectedGameObject != button) && GameManager.isInteractableObject(button))
-            {
                 //  Removes the gameObject to the list.
                 GameManager.SetInteractableObject();
-            }
         }
         #endregion
     }

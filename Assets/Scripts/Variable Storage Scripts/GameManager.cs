@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     public static GameManager singleton;
     public static List<CropScript> crops;
     public static bool dialogueActive;
+    public static bool inputResponse;
+
     public static Item[] items => singleton._items;
 
     public static Transform Player => singleton.player;
@@ -45,6 +47,7 @@ public class GameManager : MonoBehaviour
 
     //  Dialogue UI
     public static GameObject DialogueUI => singleton._dialogueUI;
+    public static GameObject DialogueChoices => singleton._dialogueChoices;
     public static TextMeshProUGUI DialogueName => singleton._dialogueName;
     public static TextMeshProUGUI DialogueText => singleton._dialogueText;
     #endregion
@@ -65,11 +68,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _dialogueUI;
     [SerializeField] TextMeshProUGUI _dialogueName;
     [SerializeField] TextMeshProUGUI _dialogueText;
+
+    [Space()]
+    [SerializeField] GameObject _dialogueChoices;
     #endregion
 
     #region Hidden/Private Variables
     [HideInInspector] public InteractableObject _interactableObject;
     [HideInInspector] public Item[] _items;
+    bool acceptedQuest;
     #endregion
 
     /*******************************************************************/
@@ -89,6 +96,9 @@ public class GameManager : MonoBehaviour
         //  Initialize lists/arrays.
         crops = new List<CropScript>();
         _items = Resources.LoadAll<Item>("Items");
+
+        //  Turn off some UI.
+        _dialogueUI.SetActive(false);
         #endregion
     }
 
@@ -125,6 +135,26 @@ public class GameManager : MonoBehaviour
         //  Returns the component.
         return outline;
     }
+
+    #region Response Functions
+    /*
+     *   Return if the player has inputted a response
+     *   also tells the quest giver if they accepted
+     *   or not.
+     */
+    public static bool CheckIfInputtedResponse(Dialogue dialogue)
+    {
+        if (inputResponse)
+            dialogue.acceptedQuest = singleton.acceptedQuest;
+        return inputResponse;
+    }
+
+    public void ChangeResponseStatus(bool accepted)
+    {
+        acceptedQuest = accepted;
+        inputResponse = true;
+    }
+    #endregion
 
     #region Interactable Object Functions
     //  Sets the object to the selected object.
@@ -177,10 +207,18 @@ public class GameManager : MonoBehaviour
     *   Toggles the active state
     *   of the dialogue UI.
     */
-    public static void ToggleDialogueUI(bool dialogueActive, string speakerName = "")
+    public static void ToggleDialogueUI(bool active, string speakerName = "")
     {
-        DialogueUI.SetActive(dialogueActive);
-        DialogueName.text = dialogueActive ? speakerName : "";
+        Cursor.lockState = active ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = active;
+        DialogueUI.SetActive(active);
+        DialogueName.text = active ? speakerName : "";
+        dialogueActive = active;
+    }
+
+    public static void ToggleDialogueChoices(bool active)
+    {
+        DialogueChoices.SetActive(active);
     }
 
    /*

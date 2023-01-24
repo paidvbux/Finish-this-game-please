@@ -7,13 +7,14 @@ public class Dialogue : MonoBehaviour
     #region General Variables/Settings
     [Header("General Settings")]
     public string speakerName;
-    public string[] dialogue;
+    public Quest selectedQuest;
     #endregion
 
     #region Hidden/Private Variables
+    [HideInInspector] public bool acceptedQuest;
     string current = "";
     #endregion
-    
+
     /*******************************************************************/
 
     #region Custom Functions
@@ -23,7 +24,7 @@ public class Dialogue : MonoBehaviour
      *   of each line, continues when
      *   player presses space.
      */
-    protected IEnumerator RunDialogue()
+    protected IEnumerator RunDialogue(Quest.QuestDialogue[] dialogue)
     {
         if (GameManager.dialogueActive)
             yield break;
@@ -32,10 +33,25 @@ public class Dialogue : MonoBehaviour
         for (int i = 0; i < dialogue.Length; i++)
         {
             current = "";
-            StartCoroutine(CustomFunctions.LerpText(current, dialogue[i], 0.1f, GetValue));
-            yield return new WaitWhile (() => !Input.GetKeyDown(KeyCode.Space)) ;
+            StartCoroutine(CustomFunctions.LerpText(current, dialogue[i].dialogue, dialogue[i].timeBetweenCharacters, GetValue));
+
+            if (!dialogue[i].hasResponse)
+                yield return new WaitWhile(() => !Input.GetKeyDown(KeyCode.Space));
         }
+
+        if (dialogue[dialogue.Length - 1].hasResponse)
+        {
+            yield return new WaitWhile(() => (current == dialogue[dialogue.Length - 1].dialogue));
+            GameManager.ToggleDialogueChoices(true);
+            yield return new WaitWhile(() => !GameManager.inputResponse);
+            if (acceptedQuest)
+                StartCoroutine(RunDialogue(selectedQuest.questAcceptDialogue));
+            else
+                StartCoroutine(RunDialogue(selectedQuest.questRejectDialogue));
+        }
+
         GameManager.ToggleDialogueUI(false);
+        GameManager.ToggleDialogueChoices(false);
         yield break;
     }
 
@@ -47,6 +63,7 @@ public class Dialogue : MonoBehaviour
     void GetValue(string value)
     {
         current = value;
+        GameManager.DialogueText.text = current;
     }
     #endregion
 }

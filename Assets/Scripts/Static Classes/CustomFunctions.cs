@@ -14,7 +14,13 @@ public class CustomFunctions
         while (a != b)
         {
             string calculatedString;
+
             int length = a.Length + (a.Length < b.Length ? 1 : 0);
+            if (b[length - 1] == '<')
+            {
+                int index = b.IndexOf('>', length);
+                length = index + ((index == b.Length - 1) ? 1 : 2);
+            }
 
             calculatedString = b.Substring(0, length);
 
