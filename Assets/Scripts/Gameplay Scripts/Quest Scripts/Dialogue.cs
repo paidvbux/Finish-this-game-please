@@ -41,7 +41,7 @@ public class Dialogue : MonoBehaviour
 
         if (dialogue[dialogue.Length - 1].hasResponse)
         {
-            yield return new WaitWhile(() => (current == dialogue[dialogue.Length - 1].dialogue));
+            yield return new WaitWhile(() => current != dialogue[dialogue.Length - 1].dialogue);
             GameManager.ToggleDialogueChoices(true);
             yield return new WaitWhile(() => !GameManager.inputResponse);
             if (acceptedQuest)

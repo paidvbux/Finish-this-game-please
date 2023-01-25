@@ -5,10 +5,12 @@ using UnityEngine;
 public class QuestLoader : MonoBehaviour
 {
     #region Static Variables/Settings
+    public static QuestLoader singleton;
+
     public static Quest[] allQuests;
     public static Quest[] allRandomQuests;
     public static List<Quest> availableQuests;
-    public List<Quest> dailyQuests;
+    public static List<Quest> dailyQuests;
 
     public static int dailyQuestsAvailable;
     #endregion
@@ -21,13 +23,13 @@ public class QuestLoader : MonoBehaviour
     List<string> dailyQuestNames;
     #endregion
 
-    public QuestBoardScript questBoard;
-
     /*******************************************************************/
 
     #region Unity Runtime Functions
     void Awake()
     {
+        singleton = this;
+
         //  Load all the quests.
         allQuests = Resources.LoadAll<Quest>("Quests");
         allRandomQuests = Resources.LoadAll<Quest>("Random Quests");
@@ -41,8 +43,6 @@ public class QuestLoader : MonoBehaviour
     void Start()
     {
         GenerateDailyQuests();
-
-        questBoard.selectedQuest = dailyQuests[0];
     }
     #endregion
 
