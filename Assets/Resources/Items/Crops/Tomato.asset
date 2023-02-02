@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Tomato
   pluralItemName: Tomatoes
-  grabbableCropObject: {fileID: 8293824090431614488, guid: e018b7cbb056d824bbe241a76389d83b, type: 3}
-  cropObject: {fileID: 3636798997628185740, guid: 5968de0cb27e72a458b090f48ba4e27e, type: 3}
+  grabbableObject: {fileID: 8293824090431614488, guid: e018b7cbb056d824bbe241a76389d83b, type: 3}
+  gameObject: {fileID: 3636798997628185740, guid: 5968de0cb27e72a458b090f48ba4e27e, type: 3}
   minHarvestCount: 5
   maxHarvestCount: 12
   mass: 0.5

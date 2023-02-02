@@ -80,7 +80,7 @@ public class PlotScript : MonoBehaviour
     void SummonCrop()
     {
         //  Instantiate the crop object.
-        GameObject cropObject = Instantiate(plantedCrop.cropObject, transform.position, Quaternion.identity);
+        GameObject cropObject = Instantiate(plantedCrop.gameObject, transform.position, Quaternion.identity);
 
         #region Initialization
         //  Start the scale of the object at zero and set the parent to this. (Parented to remove clutter from the hierarchy)
@@ -107,7 +107,7 @@ public class PlotScript : MonoBehaviour
         //  Instantiates the drops.
         for (int i = 0; i < Random.Range(plantedCrop.minHarvestCount, plantedCrop.maxHarvestCount + 1); i++)
         {
-            GameObject droppedCrop = Instantiate(plantedCrop.grabbableCropObject, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+            GameObject droppedCrop = Instantiate(plantedCrop.grabbableObject, transform.position + Vector3.up * 0.5f, Quaternion.identity);
             
             //  Reduce clutter in the hierarchy
             droppedCrop.transform.SetParent(GameManager.singleton.transform);

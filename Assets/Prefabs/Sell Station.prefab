@@ -3031,7 +3031,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 096d18056ddaeb74aa8934ca265f8ee0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stationType: 0
+  interactText: Sell Items
   button: {fileID: 1854620433561365802}
   inputTrigger: {fileID: 1854620433069280520}
   crates: []

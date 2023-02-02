@@ -95,7 +95,7 @@ public class CrateScript : GrabbableObjectScript
                 for (int i = 0; i < storedAmount; i++)
                 {
                     //  Duplicates the item towards the player to prevent it from clipping through objects.
-                    GameObject crop = Instantiate(storedItem.grabbableCropObject, 
+                    GameObject crop = Instantiate(storedItem.grabbableObject, 
                         transform.position + (GameManager.Player.position - transform.position) * 0.1f, Quaternion.identity);
                     crop.transform.SetParent(GameManager.singleton.transform);
                 }

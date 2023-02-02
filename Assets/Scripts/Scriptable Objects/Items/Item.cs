@@ -13,8 +13,8 @@ public class Item : ScriptableObject
 
     #region Display Variables/Settings
     [Header("Display Settings")]
-    public GameObject grabbableCropObject;
-    public GameObject cropObject;
+    public GameObject grabbableObject;
+    public GameObject gameObject;
     #endregion
 
     #region Harvest Variables/Settings

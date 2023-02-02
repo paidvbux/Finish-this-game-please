@@ -121,6 +121,14 @@ public class GameManager : MonoBehaviour
 
         return outline;
     }
+    
+    public static void CheckIfInteractable(string interactText, GameObject gameObjectToCheck)
+    {
+        if (HoverScript.selectedGameObject == gameObjectToCheck && !isInteractableObject(gameObjectToCheck) && isEmpty())
+            SetInteractableObject(interactText, gameObjectToCheck);
+        else if (HoverScript.selectedGameObject != gameObjectToCheck && isInteractableObject(gameObjectToCheck))
+            SetInteractableObject();
+    }
 
     #region Response Functions
     public static bool CheckIfInputtedResponse(Dialogue dialogue)

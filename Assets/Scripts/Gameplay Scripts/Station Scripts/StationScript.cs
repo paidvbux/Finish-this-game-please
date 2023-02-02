@@ -16,26 +16,17 @@ public abstract class StationScript : MonoBehaviour
     void Update()
     {
         #region Interact
+        GameManager.CheckIfInteractable(interactText, button);
+
         if (GameManager.isInteractableObject(button) && Input.GetKeyDown(KeyCode.E))
         {
             Interact();
         }
-
-        CheckIfInteractable();
         #endregion
     }
     #endregion
 
     #region Custom Functions
     public abstract void Interact();
-    
-    
-    void CheckIfInteractable()
-    {
-        if (HoverScript.selectedGameObject == button && !GameManager.isInteractableObject(button) && GameManager.isEmpty())
-            GameManager.SetInteractableObject(interactText, button);
-        else if ((HoverScript.selectedGameObject != button) && GameManager.isInteractableObject(button))
-            GameManager.SetInteractableObject();
-    }
     #endregion
 }
