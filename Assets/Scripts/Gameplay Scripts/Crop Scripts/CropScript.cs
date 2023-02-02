@@ -16,11 +16,6 @@ public class CropScript : MonoBehaviour
     /*******************************************************************/
 
     #region Custom Functions
-   /*
-    *   Adds a outline on the crop when the player
-    *   is looking at it. Also checks if the player
-    *   is trying to harvest it.
-    */
     public void Hover()
     {
         if (HoverScript.selectedGameObject == gameObject)
