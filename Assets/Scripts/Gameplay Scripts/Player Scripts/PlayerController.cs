@@ -67,8 +67,11 @@ public class PlayerController : MonoBehaviour
     {
         #region Update Movement & Camera
         //  Updates movement and camera direction.
-        if (GameManager.dialogueActive)
+        GameManager.ToggleCursor(GameManager.uiActive);
+
+        if (GameManager.uiActive)
             return;
+
         UpdateMovement();
         if (!rotatingObject)
         {

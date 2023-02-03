@@ -33,6 +33,7 @@ public class Item : ScriptableObject
     [Header("Buy/Sell Settings")]
     public int buyCost;
     public int sellCost;
+    public string description;
     #endregion
 
     #region Quest Variables/Settings

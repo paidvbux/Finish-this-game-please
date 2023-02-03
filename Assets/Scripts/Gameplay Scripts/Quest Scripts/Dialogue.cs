@@ -26,7 +26,7 @@ public class Dialogue : MonoBehaviour
      */
     protected IEnumerator RunDialogue(Quest.QuestDialogue[] dialogue)
     {
-        if (GameManager.dialogueActive)
+        if (GameManager.uiActive)
             yield break;
 
         GameManager.ToggleDialogueUI(true, speakerName);

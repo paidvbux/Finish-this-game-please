@@ -40,7 +40,7 @@ public class GrabScript : MonoBehaviour
     void Update()
     {
         //  Prevents any bugs from occuring when talking to a NPC while holding an object.
-        if (GameManager.dialogueActive)
+        if (GameManager.uiActive)
             return;
 
         #region Pickup
