@@ -27,7 +27,6 @@ public class GrabbableObjectScript : MonoBehaviour
 
     void Update()
     {
-        //  Runs a function to check if the object should be highlighted or not.
         CheckForHighlight();
     }
     #endregion
@@ -35,17 +34,14 @@ public class GrabbableObjectScript : MonoBehaviour
     #region Custom Functions
     public void Initialize()
     {
-        //  Sets the rigidBody's drag to 1 if it is 0, else keep it the same.
-        rigidBody.drag = rigidBody.drag == 0 ? 1 : rigidBody.drag;
+        rigidBody.drag = (rigidBody.drag == 0 ? 1 : rigidBody.drag);
     }
 
     public void CheckForHighlight()
     {
-        //  Checks if the selected GameObject is this GameObject.
         if (HoverScript.selectedGameObject == gameObject)
         {
             #region Add Outline
-            //  If there is not outline, add one.
             if (outline == null)
                 outline = GameManager.AddOutline(gameObject, outlineParameters);
             #endregion
@@ -53,7 +49,6 @@ public class GrabbableObjectScript : MonoBehaviour
         else
         {
             #region Delete Outline
-            //  Deletes the outline if it is not selected and there is an outline still active.
             if (outline != null)
             {
                 Destroy(outline);

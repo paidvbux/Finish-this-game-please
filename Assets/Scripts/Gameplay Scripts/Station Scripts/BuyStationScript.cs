@@ -9,6 +9,7 @@ public class BuyStationScript : StationScript
     public List<Item> purchasableItems;
     public Dictionary<Item, int> cart;
     public GameObject boxPrefab;
+    public Transform boxSpawnPosition;
     #endregion
 
     #region Hidden Variables
@@ -26,11 +27,26 @@ public class BuyStationScript : StationScript
         changeAmount = 1;
 
         cart = new Dictionary<Item, int>();
+        cartItems = new Dictionary<Item, CartItemScript>();
     }
     #endregion
 
     #region Custom Functions
     #region Public Functions
+    public void Checkout()
+    {
+        if (cart.Count == 0)
+            return;
+
+        GameManager.singleton.coins -= GetTotal();
+
+        ContainerScript containerScript = Instantiate(boxPrefab, boxSpawnPosition).GetComponent<ContainerScript>();
+        containerScript.storedItems = new List<ContainerScript.StoredItem>();
+
+        foreach (KeyValuePair<Item, int> item in cart)
+            containerScript.storedItems.Add(new ContainerScript.StoredItem(item.Key, item.Value));
+    }
+    
     public void SetIncrement(int value)
     {
         changeAmount = value;
@@ -48,7 +64,11 @@ public class BuyStationScript : StationScript
         if (cart.ContainsKey(selectedItem) && cart[selectedItem] > changeAmount)
             cart[selectedItem] -= changeAmount;
         else if (cart[selectedItem] <= changeAmount)
+        {
             cart.Remove(selectedItem);
+            Destroy(cartItems[selectedItem].gameObject);
+            cartItems.Remove(selectedItem);
+        }
         UpdateUIButtons();
         UpdateCartUI();
         UpdateItemUI();
@@ -59,7 +79,15 @@ public class BuyStationScript : StationScript
         if (cart.ContainsKey(selectedItem))
             cart[selectedItem] += changeAmount;
         else if (!cart.ContainsKey(selectedItem))
+        {
             cart.Add(selectedItem, changeAmount);
+
+            CartItemScript cartItem = Instantiate(GameManager.singleton.cartItemUI, GameManager.singleton.cartItemUIParent).GetComponent<CartItemScript>();
+            cartItem.item = selectedItem;
+            cartItem.amount = changeAmount;
+
+            cartItems.Add(selectedItem, cartItem);
+        }
         UpdateUIButtons();
         UpdateCartUI();
         UpdateItemUI();
@@ -73,15 +101,6 @@ public class BuyStationScript : StationScript
 
     public void LoadCartUI()
     {
-        foreach (KeyValuePair<Item, int> item in cart)
-        {
-            CartItemScript cartItem = Instantiate(GameManager.singleton.cartItemUI, GameManager.singleton.cartItemUIParent).GetComponent<CartItemScript>();
-            cartItem.item = item.Key;
-            cartItem.amount = item.Value;
-
-            cartItems.Add(item.Key, cartItem);
-        }
-
         UpdateCartUI();
         GameManager.cartUI.SetActive(true);
     }
@@ -89,13 +108,11 @@ public class BuyStationScript : StationScript
 
     void UpdateCartUI()
     {
-        int total = 0;
+        int total = GetTotal();
         foreach (KeyValuePair<Item, CartItemScript> cartItem in cartItems)
         {
             cartItem.Value.amount = cart[cartItem.Key];
             cartItem.Value.UpdateUI();
-
-            total += cart[cartItem.Key] * cartItem.Key.buyCost;
         }
 
         GameManager.totalText.text = $"{total}";

@@ -18,11 +18,12 @@ public class CropScript : MonoBehaviour
     #region Custom Functions
     public void Hover()
     {
+        GameManager.CheckIfInteractable("Harvest", gameObject);
         if (HoverScript.selectedGameObject == gameObject)
         {
             #region Harvest Crop
-            //  Harvests if the player wants to.
-            if (Input.GetKeyDown(KeyCode.E)) plotScript.Harvest();
+            if (Input.GetKeyDown(KeyCode.E)) 
+                plotScript.Harvest();
             #endregion
 
             #region Add Outline

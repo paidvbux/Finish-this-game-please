@@ -48,23 +48,13 @@ public class PlotScript : MonoBehaviour
     #endregion
 
     #region Custom Functions
-   /*
-    *   Decrement the timer and lerps the 
-    *   scale from zero to full depending 
-    *   on the timer.
-    */
     void GrowCrops()
     {
-        //  Decreases the timer if the timer is more or equal to zero.
         timer -= timer >= 0 ? Time.deltaTime : 0;
 
         #region Update Scale & Hover
-        /*
-         *   If the timer is less or equal to 0 then 
-         *   allow for the hover outline to be shown.
-         *   If not, change the scale of the object.
-         */
-        if (timer <= 0) summonedCrop.Hover();
+        if (timer <= 0) 
+            summonedCrop.Hover();
         else
         {
             float lerpAmount = (plantedCrop.cropGrowTime - timer) / plantedCrop.cropGrowTime;
@@ -73,53 +63,36 @@ public class PlotScript : MonoBehaviour
         #endregion
     }
 
-    /*
-     *   Instantiates the crop and sets up 
-     *   some variables for later use.
-     */
     void SummonCrop()
     {
-        //  Instantiate the crop object.
         GameObject cropObject = Instantiate(plantedCrop.gameObject, transform.position, Quaternion.identity);
 
         #region Initialization
-        //  Start the scale of the object at zero and set the parent to this. (Parented to remove clutter from the hierarchy)
         cropObject.transform.localScale = Vector3.zero;
         cropObject.transform.SetParent(transform);
 
-        //  Adds the instantiated crop to the list of all crops in the game.
         summonedCrop = cropObject.GetComponent<CropScript>();
         GameManager.crops.Add(summonedCrop);
 
-        //  Sets a variable for later use.
         summonedCrop.plotScript = this;
         #endregion
     }
 
-   /*
-    *   Harvests the plot. Destroys the crop
-    *   and removes it from the global list.
-    *   Instantiates the drops on top.
-    */
     public void Harvest()
     {
         #region Instantiate Drops
-        //  Instantiates the drops.
         for (int i = 0; i < Random.Range(plantedCrop.minHarvestCount, plantedCrop.maxHarvestCount + 1); i++)
         {
             GameObject droppedCrop = Instantiate(plantedCrop.grabbableObject, transform.position + Vector3.up * 0.5f, Quaternion.identity);
             
-            //  Reduce clutter in the hierarchy
             droppedCrop.transform.SetParent(GameManager.singleton.transform);
         }
         #endregion
 
         #region Remove Crop
-        //  Removes the summonedCrop from the global list and destroys it.
         GameManager.crops.Remove(summonedCrop);
         Destroy(summonedCrop.gameObject);
 
-        //  Reset some values.
         summonedCrop = null;
         plantedCrop = null;
         #endregion

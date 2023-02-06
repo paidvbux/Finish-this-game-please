@@ -10,6 +10,12 @@ public class ContainerScript : GrabbableObjectScript
     {
         public Item item;
         public int count;
+
+        public StoredItem(Item _item, int _count)
+        {
+            item = _item;
+            count = _count;
+        }
     }
     #endregion
 
@@ -18,6 +24,9 @@ public class ContainerScript : GrabbableObjectScript
     public List<StoredItem> storedItems = new List<StoredItem>();
     #endregion
 
+    /*******************************************************************/
+
+    #region Unity Runtime Functions
     void Update()
     {
         GameManager.CheckIfInteractable("Empty", gameObject);
@@ -26,11 +35,15 @@ public class ContainerScript : GrabbableObjectScript
         {
             EmptyContainer();
         }
-    }
 
+        CheckForHighlight();
+    }
+    #endregion
+
+    #region Custom Functions
     void EmptyContainer()
     {
-        Vector3 spawnPosition = ((GameManager.Player.transform.position - transform.position).normalized + Vector3.up) / 10f;
+        Vector3 spawnPosition = ((GameManager.Player.transform.position - transform.position).normalized + Vector3.up) / 10f + transform.position;
         foreach (StoredItem item in storedItems)
         {
             for (int i = 0; i < item.count; i++)
@@ -42,4 +55,5 @@ public class ContainerScript : GrabbableObjectScript
 
         Destroy(gameObject);
     }
+    #endregion
 }

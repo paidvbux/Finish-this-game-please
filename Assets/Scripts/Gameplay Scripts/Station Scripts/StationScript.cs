@@ -30,10 +30,8 @@ public abstract class StationScript : MonoBehaviour
                 GameManager.interactableObject.text = interactText;
                 GameManager.interactUI.SetActive(true);
             }
-            else
-            {
+            else if (GameManager.interactableObject.gameObject == gameObject)
                 GameManager.interactableObject.gameObject = null;
-            }
         }
         else if (!useTrigger)
         {

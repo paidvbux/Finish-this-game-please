@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         #region Update Interact UI
-        if (_interactableObject.gameObject == null)
+        if (_interactableObject.gameObject == null || uiActive)
             DisableInteractUI();
         else
             UpdateInteractUI(_interactableObject.text);
@@ -213,6 +213,11 @@ public class GameManager : MonoBehaviour
     public void RemoveFromCart()
     {
         selectedShop.RemoveFromCart();
+    }
+
+    public void Checkout()
+    {
+        selectedShop.Checkout();
     }
     #endregion
 
