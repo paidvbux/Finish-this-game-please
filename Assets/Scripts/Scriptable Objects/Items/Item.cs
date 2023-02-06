@@ -15,6 +15,7 @@ public class Item : ScriptableObject
     [Header("Display Settings")]
     public GameObject grabbableObject;
     public GameObject gameObject;
+    public Sprite sprite;
     #endregion
 
     #region Harvest Variables/Settings

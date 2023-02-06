@@ -54,14 +54,22 @@ public class GameManager : MonoBehaviour
     public static TextMeshProUGUI DialogueText => singleton._dialogueText;
     #endregion
 
-    #region Shop Description
+    #region Shop UI
     public static GameObject shopUI => singleton._shopUI;
+    public static GameObject cartUI => singleton._cartUI;
+    public static GameObject shopDescriptionUI => singleton._shopDescriptionUI;
     public static TextMeshProUGUI shopNameText => singleton._shopNameText;
     public static TextMeshProUGUI shopCostText => singleton._shopCostText;
     public static TextMeshProUGUI shopDescriptionText => singleton._shopDescriptionText;
     public static TextMeshProUGUI shopAmountText => singleton._shopAmountText;
+    public static TextMeshProUGUI shopIncrementText => singleton._shopIncrementText;
+    public static TMP_InputField incrementInputField => singleton._incrementInputField;
     public static Button shopIncreaseButton => singleton._shopIncreaseButton;
     public static Button shopDecreaseButton => singleton._shopDecreaseButton;
+
+    public static TextMeshProUGUI totalText => singleton._totalText;
+    public static TextMeshProUGUI currentBalanceText => singleton._currentBalanceText;
+    public static TextMeshProUGUI remainingBalanceText => singleton._remainingBalanceText;
     #endregion
     #endregion
 
@@ -70,29 +78,46 @@ public class GameManager : MonoBehaviour
     public Transform player;
     public PlayerController playerController => player.GetComponent<PlayerController>();
     public int coins;
+
+    public BuyStationScript selectedShop;
     #endregion
 
     #region UI Variables/Settings
-    [Header("UI Settings")]
+    [Header("Interact UI Settings")]
     [SerializeField] GameObject _interactUI;
     [SerializeField] TextMeshProUGUI _interactText;
 
-    [Space()]
+    [Header("Dialogue UI Settings")]
     [SerializeField] GameObject _dialogueUI;
     [SerializeField] TextMeshProUGUI _dialogueName;
     [SerializeField] TextMeshProUGUI _dialogueText;
-
+    
     [Space()]
     [SerializeField] GameObject _dialogueChoices;
 
-    [Space()]
+    [Header("Shop UI Settings")]
     [SerializeField] GameObject _shopUI;
+    [SerializeField] GameObject _cartUI;
+    public Transform itemUIParent;
+    public GameObject itemUI;
+    public Transform cartItemUIParent;
+    public GameObject cartItemUI;
+
+    [Header("Shop Description UI Settings")]
+    [SerializeField] GameObject _shopDescriptionUI;
     [SerializeField] TextMeshProUGUI _shopNameText;
     [SerializeField] TextMeshProUGUI _shopCostText;
     [SerializeField] TextMeshProUGUI _shopDescriptionText;
     [SerializeField] TextMeshProUGUI _shopAmountText;
+    [SerializeField] TextMeshProUGUI _shopIncrementText;
+    [SerializeField] TMP_InputField _incrementInputField;
     [SerializeField] Button _shopIncreaseButton;
     [SerializeField] Button _shopDecreaseButton;
+
+    [Header("Cart UI Settings")]
+    [SerializeField] TextMeshProUGUI _totalText;
+    [SerializeField] TextMeshProUGUI _currentBalanceText;
+    [SerializeField] TextMeshProUGUI _remainingBalanceText;
     #endregion
 
     #region Hidden/Private Variables
@@ -109,8 +134,10 @@ public class GameManager : MonoBehaviour
         #region Initialization
         _interactableObject = new InteractableObject("", null);
 
-        DisableInteractUI();
         singleton = this;
+
+        DisableInteractUI();
+        DisableShopUI();
 
         crops = new List<CropScript>();
         _items = Resources.LoadAll<Item>("Items");
@@ -126,7 +153,14 @@ public class GameManager : MonoBehaviour
             DisableInteractUI();
         else
             UpdateInteractUI(_interactableObject.text);
-        #endregion       
+        #endregion
+
+        #region Update Shop UI
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            DisableShopUI();
+        }
+        #endregion
     }
     #endregion
 
@@ -143,21 +177,6 @@ public class GameManager : MonoBehaviour
 
         return outline;
     }
-    
-    public static void CloseShopUI()
-    {
-        shopUI.SetActive(false);
-        ToggleCursor(false);
-    }
-
-    public static void UpdateShopDescriptionUI(Item item, int amount)
-    {
-        shopUI.SetActive(true);
-        shopNameText.text = item.name;
-        shopCostText.text = item.buyCost.ToString();
-        shopDescriptionText.text = item.description;
-        shopAmountText.text = amount.ToString();
-    }
 
     public static void ToggleCursor(bool active)
     {
@@ -165,6 +184,37 @@ public class GameManager : MonoBehaviour
         Cursor.visible = active;
         uiActive = active;
     }
+
+    #region Shop Functions
+    public void SubmitIncrementAmount(TMP_InputField inputField)
+    {
+        string stringInput = string.IsNullOrEmpty(inputField.text) ? "1" : inputField.text;
+        int maxValue = Mathf.FloorToInt((coins / selectedShop.selectedItem.buyCost) - 
+            (selectedShop.cart.ContainsKey(selectedShop.selectedItem) ? selectedShop.cart[selectedShop.selectedItem] : 0));
+        int intInput = Mathf.Clamp(int.Parse(stringInput), 1, maxValue);
+
+        inputField.placeholder.GetComponent<TextMeshProUGUI>().text = intInput.ToString();
+        inputField.text = intInput.ToString();
+        
+        selectedShop.SetIncrement(intInput);
+    }
+
+    public static void UpdateSelectedItem(Item item)
+    {
+        shopDescriptionUI.SetActive(true);
+        singleton.selectedShop.UpdateSelectedItem(item);
+    }
+
+    public void AddToCart()
+    {
+        selectedShop.AddToCart();
+    }
+
+    public void RemoveFromCart()
+    {
+        selectedShop.RemoveFromCart();
+    }
+    #endregion
 
     #region Response Functions
     public static bool CheckIfInputtedResponse(Dialogue dialogue)
@@ -244,6 +294,44 @@ public class GameManager : MonoBehaviour
     public static void UpdateDialogueUI(string text)
     {
         DialogueText.text = text;
+    }
+    #endregion
+
+    #region Shop UI
+    public void DisableShopUI()
+    {
+        if (selectedShop != null)
+        {
+            foreach (ShopItemScript shopItem in selectedShop.shopItems)
+                Destroy(shopItem.gameObject);
+
+            selectedShop.shopItems.Clear();
+            selectedShop.cart.Clear();
+        }
+
+        DisableCartUI();
+
+        shopUI.SetActive(false);
+        shopDescriptionUI.SetActive(false);
+        ToggleCursor(false);
+    }
+
+    public void LoadCartUI()
+    {
+        selectedShop.LoadCartUI();
+    }
+
+    public void DisableCartUI()
+    {
+        if (selectedShop != null)
+        {
+            foreach (KeyValuePair<Item, CartItemScript> cartItem in selectedShop.cartItems)
+                Destroy(cartItem.Value.gameObject);
+
+            selectedShop.cartItems.Clear();
+        }
+
+        cartUI.SetActive(false);
     }
     #endregion
     #endregion

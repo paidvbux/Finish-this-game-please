@@ -63,31 +63,24 @@ public class PlayerController : MonoBehaviour
         #endregion
     }
 
-    void LateUpdate()
+    void Update()
     {
         #region Update Movement & Camera
-        //  Updates movement and camera direction.
         GameManager.ToggleCursor(GameManager.uiActive);
+
+        UpdateMovement();
 
         if (GameManager.uiActive)
             return;
-
-        UpdateMovement();
         if (!rotatingObject)
-        {
             UpdateMouseLook();
-        }
         #endregion
     }
     #endregion
 
     #region Custom Functions
-   /*
-    *   Updates the mouse rotation so that the player can look around.
-    */
     void UpdateMouseLook()
     {
-        //  Get the mouse position input.
         Vector2 targetMouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
         #region Change FOV
@@ -98,48 +91,36 @@ public class PlayerController : MonoBehaviour
         #endregion
 
         #region Rotate
-        //  Smoothly moves the mouse position from its position to its new position.
         currentMouseDelta = Vector2.SmoothDamp(currentMouseDelta, targetMouseDelta, ref currentMouseDeltaVelocity, mouseSmoothTime);
 
-        //  Changes the camera pitch by how much the mouse moves up and down. Clamps it to straight up and straight down.
         cameraPitch -= currentMouseDelta.y * mouseSensitivity;
         cameraPitch = Mathf.Clamp(cameraPitch, -90.0f, 90.0f);
 
-        //  Updates the calculated camera rotation.
         playerCamera.localEulerAngles = Vector3.right * cameraPitch;
         transform.Rotate(Vector3.up * currentMouseDelta.x * mouseSensitivity);
         #endregion
     }
 
-   /*
-    *   Updates the velocity and position 
-    *   of the player.
-    */
     void UpdateMovement()
     {
         #region Get Movement Input
-        //  Gets inputs of the player, normalizes it and stores it as a 2D vector.
-        Vector2 targetDir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 targetDir = GameManager.uiActive ? Vector2.zero : new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         targetDir.Normalize();
 
         Vector3 velocity;
         #endregion
 
-        //  Checks if the player is touching the ground.
         if (isGrounded())
         {
             #region Calculate Velocity
-            //  Gets the current direction and calculates the current velocity.
             currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, moveSmoothTime);
             velocity = (transform.forward * currentDir.y + transform.right * currentDir.x);
             #endregion
 
             #region Update Velocity
-            //  Moves the velocity by walkSpeed if the player is walking. Moves by runSpeed otherwise.
             if (Input.GetKey(KeyCode.LeftShift)) velocity = velocity * runSpeed + Vector3.up * velocityY;
             else velocity = velocity * walkSpeed + Vector3.up * velocityY;
             
-            //  Resets the Y velocity to prevent buildup in the negative Y axis.
             velocityY = 0.0f;
             #endregion
 
@@ -152,28 +133,21 @@ public class PlayerController : MonoBehaviour
         else
         {
             #region Calculate Velocity
-            //  Gets the current direction and calculates the current velocity.
             currentDir = Vector2.SmoothDamp(currentDir, targetDir, ref currentDirVelocity, 0.6f);
             velocity = (transform.forward * currentDir.y + transform.right * currentDir.x);
             
-            //  Adds downwards velocity to account for gravity.
             velocityY -= 9.8f * Time.deltaTime;
             #endregion
 
             #region Update Velocity
-            //  Moves the velocity by walkSpeed if the player is walking. Moves by runSpeed otherwise.
             if (Input.GetKey(KeyCode.LeftShift)) velocity = velocity * runSpeed + Vector3.up * velocityY;
             else velocity = velocity * walkSpeed + Vector3.up * velocityY;
             #endregion
         }
 
-        //  Sets the velocity.
         rigidBody.velocity = velocity;
     }
 
-   /*
-    * Returns whether or not the player is grounded.
-    */
     bool isGrounded()
     {
         return Physics.OverlapCapsule(transform.position - Vector3.up, transform.position - (Vector3.up * 1.01f), 0.25f, groundMask).Length != 0;

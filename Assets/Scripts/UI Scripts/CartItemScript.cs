@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ShopItemScript : MonoBehaviour
+public class CartItemScript : MonoBehaviour
 {
     #region UI Variables/Settings
     public TextMeshProUGUI nameText;
+    public TextMeshProUGUI amountText;
     public TextMeshProUGUI costText;
     public Image image;
     #endregion
@@ -20,18 +21,19 @@ public class ShopItemScript : MonoBehaviour
     /*******************************************************************/
 
     #region Custom Functions
-    public void Setup(string name, int cost, Sprite sprite)
+    public void UpdateUI()
     {
-        nameText.text = name;
-        costText.text = cost.ToString();
+        nameText.text = item.name;
+        amountText.text = $"{amount}";
+        costText.text = $"{item.buyCost * amount}";
 
-        if (sprite != null)
-            image.sprite = sprite;
+        if (item.sprite != null)
+            image.sprite = item.sprite;
     }
 
     public void UpdateCurrentItem()
     {
-        GameManager.UpdateShopDescriptionUI(item, amount);
+        GameManager.UpdateSelectedItem(item);
     }
     #endregion
 }
