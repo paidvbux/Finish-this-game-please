@@ -14,14 +14,7 @@ public class Item : ScriptableObject
     #region Display Variables/Settings
     [Header("Display Settings")]
     public GameObject grabbableObject;
-    public GameObject gameObject;
     public Sprite sprite;
-    #endregion
-
-    #region Harvest Variables/Settings
-    [Header("Harvest Settings")]
-    public int minHarvestCount;
-    public int maxHarvestCount;
     #endregion
 
     #region Storage Variables/Settings
@@ -35,11 +28,5 @@ public class Item : ScriptableObject
     public int buyCost;
     public int sellCost;
     public string description;
-    #endregion
-
-    #region Quest Variables/Settings
-    [Header("Quest Settings")]
-    public int minQuestRequirement;
-    public int maxQuestRequirement;
     #endregion
 }

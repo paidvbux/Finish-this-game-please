@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
     public static bool uiActive;
     public static bool hasInputResponse;
 
-    public static Item[] items => singleton._items;
+    public static QuestItem[] questItems => singleton._questItems;
 
     public static Transform Player => singleton.player;
 
@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
 
     #region Hidden/Private Variables
     [HideInInspector] public InteractableObject _interactableObject;
-    [HideInInspector] public Item[] _items;
+    [HideInInspector] public QuestItem[] _questItems;
     bool acceptedQuest;
     #endregion
 
@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
         DisableShopUI();
 
         crops = new List<CropScript>();
-        _items = Resources.LoadAll<Item>("Items");
+        _questItems = Resources.LoadAll<QuestItem>("Items/Quest Items");
 
         _dialogueUI.SetActive(false);
         #endregion

@@ -4,9 +4,18 @@ using UnityEngine;
 
 public class BuyStationScript : StationScript
 {
+    #region Classes
+    [SerializeField]
+    public class PurchasableItem
+    {
+        public Item item;
+        public bool isSeedPacket;
+    }
+    #endregion
+
     #region Buy Station Variables/Settings
     [Header("Buy Station Settings")]
-    public List<Item> purchasableItems;
+    public List<PurchasableItem> purchasableItems;
     public Dictionary<Item, int> cart;
     public GameObject boxPrefab;
     public Transform boxSpawnPosition;
@@ -135,10 +144,10 @@ public class BuyStationScript : StationScript
     {
         GameManager.uiActive = true;
         GameManager.ToggleCursor(true);
-        foreach (Item item in purchasableItems)
+        foreach (PurchasableItem item in purchasableItems)
         {
             ShopItemScript shopItem = Instantiate(GameManager.singleton.itemUI, GameManager.singleton.itemUIParent).GetComponent<ShopItemScript>();
-            shopItem.item = item;
+            shopItem.item = item.item;
             shopItem.UpdateUI();
 
             shopItems.Add(shopItem);

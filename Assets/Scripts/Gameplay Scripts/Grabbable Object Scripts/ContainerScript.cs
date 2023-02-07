@@ -10,6 +10,7 @@ public class ContainerScript : GrabbableObjectScript
     {
         public Item item;
         public int count;
+        public bool isSeedPacket;
 
         public StoredItem(Item _item, int _count)
         {

@@ -23,9 +23,7 @@ public class SeedPacketScript : GrabbableObjectScript
             GameManager.SetInteractableObject("Plant", gameObject);
 
             if (Input.GetKeyDown(KeyCode.E))
-            {
                 PlantSeed();
-            }
         }
         else if (GameManager.isInteractableObject(gameObject))
             GameManager.SetInteractableObject();
@@ -39,15 +37,12 @@ public class SeedPacketScript : GrabbableObjectScript
             return;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 5, layerMask)
-            && hit.collider.TryGetComponent(out PlotScript plot) && plot.plantedCrop == null)
+        bool hitObject = Physics.Raycast(transform.position, Vector3.down, out hit, 5, layerMask);
+        bool isPlot = hit.collider.TryGetComponent(out PlotScript plot) && plot.plantedCrop == null;
+        if (hitObject && isPlot)
         {
-            print($"planted on {plot}");
-
-            /*
             plot.PlantSeed(cropToPlant);
             seedsLeft--;
-             */
         }
     }
     #endregion

@@ -21,26 +21,19 @@ public class PlotScript : MonoBehaviour
     void Update()
     {
         #region Crop Change
-        //  Checks if there is a crop planted on the plot.
         if (plantedCrop != null)
         {
-            //  Checks whether the crop has changed values
             if (plantedCrop != previousCrop)
             {
-                //  Destroy the summonedCrop to properly reset the plot.
                 Destroy(summonedCrop);
             
-                //  Run a function to summon the crop.
                 SummonCrop();
 
-                //  Reset the timer
                 timer = plantedCrop.cropGrowTime;
 
-                //  Set the previousCrop to the current one.
                 previousCrop = plantedCrop;
             }
 
-            //  Run a function to increase the scale of the crop.
             GrowCrops();
         }
         #endregion
@@ -51,7 +44,7 @@ public class PlotScript : MonoBehaviour
     #region Public Functions
     public void PlantSeed(Crop crop)
     {
-
+        plantedCrop = crop;
     }
     #endregion
 
@@ -72,7 +65,7 @@ public class PlotScript : MonoBehaviour
 
     void SummonCrop()
     {
-        GameObject cropObject = Instantiate(plantedCrop.gameObject, transform.position, Quaternion.identity);
+        GameObject cropObject = Instantiate(plantedCrop.cropGameObject, transform.position, Quaternion.identity);
 
         #region Initialization
         cropObject.transform.localScale = Vector3.zero;

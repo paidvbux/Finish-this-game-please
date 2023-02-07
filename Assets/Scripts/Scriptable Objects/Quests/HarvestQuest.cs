@@ -10,7 +10,7 @@ public class HarvestQuest : Quest
     #region Item Variables/Settings
     [Header("Item Settings")]
     public bool isRandom;
-    public Item requiredItem;
+    public QuestItem requiredQuestItem;
     public int amountRequired;
     #endregion
 
@@ -28,7 +28,7 @@ public class HarvestQuest : Quest
         #region Create Quest
         //  Create a new instance of the object
         HarvestQuest quest = Instantiate(this);
-        quest.name = $"{requiredItem.itemName} {amountRequired}";
+        quest.name = $"{requiredQuestItem.itemName} {amountRequired}";
         #endregion
 
         #region Format Dialogue
@@ -51,10 +51,10 @@ public class HarvestQuest : Quest
     {
         //  Randomize all variables.
         #region Randomize Variables
-        int randomIndex = Random.Range(0, GameManager.items.Length);
-        requiredItem = GameManager.items[randomIndex];
-        amountRequired = Random.Range(requiredItem.minQuestRequirement, requiredItem.maxQuestRequirement);
-        coinAmount = amountRequired * requiredItem.buyCost;
+        int randomIndex = Random.Range(0, GameManager.questItems.Length);
+        requiredQuestItem = GameManager.questItems[randomIndex];
+        amountRequired = Random.Range(requiredQuestItem.minQuestRequirement, requiredQuestItem.maxQuestRequirement);
+        coinAmount = amountRequired * requiredQuestItem.buyCost;
         #endregion
     }
 
@@ -62,7 +62,7 @@ public class HarvestQuest : Quest
     {
         //  Return the formatted string.
         return string.Format(text, $"<color=#EDBC29>{coinAmount}</color>", $"<color=#428CF1>{amountRequired}</color>",
-            $"<color=#428CF1>{(amountRequired == 1 ? requiredItem.itemName : requiredItem.pluralItemName)}</color>");
+            $"<color=#428CF1>{(amountRequired == 1 ? requiredQuestItem.itemName : requiredQuestItem.pluralItemName)}</color>");
     }
     #endregion
 }
