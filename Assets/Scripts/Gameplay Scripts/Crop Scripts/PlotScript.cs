@@ -48,6 +48,13 @@ public class PlotScript : MonoBehaviour
     #endregion
 
     #region Custom Functions
+    #region Public Functions
+    public void PlantSeed(Crop crop)
+    {
+
+    }
+    #endregion
+
     void GrowCrops()
     {
         timer -= timer >= 0 ? Time.deltaTime : 0;

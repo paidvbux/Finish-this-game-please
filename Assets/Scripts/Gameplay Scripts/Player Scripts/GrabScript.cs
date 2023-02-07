@@ -5,6 +5,7 @@ using UnityEngine;
 public class GrabScript : MonoBehaviour
 {
     #region Static Variables
+    public static GrabScript singleton;
     public static bool holdingObject;
     #endregion
 
@@ -25,7 +26,7 @@ public class GrabScript : MonoBehaviour
     float desiredDistanceFromPlayer;
     Vector3 desiredObjectPosition;
 
-    Rigidbody heldRigidbody;
+    [HideInInspector] public Rigidbody heldRigidbody;
     #endregion
 
     /*******************************************************************/
@@ -33,13 +34,13 @@ public class GrabScript : MonoBehaviour
     #region Unity Runtime Functions
     void Start()
     {
-        //  Resets some variables.
+        singleton = this;
+
         holdingObject = false;
     }
 
     void Update()
     {
-        //  Prevents any bugs from occuring when talking to a NPC while holding an object.
         if (GameManager.uiActive)
             return;
 

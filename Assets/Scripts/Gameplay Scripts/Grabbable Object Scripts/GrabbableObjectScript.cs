@@ -39,7 +39,7 @@ public class GrabbableObjectScript : MonoBehaviour
 
     public void CheckForHighlight()
     {
-        if (HoverScript.selectedGameObject == gameObject)
+        if (HoverScript.selectedGameObject == gameObject || GrabScript.singleton.heldRigidbody == rigidBody)
         {
             #region Add Outline
             if (outline == null)
