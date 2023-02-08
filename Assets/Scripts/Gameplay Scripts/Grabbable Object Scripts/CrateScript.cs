@@ -15,6 +15,7 @@ public class CrateScript : GrabbableObjectScript
     public UpdateUIInfo uiInfo;
     UpdateUIInfo.TMPInfo nameInfo;
     UpdateUIInfo.TMPInfo countInfo;
+    UpdateUIInfo.ImageInfo mainImageInfo;
     #endregion
 
     #region Private/Hidden Variables
@@ -27,7 +28,15 @@ public class CrateScript : GrabbableObjectScript
     void Awake()
     {
         #region Map UI Info
-        //  Sets the nameInfo and countInfo to be a global variable for easier access.
+        foreach (UpdateUIInfo.ImageInfo imageInfo in uiInfo.imagesToUpdate)
+        {
+            if (imageInfo.referenceName == "Main Image")
+            {
+                mainImageInfo = imageInfo;
+                continue;
+            }
+        }
+
         foreach (UpdateUIInfo.TMPInfo textInfo in uiInfo.textToUpdate)
         {
             if (textInfo.name == "Name")
@@ -44,11 +53,9 @@ public class CrateScript : GrabbableObjectScript
         #endregion
 
         #region Initialization
-        //  Sets its tag to "Crate" to allow for the GrabScript to properly interact with it.
         gameObject.tag = "Crate";
         startingMass = rigidBody.mass;
 
-        //  Runs the derived initialization.
         Initialize();
         #endregion
     }
@@ -56,45 +63,29 @@ public class CrateScript : GrabbableObjectScript
     void Update()
     {
         #region Empty Contents
-        //  Checks the player is trying to interact with the crate.
         if (storedItem != null && storedAmount > 0 && HoverScript.selectedGameObject == gameObject && !GameManager.isInteractableObject(gameObject) && GameManager.isEmpty())
-            //  Sets the UI to display this gameObject.
             GameManager.SetInteractableObject("Empty Crate", gameObject);
         else if ((storedItem == null || storedAmount == 0 || HoverScript.selectedGameObject != gameObject) && GameManager.isInteractableObject(gameObject))
-            //  Removes the UI to display.
             GameManager.SetInteractableObject();
 
-        //  Checks if it can be emptied.
         if (GameManager.isInteractableObject(gameObject))
             EmptyCrate(true);
         #endregion
 
-        //  Runs the highlight function from its derived class
         CheckForHighlight();
     }
     #endregion
 
     #region Custom Functions
-   /*
-    *   Empties the crate so that the player can replace the 
-    *   contents of the crate or to sell the contents of the
-    *   crate.
-    */
     public void EmptyCrate(bool giveBackItems)
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
             #region Return Items
-            /* 
-             *   Determines whether or not to return the dropped items back to the player.
-             *   true  : Used when emptying the crate.
-             *   false : Used when selling contents of the crates.
-             */
             if (giveBackItems) 
             {
                 for (int i = 0; i < storedAmount; i++)
                 {
-                    //  Duplicates the item towards the player to prevent it from clipping through objects.
                     GameObject crop = Instantiate(storedItem.grabbableObject, 
                         transform.position + (GameManager.Player.position - transform.position) * 0.1f, Quaternion.identity);
                     crop.transform.SetParent(GameManager.singleton.transform);
@@ -103,14 +94,11 @@ public class CrateScript : GrabbableObjectScript
             #endregion
 
             #region Reset Variables
-            //  Resets the mass of the crate because there is nothing inside anymore.
             rigidBody.mass = startingMass;
 
-            //  Resets some values to prevent bugs.
             storedItem = null;
             storedAmount = 0;
 
-            //  Resets the crate's display to be empty.
             nameInfo.ChangeValue(Color.white, "Empty");
             countInfo.ChangeValue(Color.white, "- / -");
             uiInfo.UpdateUIElements();
@@ -119,50 +107,35 @@ public class CrateScript : GrabbableObjectScript
         }
     }
 
-   /*
-    *   Adds an item to the crate; increases the count
-    *   by one.
-    */
     public void AddItem(Item item)
     {
         #region Reset Empty
-        /*
-         *   Checks if the crate is empty and changes values
-         *   depending on if it is.
-         * 
-         *   Empty?
-         *       Yes : Sets the item to the one added and 
-         *             updates the name on the display.
-         *       No  : Skips the step.
-         */
-
         if (storedItem == null)
         {
             storedItem = item;
             nameInfo.ChangeValue(nameInfo.color, storedItem.itemName);
+            if (item.sprite != null)
+                mainImageInfo.ChangeValue(item.sprite, Color.white);
+            else
+                mainImageInfo.ChangeValue(null, new Color(0, 0, 0, 0));
+            
             storedAmount = 0;
         }
         #endregion
 
         #region Update Values/UI
-        //  Increases the mass and the amount stored inside.
         rigidBody.mass += storedItem.mass;
         storedAmount++;
 
-        //  Updates the number of items stored.
         countInfo.ChangeValue(isFull() ? Color.red : Color.white, storedAmount + " / " + storedItem.maxCrateStorage);
         uiInfo.UpdateUIElements();
         uiInfo.quadDisplay.UpdateTexture(storedItem.itemName + "/" + storedItem.itemName + " " + storedAmount.ToString());
         #endregion
     }
 
-   /*
-    *   Returns if the crate is full or not
-    */
     public bool isFull()
     {
         #region Returns Value
-        //  Exit function early if the crate is empty.
         if (storedItem == null)
             return false;
         return storedAmount >= storedItem.maxCrateStorage;

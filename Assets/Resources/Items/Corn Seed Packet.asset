@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Corn Seeds
   pluralItemName: Corn Seeds
+  isSeedPacket: 1
   grabbableObject: {fileID: 1596642672562359635, guid: e368e342ec29c8f4ca18817cac5936bf, type: 3}
   sprite: {fileID: 0}
   mass: 0

@@ -10,7 +10,7 @@ public class UpdateUIInfo : MonoBehaviour
     [System.Serializable]
     public class ImageInfo
     {
-        public string refernceName;
+        public string referenceName;
 
         public Image img;
         public Sprite sprite;
@@ -19,11 +19,6 @@ public class UpdateUIInfo : MonoBehaviour
         [HideInInspector] public Sprite oldSprite;
         [HideInInspector] public Color oldColor;
 
-       /*
-        *   Checks if the value of the variable 
-        *   has changed, if so change it and set
-        *   the old one to the new one.
-        */
         public void UpdateChanges()
         {
             if (oldSprite != sprite)
@@ -36,6 +31,11 @@ public class UpdateUIInfo : MonoBehaviour
                 img.color = color;
                 oldColor = color;
             }
+        }
+
+        public void ChangeValue(Sprite _sprite)
+        {
+            sprite = _sprite;
         }
 
         public void ChangeValue(Sprite _sprite, Color _color)
@@ -57,11 +57,6 @@ public class UpdateUIInfo : MonoBehaviour
         [HideInInspector] public Color oldColor;
         [HideInInspector] public string oldInfo;
 
-       /*
-        *   Checks if the value of the variable 
-        *   has changed, if so change it and set
-        *   the old one to the new one.
-        */
         public void UpdateChanges()
         {
             if (oldColor != color)
@@ -95,9 +90,6 @@ public class UpdateUIInfo : MonoBehaviour
     /*******************************************************************/
 
     #region Custom Functions
-   /*  
-    *   Updates all UI elements. 
-    */
     public void UpdateUIElements()
     {
         #region Update Images

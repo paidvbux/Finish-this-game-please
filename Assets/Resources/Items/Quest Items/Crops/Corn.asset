@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Corn
   pluralItemName: Corn
+  isSeedPacket: 0
   grabbableObject: {fileID: 2674817404406123266, guid: b9b0be6c456802d42b91783b612faedc, type: 3}
   sprite: {fileID: 0}
   mass: 1
@@ -23,7 +24,7 @@ MonoBehaviour:
   description: 
   minQuestRequirement: 3
   maxQuestRequirement: 5
-  cropGrowTime: 5
+  cropGrowTime: 15
   cropGameObject: {fileID: 7039810372250389003, guid: 256c7a36ffe6a94409a948681e388ee2, type: 3}
   minHarvestCount: 4
   maxHarvestCount: 6

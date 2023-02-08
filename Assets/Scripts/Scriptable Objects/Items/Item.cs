@@ -9,6 +9,8 @@ public class Item : ScriptableObject
     [Header("General Settings")]
     public string itemName;
     public string pluralItemName;
+
+    public bool isSeedPacket;
     #endregion
 
     #region Display Variables/Settings

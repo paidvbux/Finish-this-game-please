@@ -4,18 +4,9 @@ using UnityEngine;
 
 public class BuyStationScript : StationScript
 {
-    #region Classes
-    [SerializeField]
-    public class PurchasableItem
-    {
-        public Item item;
-        public bool isSeedPacket;
-    }
-    #endregion
-
     #region Buy Station Variables/Settings
     [Header("Buy Station Settings")]
-    public List<PurchasableItem> purchasableItems;
+    public List<Item> purchasableItems;
     public Dictionary<Item, int> cart;
     public GameObject boxPrefab;
     public Transform boxSpawnPosition;
@@ -53,7 +44,7 @@ public class BuyStationScript : StationScript
         containerScript.storedItems = new List<ContainerScript.StoredItem>();
 
         foreach (KeyValuePair<Item, int> item in cart)
-            containerScript.storedItems.Add(new ContainerScript.StoredItem(item.Key, item.Value));
+            containerScript.storedItems.Add(new ContainerScript.StoredItem(item.Key, item.Value, item.Key.isSeedPacket));
     }
     
     public void SetIncrement(int value)
@@ -144,10 +135,10 @@ public class BuyStationScript : StationScript
     {
         GameManager.uiActive = true;
         GameManager.ToggleCursor(true);
-        foreach (PurchasableItem item in purchasableItems)
+        foreach (Item item in purchasableItems)
         {
             ShopItemScript shopItem = Instantiate(GameManager.singleton.itemUI, GameManager.singleton.itemUIParent).GetComponent<ShopItemScript>();
-            shopItem.item = item.item;
+            shopItem.item = item;
             shopItem.UpdateUI();
 
             shopItems.Add(shopItem);

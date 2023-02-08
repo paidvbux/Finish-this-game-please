@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Tomato
   pluralItemName: Tomatoes
+  isSeedPacket: 0
   grabbableObject: {fileID: 8293824090431614488, guid: e018b7cbb056d824bbe241a76389d83b, type: 3}
   sprite: {fileID: 0}
   mass: 0.5

@@ -399,10 +399,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8290951327698405360}
     m_Modifications:
-    - target: {fileID: 5670286281077852629, guid: e13c9a651ee276c468a5dbbc100a1911, type: 3}
-      propertyPath: m_text
-      value: Empty
-      objectReference: {fileID: 0}
     - target: {fileID: 6558547874752035896, guid: e13c9a651ee276c468a5dbbc100a1911, type: 3}
       propertyPath: m_Name
       value: Crate Display
