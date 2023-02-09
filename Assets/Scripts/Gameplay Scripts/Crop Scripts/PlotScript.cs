@@ -7,11 +7,11 @@ public class PlotScript : MonoBehaviour
     #region Crop Variables/Settings
     [Header("Crop Settings")]
     public Crop plantedCrop;
-    Crop previousCrop;
-    CropScript summonedCrop;
     #endregion
 
     #region Hidden/Private Variables
+    Crop previousCrop;
+    CropScript summonedCrop;
     float timer;
     #endregion
 
@@ -45,6 +45,12 @@ public class PlotScript : MonoBehaviour
     public void PlantSeed(Crop crop)
     {
         plantedCrop = crop;
+
+        SummonCrop();
+
+        timer = plantedCrop.cropGrowTime;
+
+        previousCrop = plantedCrop;
     }
     #endregion
 
@@ -58,20 +64,19 @@ public class PlotScript : MonoBehaviour
         else
         {
             float lerpAmount = (plantedCrop.cropGrowTime - timer) / plantedCrop.cropGrowTime;
-            summonedCrop.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, lerpAmount);
+            summonedCrop.transform.localScale = Vector3.Lerp(Vector3.one * 0.001f, Vector3.one, lerpAmount);
         }
         #endregion
     }
 
     void SummonCrop()
     {
-        GameObject cropObject = Instantiate(plantedCrop.cropGameObject, transform.position, Quaternion.identity);
+        summonedCrop = Instantiate(plantedCrop.cropGameObject, transform.position, Quaternion.identity).GetComponent<CropScript>();
 
         #region Initialization
-        cropObject.transform.localScale = Vector3.zero;
-        cropObject.transform.SetParent(transform);
+        summonedCrop.transform.localScale = Vector3.zero;
+        summonedCrop.transform.SetParent(transform);
 
-        summonedCrop = cropObject.GetComponent<CropScript>();
         GameManager.crops.Add(summonedCrop);
 
         summonedCrop.plotScript = this;

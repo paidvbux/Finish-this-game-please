@@ -6,7 +6,7 @@ public class SeedPacketScript : GrabbableObjectScript
 {
     #region Crop Settings
     [Header("Crop Settings")]
-    public LayerMask layerMask;
+    [SerializeField] LayerMask layerMask;
 
     public Crop cropToPlant;
     public int seedsLeft;
@@ -44,6 +44,9 @@ public class SeedPacketScript : GrabbableObjectScript
             plot.PlantSeed(cropToPlant);
             seedsLeft--;
         }
+
+        if (seedsLeft <= 0)
+            Destroy(gameObject);
     }
     #endregion
 }
