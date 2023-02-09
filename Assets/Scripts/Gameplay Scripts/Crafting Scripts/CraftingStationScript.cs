@@ -13,4 +13,13 @@ public class CraftingStationScript : MonoBehaviour
     [SerializeField] string recipesPath = "Recipes/";
     [SerializeField] Recipe[] recipes;
     #endregion
+
+    /*******************************************************************/
+
+    #region Unity Runtime Functions
+    void Awake()
+    {
+        recipes = Resources.LoadAll<Recipe>(recipesPath);
+    }
+    #endregion
 }

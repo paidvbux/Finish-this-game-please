@@ -245,10 +245,10 @@ public class GameManager : MonoBehaviour
             SetInteractableObject();
     }
 
-    public static void SetInteractableObject(string text, GameObject gameObjectToAdd)
+    public static void SetInteractableObject(string text, GameObject selectedGameObject)
     {
         interactableObject.text = text;
-        interactableObject.gameObject = gameObjectToAdd;
+        interactableObject.gameObject = selectedGameObject;
     }
 
     public static void SetInteractableObject()
