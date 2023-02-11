@@ -37,7 +37,7 @@ public class IngredientHolderScript : MonoBehaviour
         #endregion
 
         #region Place Item
-        if (GameManager.isInteractableObject(gameObject) && Input.GetKeyDown(KeyCode.E))
+        if (GameManager.isInteractableObject(gameObject) && Input.GetKeyDown(KeyCode.E) && heldItem == null)
         {
             GrabScript.singleton.heldRigidbody = null;
             GrabScript.holdingObject = false;

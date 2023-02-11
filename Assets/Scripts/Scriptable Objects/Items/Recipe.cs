@@ -6,6 +6,7 @@ using UnityEngine;
 public class Recipe : ScriptableObject
 {
     #region Classes
+    [System.Serializable]
     public class RecipeItem
     {
         public Item item;
@@ -15,7 +16,7 @@ public class Recipe : ScriptableObject
 
     #region General Settings
     [Header("General Settings")]
-    public RecipeItem result;
     public RecipeItem[] requiredItems;
+    public RecipeItem result;
     #endregion
 }
