@@ -302,7 +302,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9b3e37391df92b949829e0829c9568dd, type: 2}
+  - {fileID: 2100000, guid: 3025809e30e3a57478fcc0bf4210f5ba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2941,7 +2941,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9b3e37391df92b949829e0829c9568dd, type: 2}
+  - {fileID: 2100000, guid: 3025809e30e3a57478fcc0bf4210f5ba, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3033,6 +3033,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactText: Sell Items
   button: {fileID: 1854620433561365802}
+  playerTrigger: {fileID: 0}
+  useTrigger: 0
   inputTrigger: {fileID: 1854620433069280520}
   crates: []
   droppedItems: []
