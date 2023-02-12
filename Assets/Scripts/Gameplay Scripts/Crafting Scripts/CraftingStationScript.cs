@@ -6,23 +6,22 @@ public class CraftingStationScript : MonoBehaviour
 {
     #region General Settings
     [Header("General Settings")]
-    #endregion
-
-    #region General Settings
-    [Header("General Settings")]
-    [SerializeField] Transform itemSpawnPosition;
-    [SerializeField] IngredientHolderScript[] itemSlots;
-    [SerializeField] Item failedRecipeResult;
+    [SerializeField] protected string interactText;
+    [SerializeField] protected GameObject interactArea;
+    [SerializeField] protected Transform itemSpawnPosition;
+    [SerializeField] protected IngredientHolderScript[] itemSlots;
+    [SerializeField] protected Item failedRecipeResult;
+    [SerializeField] protected int failedCookingTime;
     #endregion
 
     #region Recipe Variables/Settings
     [Header("Recipe Settings")]
-    [SerializeField] string recipesPath = "Recipes/";
-    [SerializeField] Recipe[] recipes;
+    [SerializeField] protected string recipesPath = "Recipes/";
+    protected Recipe[] recipes;
     #endregion
 
     #region Hidden Variables
-    List<Recipe.RecipeItem> storedRecipeItems = new List<Recipe.RecipeItem>();
+    protected List<Recipe.RecipeItem> storedRecipeItems = new List<Recipe.RecipeItem>();
     #endregion
 
     /*******************************************************************/
@@ -35,36 +34,31 @@ public class CraftingStationScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        GameManager.CheckIfInteractable(interactText, interactArea);
+
+        if (GameManager.isInteractableObject(interactArea) && Input.GetKeyDown(KeyCode.E))
             Craft();
     }
     #endregion
 
     #region Custom Functions
-    void Craft()
+    protected void Craft()
     {
         Dictionary<Item, int> storedItems = LoadItems();
         storedRecipeItems = LoadRecipeItems(storedItems);
 
-        Recipe selectedRecipe = null;
-        foreach (Recipe recipe in recipes)
-        {
-            if (!recipe.requiredItems.Equals(storedRecipeItems))
-                continue;
+        if (storedRecipeItems.Count == 0)
+            return;
 
-            selectedRecipe = recipe;
-        }
-
-        if (selectedRecipe == null)
-            SummonItem(failedRecipeResult, GetCount());
-        else
-            SummonItem(selectedRecipe.result.item, selectedRecipe.result.amount);
+        Recipe selectedRecipe = CheckForRecipe();
 
         foreach (IngredientHolderScript itemSlot in itemSlots)
             itemSlot.Clear();
+
+        WaitForCookFinish(selectedRecipe);
     }
 
-    void SummonItem(Item itemToSummmon, int amount)
+    protected void SummonItem(Item itemToSummmon, int amount)
     {
         for (int i = 0; i < amount; i++)
         {
@@ -73,7 +67,21 @@ public class CraftingStationScript : MonoBehaviour
         }
     }
 
-    int GetCount()
+    protected void WaitForCookFinish(Recipe recipe)
+    {
+        float cookTime = recipe == null ? failedCookingTime : recipe.cookingTime;
+        float timer = cookTime;
+
+        //Add Scale lerp.
+
+        if (recipe == null)
+            SummonItem(failedRecipeResult, GetCount());
+        else
+            SummonItem(recipe.result.item, recipe.result.amount);
+    }
+
+    #region Helper Functions
+    protected int GetCount()
     {
         int totalAmount = 0;
         foreach (Recipe.RecipeItem storedRecipeItem in storedRecipeItems)
@@ -82,7 +90,32 @@ public class CraftingStationScript : MonoBehaviour
         return totalAmount;
     }
 
-    Dictionary<Item, int> LoadItems()
+    protected Recipe CheckForRecipe()
+    {
+        Recipe selectedRecipe = null;
+
+        foreach (Recipe recipe in recipes)
+        {
+            bool isRecipe = true;
+            for (int i = 0; i < recipe.requiredItems.Count; i++)
+            {
+                bool notNull = storedRecipeItems[i] != null && recipe.requiredItems[i] != null;
+                bool notEqual = recipe.requiredItems[i].amount != storedRecipeItems[i].amount || recipe.requiredItems[i].item != storedRecipeItems[i].item;
+                if (notNull && notEqual)
+                {
+                    isRecipe = false;
+                    break;
+                }
+            }
+
+            if (isRecipe)
+                selectedRecipe = recipe;
+        }
+
+        return selectedRecipe;
+    }
+
+    protected Dictionary<Item, int> LoadItems()
     {
         Dictionary<Item, int> items = new Dictionary<Item, int>();
 
@@ -100,7 +133,7 @@ public class CraftingStationScript : MonoBehaviour
         return items;
     }
 
-    List<Recipe.RecipeItem> LoadRecipeItems(Dictionary<Item, int> items)
+    protected List<Recipe.RecipeItem> LoadRecipeItems(Dictionary<Item, int> items)
     {
         List<Recipe.RecipeItem> recipeItems = new List<Recipe.RecipeItem>();
 
@@ -109,5 +142,6 @@ public class CraftingStationScript : MonoBehaviour
 
         return recipeItems;
     }
+    #endregion
     #endregion
 }

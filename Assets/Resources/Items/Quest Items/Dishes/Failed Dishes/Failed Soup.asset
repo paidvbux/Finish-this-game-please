@@ -21,6 +21,6 @@ MonoBehaviour:
   placedOffset: {x: 0, y: 0, z: 0}
   mass: 2
   maxCrateStorage: 5
-  buyCost: 25
-  sellCost: 10
+  buyCost: 10
+  sellCost: 5
   description: 

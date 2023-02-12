@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07ff8bd6cdb5e394ea356f89d8a6c07e, type: 3}
   m_Name: Tomato Soup
   m_EditorClassIdentifier: 
+  cookingTime: 5
   requiredItems:
   - item: {fileID: 11400000, guid: c20e75f1fba794c48bf8bec99493723b, type: 2}
     amount: 4
   result:
-    item: {fileID: 0}
-    amount: 0
+    item: {fileID: 11400000, guid: 88ac2880c10c1444b9e8ef0525db953f, type: 2}
+    amount: 2
+  cookingPotMaterial: {fileID: 2100000, guid: d2793b6a2cbdbd34bb21c9249032c500, type: 2}

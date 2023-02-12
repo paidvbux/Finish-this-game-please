@@ -24,7 +24,15 @@ public class Recipe : ScriptableObject
 
     #region General Settings
     [Header("General Settings")]
+    public float cookingTime;
+
+    [Space()]
     public List<RecipeItem> requiredItems;
     public RecipeItem result;
+    #endregion
+
+    #region Display Settings
+    [Header("Display Settings")]
+    public Material cookingPotMaterial;
     #endregion
 }
