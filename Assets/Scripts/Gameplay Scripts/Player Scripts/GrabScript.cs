@@ -168,6 +168,8 @@ public class GrabScript : MonoBehaviour
 
                 heldRigidbody.transform.Rotate(translatedRight * targetMouseDelta.y);
                 heldRigidbody.transform.Rotate(translatedUp * targetMouseDelta.x);
+
+                heldRigidbody.angularVelocity = Vector3.zero;
             }
             else
                 PlayerController.rotatingObject = false;

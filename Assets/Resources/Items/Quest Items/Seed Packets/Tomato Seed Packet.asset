@@ -17,7 +17,7 @@ MonoBehaviour:
   isSeedPacket: 1
   grabbableObject: {fileID: 5601376135859013931, guid: 7746bd3656baae14ea3561404a70aee3, type: 3}
   sprite: {fileID: 0}
-  mass: 0
+  mass: 1
   maxCrateStorage: 0
   buyCost: 5
   sellCost: 3

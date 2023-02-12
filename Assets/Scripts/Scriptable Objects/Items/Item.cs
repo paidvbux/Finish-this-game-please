@@ -19,6 +19,12 @@ public class Item : ScriptableObject
     public Sprite sprite;
     #endregion
 
+    #region Crafting Variables/Settings
+    [Header("Crafting Settings")]
+    public Vector3 placedRotation;
+    public Vector3 placedOffset;
+    #endregion
+
     #region Storage Variables/Settings
     [Header("Storage Settings")]
     public float mass;

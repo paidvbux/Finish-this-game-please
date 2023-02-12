@@ -9,14 +9,22 @@ public class Recipe : ScriptableObject
     [System.Serializable]
     public class RecipeItem
     {
+        string name => item.name;
+
         public Item item;
-        public int amountRequired;
+        public int amount;
+
+        public RecipeItem(Item _item, int _amountRequired)
+        {
+            item = _item;
+            amount = _amountRequired;
+        }
     }
     #endregion
 
     #region General Settings
     [Header("General Settings")]
-    public RecipeItem[] requiredItems;
+    public List<RecipeItem> requiredItems;
     public RecipeItem result;
     #endregion
 }

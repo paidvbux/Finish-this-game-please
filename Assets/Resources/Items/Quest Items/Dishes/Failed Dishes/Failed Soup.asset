@@ -10,15 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 393346ee19c2cc0469dd0674d99dbc0f, type: 3}
-  m_Name: Corn Seed Packet
+  m_Name: Failed Soup
   m_EditorClassIdentifier: 
-  itemName: Corn Seeds
-  pluralItemName: Corn Seeds
-  isSeedPacket: 1
-  grabbableObject: {fileID: 1596642672562359635, guid: e368e342ec29c8f4ca18817cac5936bf, type: 3}
+  itemName: Failed Soup
+  pluralItemName: Failed Soup
+  isSeedPacket: 0
+  grabbableObject: {fileID: 1390069905700443578, guid: 1052556b3f2a1964982883a73ed008f6, type: 3}
   sprite: {fileID: 0}
-  mass: 1
-  maxCrateStorage: 0
-  buyCost: 10
-  sellCost: 5
-  description: Seeds used to plant corn.
+  placedRotation: {x: 0, y: 0, z: 0}
+  placedOffset: {x: 0, y: 0, z: 0}
+  mass: 2
+  maxCrateStorage: 5
+  buyCost: 25
+  sellCost: 10
+  description: 
