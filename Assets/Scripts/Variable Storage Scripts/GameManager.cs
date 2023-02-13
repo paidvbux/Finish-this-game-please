@@ -36,9 +36,13 @@ public class GameManager : MonoBehaviour
     public static List<CropScript> crops;
     public static bool uiActive;
     public static bool hasInputResponse;
+    public static List<Recipe> unlockedRecipes;
 
     public static QuestItem[] questItems => singleton._questItems;
     public static Transform Player => singleton.player;
+
+    public static Transform recipeRequirementParent => singleton._recipeRequirementParent;
+    public static GameObject recipeRequirementUI => singleton._recipeRequirementUI;
 
     #region Interact UI
     public static GameObject interactUI => singleton._interactUI;
@@ -77,13 +81,21 @@ public class GameManager : MonoBehaviour
     public Transform player;
     public PlayerController playerController => player.GetComponent<PlayerController>();
     public int coins;
-
-    public BuyStationScript selectedShop;
     #endregion
 
     #region UI Variables/Settings
-    #region Main Menu UI
-    public GameObject mainMenuUI;
+    #region Recipe Book
+    [Header("Recipe Book Settings")]
+    public Transform _recipeUIParent;
+    public GameObject _recipeUIPrefab;
+
+    public Transform _recipeRequirementParent;
+    public GameObject _recipeRequirementUI;
+    #endregion
+
+    #region Menu UI
+    [Header("Menu Settings")]
+    public GameObject menuUI;
     #endregion
 
     #region Interact UI
@@ -134,8 +146,10 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Hidden/Private Variables
+    [HideInInspector] public BuyStationScript selectedShop;
     [HideInInspector] public InteractableObject _interactableObject;
     [HideInInspector] public QuestItem[] _questItems;
+    [HideInInspector] public List<RecipeItemUIScript> loadedRecipeItems;
     bool acceptedQuest;
     #endregion
 
@@ -161,6 +175,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            LoadMenu();
+
         #region Update Interact UI
         if (_interactableObject.gameObject == null || uiActive)
             DisableInteractUI();
@@ -178,7 +195,34 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Custom Functions
-    #region Main Menu Functions
+    #region Other Functions
+    static void UnlockRecipe(Recipe recipe)
+    {
+        unlockedRecipes.Add(recipe);
+    }
+    #endregion
+
+    #region Menu Functions
+    void LoadMenu()
+    {
+        menuUI.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    void CloseMenu()
+    {
+        menuUI.SetActive(false);
+        Time.timeScale = 1;
+    }
+
+    void LoadRecipeBook()
+    {
+        foreach (Recipe recipe in unlockedRecipes)
+        {
+            RecipeUIScript recipeUI = Instantiate(_recipeUIPrefab, _recipeUIParent.position, Quaternion.identity).GetComponent<RecipeUIScript>();
+            recipeUI.LoadUI(recipe);
+        }
+    }
     #endregion
 
     #region Helper Functions
