@@ -6,12 +6,14 @@ public class CraftingStationScript : MonoBehaviour
 {
     #region General Settings
     [Header("General Settings")]
-    [SerializeField] protected string interactText;
+    [SerializeField] protected GameManager.OutlineParams outlineParams;
+    [SerializeField] protected string cookInteractText = "Cook";
+    [SerializeField] protected string finishInteractText = "Pickup";
     [SerializeField] protected GameObject interactArea;
     [SerializeField] protected Transform itemSpawnPosition;
     [SerializeField] protected IngredientHolderScript[] itemSlots;
     [SerializeField] protected Item failedRecipeResult;
-    [SerializeField] protected int failedCookingTime;
+    [SerializeField] protected float failedCookingTime;
     #endregion
 
     #region Recipe Variables/Settings
@@ -21,7 +23,16 @@ public class CraftingStationScript : MonoBehaviour
     #endregion
 
     #region Hidden Variables
+    protected Outline outline;
+
     protected List<Recipe.RecipeItem> storedRecipeItems = new List<Recipe.RecipeItem>();
+    protected Recipe selectedRecipe;
+    protected float cookTime;
+    protected float timer;
+    protected bool cooking;
+    protected bool doneCooking;
+
+    protected int amountToInstantiate;
     #endregion
 
     /*******************************************************************/
@@ -34,15 +45,50 @@ public class CraftingStationScript : MonoBehaviour
 
     void Update()
     {
-        GameManager.CheckIfInteractable(interactText, interactArea);
+        CheckIfInteractable();
 
         if (GameManager.isInteractableObject(interactArea) && Input.GetKeyDown(KeyCode.E))
-            Craft();
+        {
+            if (doneCooking)
+                FinishCooking();
+            else if (!doneCooking && !cooking)
+                Craft();
+        }
+
+        if (cooking)
+        {
+            timer -= Time.deltaTime;
+            if (timer <= 0)
+                CookFinish();
+        }
     }
     #endregion
 
     #region Custom Functions
-    protected void Craft()
+    protected void CheckIfInteractable()
+    {
+        if (HoverScript.selectedGameObject == interactArea)
+        {
+            if (doneCooking)
+            {
+                if ((GameManager.isEmpty() || GameManager.interactableObject.text == cookInteractText) && GameManager.interactableObject.text != finishInteractText)
+                    GameManager.SetInteractableObject(finishInteractText, interactArea);
+            }
+
+            if (!cooking && !doneCooking && GetCount() != 0)
+            {
+                if ((GameManager.isEmpty() || GameManager.interactableObject.text == finishInteractText) && GameManager.interactableObject.text != cookInteractText)
+                    GameManager.SetInteractableObject(cookInteractText, interactArea);
+            }
+
+            if (cooking && GameManager.isInteractableObject(interactArea))
+                GameManager.SetInteractableObject();
+        }
+        if (HoverScript.selectedGameObject != interactArea && GameManager.isInteractableObject(interactArea))
+            GameManager.SetInteractableObject();
+    }
+
+    protected virtual void Craft()
     {
         Dictionary<Item, int> storedItems = LoadItems();
         storedRecipeItems = LoadRecipeItems(storedItems);
@@ -50,42 +96,65 @@ public class CraftingStationScript : MonoBehaviour
         if (storedRecipeItems.Count == 0)
             return;
 
-        Recipe selectedRecipe = CheckForRecipe();
+        selectedRecipe = CheckForRecipe();
+
+        if (selectedRecipe == null)
+            amountToInstantiate = GetCount();
+        else
+            amountToInstantiate = selectedRecipe.result.amount;
+
+        cookTime = selectedRecipe == null ? (failedCookingTime * GetCount()) : selectedRecipe.cookingTime;
 
         foreach (IngredientHolderScript itemSlot in itemSlots)
             itemSlot.Clear();
 
-        WaitForCookFinish(selectedRecipe);
+        timer = cookTime;
+
+        cooking = true;
     }
 
-    protected void SummonItem(Item itemToSummmon, int amount)
+    protected void SummonItem(Item itemToSummmon)
     {
-        for (int i = 0; i < amount; i++)
+        GameObject instantiatedItem = Instantiate(itemToSummmon.grabbableObject, itemSpawnPosition.position, Quaternion.identity);
+        instantiatedItem.transform.SetParent(GameManager.singleton.transform);
+    }
+
+    protected virtual void OnClear()
+    {
+        doneCooking = false; 
+
+        Destroy(outline);
+        outline = null;
+    }
+
+    protected void FinishCooking()
+    {
+        if (selectedRecipe == null)
+            SummonItem(failedRecipeResult);
+        else
+            SummonItem(selectedRecipe.result.item);
+
+        if (--amountToInstantiate == 0)
         {
-            GameObject instantiatedItem = Instantiate(itemToSummmon.grabbableObject, itemSpawnPosition.position, Quaternion.identity);
-            instantiatedItem.transform.SetParent(GameManager.singleton.transform);
+            OnClear();
+            return;
         }
     }
 
-    protected void WaitForCookFinish(Recipe recipe)
+    protected void CookFinish()
     {
-        float cookTime = recipe == null ? failedCookingTime : recipe.cookingTime;
-        float timer = cookTime;
+        cooking = false;
+        doneCooking = true;
 
-        //Add Scale lerp.
-
-        if (recipe == null)
-            SummonItem(failedRecipeResult, GetCount());
-        else
-            SummonItem(recipe.result.item, recipe.result.amount);
+        outline = GameManager.AddOutline(interactArea, outlineParams);
     }
 
     #region Helper Functions
     protected int GetCount()
     {
         int totalAmount = 0;
-        foreach (Recipe.RecipeItem storedRecipeItem in storedRecipeItems)
-            totalAmount += storedRecipeItem.amount;
+        foreach (IngredientHolderScript itemSlot in itemSlots)
+            totalAmount += itemSlot.storedItem != null ? 1 : 0;
 
         return totalAmount;
     }

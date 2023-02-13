@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
     public static bool hasInputResponse;
 
     public static QuestItem[] questItems => singleton._questItems;
-
     public static Transform Player => singleton.player;
 
     #region Interact UI
@@ -83,10 +82,17 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region UI Variables/Settings
+    #region Main Menu UI
+    public GameObject mainMenuUI;
+    #endregion
+
+    #region Interact UI
     [Header("Interact UI Settings")]
     [SerializeField] GameObject _interactUI;
     [SerializeField] TextMeshProUGUI _interactText;
+    #endregion
 
+    #region Dialogue UI
     [Header("Dialogue UI Settings")]
     [SerializeField] GameObject _dialogueUI;
     [SerializeField] TextMeshProUGUI _dialogueName;
@@ -94,7 +100,9 @@ public class GameManager : MonoBehaviour
     
     [Space()]
     [SerializeField] GameObject _dialogueChoices;
+    #endregion
 
+    #region Shop UI
     [Header("Shop UI Settings")]
     [SerializeField] GameObject _shopUI;
     [SerializeField] GameObject _cartUI;
@@ -102,7 +110,9 @@ public class GameManager : MonoBehaviour
     public GameObject itemUI;
     public Transform cartItemUIParent;
     public GameObject cartItemUI;
+    #endregion
 
+    #region Shop Description UI
     [Header("Shop Description UI Settings")]
     [SerializeField] GameObject _shopDescriptionUI;
     [SerializeField] TextMeshProUGUI _shopNameText;
@@ -113,11 +123,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_InputField _incrementInputField;
     [SerializeField] Button _shopIncreaseButton;
     [SerializeField] Button _shopDecreaseButton;
+    #endregion
 
+    #region Cart UI
     [Header("Cart UI Settings")]
     [SerializeField] TextMeshProUGUI _totalText;
     [SerializeField] TextMeshProUGUI _currentBalanceText;
     [SerializeField] TextMeshProUGUI _remainingBalanceText;
+    #endregion
     #endregion
 
     #region Hidden/Private Variables
@@ -165,6 +178,10 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Custom Functions
+    #region Main Menu Functions
+    #endregion
+
+    #region Helper Functions
     public static Outline AddOutline(GameObject obj, OutlineParams outlineParams)
     {
         Outline outline = obj.AddComponent<Outline>();
@@ -184,7 +201,9 @@ public class GameManager : MonoBehaviour
         Cursor.visible = active;
         uiActive = active;
     }
+    #endregion
 
+    #region Other Helper Functions
     #region Shop Functions
     public void SubmitIncrementAmount(TMP_InputField inputField)
     {
@@ -267,6 +286,7 @@ public class GameManager : MonoBehaviour
     {
         return interactableObject.gameObject == null;
     }
+    #endregion
     #endregion
 
     #region UI Functions

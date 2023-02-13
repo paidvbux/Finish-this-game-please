@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 393346ee19c2cc0469dd0674d99dbc0f, type: 3}
+  m_Name: Corn Soup
+  m_EditorClassIdentifier: 
+  itemName: Corn Soup
+  pluralItemName: Corn Soup
+  isSeedPacket: 0
+  grabbableObject: {fileID: 2131555773906088106, guid: 7e595b80654c4b9429ff3745fe4fee4a, type: 3}
+  sprite: {fileID: 0}
+  placedRotation: {x: 0, y: 0, z: 0}
+  placedOffset: {x: 0, y: 0, z: 0}
+  mass: 2
+  maxCrateStorage: 5
+  buyCost: 60
+  sellCost: 30
+  description: 

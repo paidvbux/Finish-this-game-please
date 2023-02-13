@@ -33,6 +33,6 @@ public class Recipe : ScriptableObject
 
     #region Display Settings
     [Header("Display Settings")]
-    public Material cookingPotMaterial;
+    public Material craftingMaterial;
     #endregion
 }
