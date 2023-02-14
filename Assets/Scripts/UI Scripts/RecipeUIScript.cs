@@ -10,7 +10,6 @@ public class RecipeUIScript : MonoBehaviour
     [Header("General Settings")]
     public TextMeshProUGUI recipeName;
     public Image recipeImage;
-    public TextMeshProUGUI recipeDescription;
     #endregion
 
     #region Hidden Variables
@@ -28,7 +27,6 @@ public class RecipeUIScript : MonoBehaviour
 
         recipeName.text = recipe.name;
         recipeImage.sprite = recipe.result.item.sprite;
-        recipeDescription.text = recipe.result.item.description;
     }
 
     public void LoadRecipeUI()
