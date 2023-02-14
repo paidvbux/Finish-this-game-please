@@ -39,9 +39,12 @@ public class RecipeUIScript : MonoBehaviour
         {
             RecipeItemUIScript recipeUI = Instantiate(GameManager.recipeRequirementUI, GameManager.recipeRequirementParent).GetComponent<RecipeItemUIScript>();
             recipeUI.item = recipeItem;
-
             recipeUI.LoadItem();
+
+            GameManager.singleton.loadedRecipeItems.Add(recipeUI);
         }
+
+        GameManager.singleton.LoadRecipeResult(itemResult);
     }
     #endregion
 }

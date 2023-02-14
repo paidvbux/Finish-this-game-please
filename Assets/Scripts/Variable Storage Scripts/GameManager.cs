@@ -86,9 +86,14 @@ public class GameManager : MonoBehaviour
     #region UI Variables/Settings
     #region Recipe Book
     [Header("Recipe Book Settings")]
+    [SerializeField] Image resultImage;
+    [SerializeField] TextMeshProUGUI resultNameText;
+    [SerializeField] TextMeshProUGUI resultAmountText;
+    
     public Transform _recipeUIParent;
     public GameObject _recipeUIPrefab;
 
+    [Space()]
     public Transform _recipeRequirementParent;
     public GameObject _recipeRequirementUI;
     #endregion
@@ -159,6 +164,10 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         #region Initialization
+        unlockedRecipes = new List<Recipe>();
+
+        uiActive = false;
+
         _interactableObject = new InteractableObject("", null);
 
         singleton = this;
@@ -175,8 +184,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            LoadMenu();
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            menuUI.SetActive(!menuUI.activeSelf);
+            uiActive = menuUI.activeSelf;
+        }
 
         #region Update Interact UI
         if (_interactableObject.gameObject == null || uiActive)
@@ -202,20 +214,15 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    #region Menu Functions
-    void LoadMenu()
+    #region Recipe Book Functions
+    public void LoadRecipeResult(Recipe.RecipeItem result)
     {
-        menuUI.SetActive(true);
-        Time.timeScale = 0;
+        resultImage.sprite = result.item.sprite;
+        resultNameText.text = result.item.name;
+        resultAmountText.text = $"x{result.amount}";
     }
-
-    void CloseMenu()
-    {
-        menuUI.SetActive(false);
-        Time.timeScale = 1;
-    }
-
-    void LoadRecipeBook()
+    
+    public void LoadRecipeBook()
     {
         foreach (Recipe recipe in unlockedRecipes)
         {
