@@ -20,19 +20,16 @@ public class HarvestQuest : Quest
     public HarvestQuest LoadQuest()
     {
         #region Randomize
-        //  Randomize variables.
         if (isRandom)
             Randomize();
         #endregion
 
         #region Create Quest
-        //  Create a new instance of the object
         HarvestQuest quest = Instantiate(this);
         quest.name = $"{requiredQuestItem.itemName} {amountRequired}";
         #endregion
 
         #region Format Dialogue
-        // Format all the dialogue.
         for (int i = 0; i < quest.questInitalDialogue.Length; i++)
             quest.questInitalDialogue[i].dialogue = Format(quest.questInitalDialogue[i].dialogue);
         for (int i = 0; i < quest.questAcceptDialogue.Length; i++)
@@ -43,13 +40,11 @@ public class HarvestQuest : Quest
             quest.questFinishDialogue[i].dialogue = Format(quest.questFinishDialogue[i].dialogue);
         #endregion
 
-        //  Return the new quest.
         return quest;
     }
 
     void Randomize()
     {
-        //  Randomize all variables.
         #region Randomize Variables
         int randomIndex = Random.Range(0, GameManager.questItems.Length);
         requiredQuestItem = GameManager.questItems[randomIndex];
@@ -60,7 +55,6 @@ public class HarvestQuest : Quest
 
     string Format(string text)
     {
-        //  Return the formatted string.
         return string.Format(text, $"<color=#EDBC29>{coinAmount}</color>", $"<color=#428CF1>{amountRequired}</color>",
             $"<color=#428CF1>{(amountRequired == 1 ? requiredQuestItem.itemName : requiredQuestItem.pluralItemName)}</color>");
     }

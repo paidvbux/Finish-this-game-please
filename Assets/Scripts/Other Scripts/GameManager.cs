@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     public static List<CropScript> crops;
     public static bool uiActive;
     public static bool hasInputResponse;
-    public static List<Recipe> unlockedRecipes;
+    public List<Recipe> unlockedRecipes;
 
     public static QuestItem[] questItems => singleton._questItems;
     public static Transform Player => singleton.player;
@@ -89,7 +89,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] Image resultImage;
     [SerializeField] TextMeshProUGUI resultNameText;
     [SerializeField] TextMeshProUGUI resultAmountText;
-    
+
+    [Space()]
+    [SerializeField] TextMeshProUGUI recipeNameText;
+    [SerializeField] TextMeshProUGUI recipeDescriptionText;
+
+    [Space()]
     public Transform _recipeUIParent;
     public GameObject _recipeUIPrefab;
 
@@ -210,13 +215,16 @@ public class GameManager : MonoBehaviour
     #region Other Functions
     static void UnlockRecipe(Recipe recipe)
     {
-        unlockedRecipes.Add(recipe);
+        singleton.unlockedRecipes.Add(recipe);
     }
     #endregion
 
     #region Recipe Book Functions
     public void LoadRecipeResult(Recipe.RecipeItem result)
     {
+        recipeNameText.text = result.item.name;
+        recipeDescriptionText.text = result.item.description;
+
         resultImage.sprite = result.item.sprite;
         resultNameText.text = result.item.name;
         resultAmountText.text = $"x{result.amount}";
@@ -228,6 +236,8 @@ public class GameManager : MonoBehaviour
         {
             RecipeUIScript recipeUI = Instantiate(_recipeUIPrefab, _recipeUIParent.position, Quaternion.identity).GetComponent<RecipeUIScript>();
             recipeUI.LoadUI(recipe);
+
+            recipeUI.transform.SetParent(_recipeUIParent);
         }
     }
     #endregion

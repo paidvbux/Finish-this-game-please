@@ -18,12 +18,6 @@ public class Dialogue : MonoBehaviour
     /*******************************************************************/
 
     #region Custom Functions
-    /*
-     *   Goes through each piece of 
-     *   dialogue. Pauses at the end
-     *   of each line, continues when
-     *   player presses space.
-     */
     protected IEnumerator RunDialogue(Quest.QuestDialogue[] dialogue)
     {
         if (GameManager.uiActive)
@@ -55,11 +49,6 @@ public class Dialogue : MonoBehaviour
         yield break;
     }
 
-   /*
-    *   Creates the callback to allow
-    *   the coroutine to return the
-    *   value.
-    */
     void GetValue(string value)
     {
         current = value;
