@@ -18,41 +18,9 @@ public class Dialogue : MonoBehaviour
     /*******************************************************************/
 
     #region Custom Functions
-    protected IEnumerator RunDialogue(Quest.QuestDialogue[] dialogue)
+    public void RunDialogue(TextAsset dialogue)
     {
-        if (GameManager.uiActive)
-            yield break;
-
-        GameManager.ToggleDialogueUI(true, speakerName);
-        for (int i = 0; i < dialogue.Length; i++)
-        {
-            current = "";
-            StartCoroutine(CustomFunctions.LerpText(current, dialogue[i].dialogue, dialogue[i].timeBetweenCharacters, GetValue));
-
-            if (!dialogue[i].hasResponse)
-                yield return new WaitWhile(() => !Input.GetKeyDown(KeyCode.Space));
-        }
-
-        if (dialogue[dialogue.Length - 1].hasResponse)
-        {
-            yield return new WaitWhile(() => current != dialogue[dialogue.Length - 1].dialogue);
-            GameManager.ToggleDialogueChoices(true);
-            yield return new WaitWhile(() => !GameManager.hasInputResponse);
-            if (acceptedQuest)
-                StartCoroutine(RunDialogue(selectedQuest.questAcceptDialogue));
-            else
-                StartCoroutine(RunDialogue(selectedQuest.questRejectDialogue));
-        }
-
-        GameManager.ToggleDialogueUI(false);
-        GameManager.ToggleDialogueChoices(false);
-        yield break;
-    }
-
-    void GetValue(string value)
-    {
-        current = value;
-        GameManager.DialogueText.text = current;
+        DialogueLoader.singleton.SetFile(dialogue);
     }
     #endregion
 }

@@ -5,26 +5,13 @@ using UnityEngine;
 
 public class Quest : ScriptableObject
 {
-    [Serializable]
-    public class QuestDialogue
-    {
-        [Multiline(4)]
-        public string dialogue = "...";
-        public float timeBetweenCharacters = 0.05f;
-
-        [Header("Response Settings")]
-        public bool hasResponse = false;
-    }
-
+    [Header("General Settings")]
     public string questName;
 
-    [Header("Dialogue")]
-    public QuestDialogue[] questInitalDialogue;
-    public QuestDialogue[] questAcceptDialogue;
-    public QuestDialogue[] questRejectDialogue;
-    public QuestDialogue[] questFinishDialogue;
+    [Header("Dialogue Settings")]
+    public TextAsset questDialogue;
 
-    [Header("Reward")]
+    [Header("Reward Settings")]
     public bool isItem;
     public Item item;
     public int coinAmount;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -30,14 +31,9 @@ public class HarvestQuest : Quest
         #endregion
 
         #region Format Dialogue
-        for (int i = 0; i < quest.questInitalDialogue.Length; i++)
-            quest.questInitalDialogue[i].dialogue = Format(quest.questInitalDialogue[i].dialogue);
-        for (int i = 0; i < quest.questAcceptDialogue.Length; i++)
-            quest.questAcceptDialogue[i].dialogue = Format(quest.questAcceptDialogue[i].dialogue);
-        for (int i = 0; i < quest.questRejectDialogue.Length; i++)              
-            quest.questRejectDialogue[i].dialogue = Format(quest.questRejectDialogue[i].dialogue);
-        for (int i = 0; i < quest.questFinishDialogue.Length; i++)
-            quest.questFinishDialogue[i].dialogue = Format(quest.questFinishDialogue[i].dialogue);
+        string assetPath = AssetDatabase.GetAssetPath(quest.questDialogue);
+        File.WriteAllText(assetPath, Format(questDialogue.text));
+        AssetDatabase.Refresh();
         #endregion
 
         return quest;
