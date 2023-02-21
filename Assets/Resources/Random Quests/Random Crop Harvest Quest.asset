@@ -13,25 +13,10 @@ MonoBehaviour:
   m_Name: Random Crop Harvest Quest
   m_EditorClassIdentifier: 
   questName: 
-  questInitalDialogue:
-  - dialogue: "\" Item Needed: {1} {2}\n  Reward: {0} coins \""
-    timeBetweenCharacters: 0.05
-    hasResponse: 1
-  questAcceptDialogue:
-  - dialogue: ...
-    timeBetweenCharacters: 0.1
-    hasResponse: 0
-  questRejectDialogue:
-  - dialogue: ...
-    timeBetweenCharacters: 0.1
-    hasResponse: 0
-  questFinishDialogue:
-  - dialogue: Thank you, here is {0} coins for your troubles.
-    timeBetweenCharacters: 0.05
-    hasResponse: 0
+  questDialogue: {fileID: 4900000, guid: 1c3e1ac81dd36a142b1a6eaecb5ce683, type: 3}
   isItem: 0
   item: {fileID: 0}
   coinAmount: 120
   isRandom: 1
-  requiredItem: {fileID: 11400000, guid: cd3b1fbb746acf3479d4886643c6e15e, type: 2}
-  amountRequired: 3
+  requiredQuestItem: {fileID: 11400000, guid: c20e75f1fba794c48bf8bec99493723b, type: 2}
+  amountRequired: 6

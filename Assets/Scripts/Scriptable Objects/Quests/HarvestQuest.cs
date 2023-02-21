@@ -31,9 +31,14 @@ public class HarvestQuest : Quest
         #endregion
 
         #region Format Dialogue
-        string assetPath = AssetDatabase.GetAssetPath(quest.questDialogue);
-        File.WriteAllText(assetPath, Format(questDialogue.text));
-        AssetDatabase.Refresh();
+        string path = $"Quest Dialogue/Random Harvest Dialogue/{requiredQuestItem.name} Dialogue/Random Dialogue ({amountRequired}, {coinAmount})";
+        if (isRandom && Resources.Load<TextAsset>(path) == null)
+        {
+            string assetPath = $"Assets/Resources/{path}.txt";
+            File.WriteAllText(assetPath, Format(questDialogue.text));
+            AssetDatabase.Refresh();
+        }
+        quest.questDialogue = Resources.Load<TextAsset>(path);
         #endregion
 
         return quest;
@@ -44,7 +49,7 @@ public class HarvestQuest : Quest
         #region Randomize Variables
         int randomIndex = Random.Range(0, GameManager.questItems.Length);
         requiredQuestItem = GameManager.questItems[randomIndex];
-        amountRequired = Random.Range(requiredQuestItem.minQuestRequirement, requiredQuestItem.maxQuestRequirement);
+        amountRequired = Random.Range(requiredQuestItem.minQuestRequirement, requiredQuestItem.maxQuestRequirement + 1);
         coinAmount = amountRequired * requiredQuestItem.buyCost;
         #endregion
     }

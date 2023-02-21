@@ -1,0 +1,4 @@
+Items Needed: {1} {2}\nReward: {0} coins
+~?Accept?
+	-Accept
+	-Decline

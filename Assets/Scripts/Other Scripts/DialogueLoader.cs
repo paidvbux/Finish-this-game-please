@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using Unity.VisualScripting;
+using System.Runtime.Remoting.Channels;
 
 public class DialogueLoader : MonoBehaviour
 {
@@ -13,26 +15,42 @@ public class DialogueLoader : MonoBehaviour
     {
         public int indents;
         public string value;
-        public bool isPlayerDialogue, waitWithClick;
+        public bool isPlayerDialogue, waitWithPlayerInput, hasPlayerResponse;
 
-        public List<TextRow> followUpDialogue;
+        public List<Response> responses;
 
 
-        public TextRow(int _indents, string _value, bool _isPlayerDialogue, bool _waitWithClick)
+        public TextRow(int _indents, string _value, bool _isPlayerDialogue, bool _waitWithPlayerInput, bool _hasPlayerResponse)
         {
             indents = _indents;
             value = _value;
             isPlayerDialogue = _isPlayerDialogue;
-            followUpDialogue = new List<TextRow>();
-            waitWithClick = _waitWithClick;
+            responses = new List<Response>();
+            waitWithPlayerInput = _waitWithPlayerInput;
+            hasPlayerResponse = _hasPlayerResponse;
+        }
+    }
+
+    [Serializable]
+    public class Response 
+    {
+        public string value;
+        public List<TextRow> followUpDialogue;
+
+        public Response(string _value)
+        {
+            value = _value;
         }
     }
     #endregion
 
     #region General Variables/Settings
     [Header("General Settings")]
-    public string speakerName;
-    public TextMeshProUGUI nameText, dialogueText;
+    public Transform buttonParent;
+    public GameObject responseButton;
+
+    public GameObject dialoguePanel;
+    public TextMeshProUGUI dialogueText;
     #endregion
 
     #region Dialogue Settings
@@ -45,7 +63,9 @@ public class DialogueLoader : MonoBehaviour
 
     #region Hidden Variables
     public static DialogueLoader singleton;
+    [HideInInspector] public TextMeshProUGUI speakerText;
 
+    string receivedInput;
     string current;
 
     bool inputReceived;
@@ -70,15 +90,18 @@ public class DialogueLoader : MonoBehaviour
     {
         file = dialogue;
         ReadFile();
+        StartCoroutine(RunFile());
     }
 
     void ReadFile()
     {
         string[] rowValues = file.text.Split("\n");
 
+        int responseDepth = 0;
+        int rowDepth = 0;
         for (int i = 0; i < rowValues.Length; i++)
         {
-            string value = rowValues[i].Replace("\t", "");
+            string value = rowValues[i].Replace("\\n","\n").Replace("\t", "");
             int indents = 0;
             int index = 0;
 
@@ -92,44 +115,119 @@ public class DialogueLoader : MonoBehaviour
             }
 
             bool isPlayerDialogue = value.StartsWith('~');
-            bool waitWithClick = (isPlayerDialogue ? value.Substring(1) : value).StartsWith('|');
-            string finalValue = value.Substring((waitWithClick ? 1 : 0) + (isPlayerDialogue ? 1 : 0));
+            bool waitWithPlayerInput = (isPlayerDialogue ? value.Substring(1) : value).StartsWith('|');
+            bool hasPlayerResponse = value.StartsWith("~?");
+            bool isResponse = value.StartsWith('-');
+            string finalValue = value.Substring((waitWithPlayerInput ? 1 : 0) + (isPlayerDialogue ? 1 : 0) + (hasPlayerResponse ? 1 : 0));
 
-            TextRow textRow = new TextRow(indents, finalValue, isPlayerDialogue, waitWithClick);
-
-            rows.Add(textRow);
-        }
-    }
-
-    IEnumerator RunFile()
-    {
-        foreach (TextRow row in rows)
-        {
-            bool hasFollowup = row.followUpDialogue.Count != 0;
-            nameText.text = row.isPlayerDialogue ? "You" : speakerName;
-            StartCoroutine(LerpText(current, row.value, readSpeed));
-
-            if (row.waitWithClick)
+            if (isResponse)
             {
-                yield return new WaitWhile(() => {
-                    bool waiting = (hasFollowup ? (inputReceived && finishedLerpingText && Input.GetKeyDown
-                        (KeyCode.Mouse0)) : finishedLerpingText && Input.GetKeyDown(KeyCode.Mouse0));
-                    return !waiting;
-                });
+                responseDepth = indents;
+                Response response = new Response(finalValue);
+                rows[rowDepth].responses.Add(response);
             }
             else
             {
-                yield return new WaitWhile(() => !(hasFollowup ? (inputReceived && finishedLerpingText) : finishedLerpingText));
+                rowDepth = i;
+                TextRow textRow = new TextRow(indents, finalValue, isPlayerDialogue, waitWithPlayerInput, hasPlayerResponse);
+                if (responseDepth > indents)
+                    rows[indents].responses[responseDepth].followUpDialogue.Add(textRow);
+                else
+                    rows.Add(textRow);
+            }
+        }
+    }
+
+    bool finishedLoadingRow = false;
+    bool finishedLoadingResponse = false;
+    bool finishedLoadingFile = false;
+
+    IEnumerator RunFile()
+    {
+        finishedLoadingFile = false;
+        
+        speakerText.gameObject.SetActive(true);
+        dialoguePanel.SetActive(true);
+        GameManager.ToggleCursor(true);
+
+        StartCoroutine(LoadRows(rows));
+        yield return new WaitWhile(() => !finishedLoadingFile);
+
+        speakerText.gameObject.SetActive(false);
+        dialoguePanel.SetActive(false);
+        GameManager.ToggleCursor(false);
+    }
+
+    IEnumerator LoadRows(List<TextRow> rowsToLoad)
+    {
+        foreach (TextRow row in rowsToLoad)
+        {
+            bool hasResponses = row.responses.Count != 0;
+            StartCoroutine(LerpText(current, row.value, readSpeed, row.isPlayerDialogue));
+
+            if (row.waitWithPlayerInput && !row.hasPlayerResponse)
+            {
+                yield return new WaitWhile(() => {
+                    bool waiting = (hasResponses ? (inputReceived && finishedLerpingText && Input.GetKeyDown
+                        (KeyCode.Mouse0)) : finishedLerpingText && Input.GetKeyDown(KeyCode.Space));
+
+                    return !waiting;
+                });
+            }
+            else if (!row.waitWithPlayerInput && !row.hasPlayerResponse)
+            {
+                yield return new WaitWhile(() => !(hasResponses ? (inputReceived && finishedLerpingText) : finishedLerpingText));
                 yield return new WaitForSeconds(waitTime);
+            }
+            if (row.hasPlayerResponse)
+            {
+                finishedLoadingRow = false;
+                LoadResponses(row.responses);
+                yield return new WaitWhile(() => !finishedLoadingResponse);
             }
 
             current = "";
             finishedLerpingText = false;
             inputReceived = false;
         }
+
+        if (rowsToLoad == rows)
+            finishedLoadingFile = true;
+
+        finishedLoadingRow = true;
     }
 
-    public IEnumerator LerpText(string a, string b, float t)
+    IEnumerator LoadResponses(List<Response> responses)
+    {
+        List<Button> instantiateButtons = new List<Button>();
+
+        print("run load response");
+        foreach (Response response in responses)
+        {
+            bool hasFollowupDialogue = response.followUpDialogue.Count != 0;
+
+            Button button = Instantiate(responseButton.gameObject, buttonParent).GetComponent<Button>();
+            print(button);
+            button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = response.value;
+            button.onClick.AddListener(() =>
+            {
+                receivedInput = response.value;
+                print(receivedInput);
+                inputReceived = true;
+            });
+
+            if (hasFollowupDialogue) 
+            {
+                finishedLoadingResponse = false;
+                StartCoroutine(LoadRows(response.followUpDialogue));
+                yield return new WaitWhile(() => !finishedLoadingRow);
+            }
+        }
+
+        finishedLoadingResponse = true;
+    }
+
+    public IEnumerator LerpText(string a, string b, float t, bool isPlayer)
     {
         while (a != b)
         {
@@ -147,7 +245,10 @@ public class DialogueLoader : MonoBehaviour
             a = calculatedString;
 
             current = calculatedString;
-            dialogueText.text = calculatedString;
+            if (isPlayer)
+                dialogueText.text = calculatedString;
+            else
+                speakerText.text = calculatedString;
             yield return new WaitForSeconds(t);
         }
         finishedLerpingText = true;

@@ -50,13 +50,6 @@ public class GameManager : MonoBehaviour
     public static InteractableObject interactableObject => singleton._interactableObject;
     #endregion
 
-    #region Dialogue UI
-    public static GameObject DialogueUI => singleton._dialogueUI;
-    public static GameObject DialogueChoices => singleton._dialogueChoices;
-    public static TextMeshProUGUI DialogueName => singleton._dialogueName;
-    public static TextMeshProUGUI DialogueText => singleton._dialogueText;
-    #endregion
-
     #region Shop UI
     public static GameObject shopUI => singleton._shopUI;
     public static GameObject cartUI => singleton._cartUI;
@@ -112,16 +105,6 @@ public class GameManager : MonoBehaviour
     [Header("Interact UI Settings")]
     [SerializeField] GameObject _interactUI;
     [SerializeField] TextMeshProUGUI _interactText;
-    #endregion
-
-    #region Dialogue UI
-    [Header("Dialogue UI Settings")]
-    [SerializeField] GameObject _dialogueUI;
-    [SerializeField] TextMeshProUGUI _dialogueName;
-    [SerializeField] TextMeshProUGUI _dialogueText;
-    
-    [Space()]
-    [SerializeField] GameObject _dialogueChoices;
     #endregion
 
     #region Shop UI
@@ -182,8 +165,6 @@ public class GameManager : MonoBehaviour
 
         crops = new List<CropScript>();
         _questItems = Resources.LoadAll<QuestItem>("Items/Quest Items");
-
-        _dialogueUI.SetActive(false);
         #endregion
     }
 
@@ -361,25 +342,6 @@ public class GameManager : MonoBehaviour
     void DisableInteractUI()
     {
         _interactUI.SetActive(false);
-    }
-    #endregion
-
-    #region Dialogue UI
-    public static void ToggleDialogueUI(bool active, string speakerName = "")
-    {
-        DialogueUI.SetActive(active);
-        DialogueName.text = active ? speakerName : "";
-        ToggleCursor(active);
-    }
-
-    public static void ToggleDialogueChoices(bool active)
-    {
-        DialogueChoices.SetActive(active);
-    }
-
-    public static void UpdateDialogueUI(string text)
-    {
-        DialogueText.text = text;
     }
     #endregion
 

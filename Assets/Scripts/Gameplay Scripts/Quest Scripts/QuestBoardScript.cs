@@ -16,7 +16,7 @@ public class QuestBoardScript : Dialogue
     {
         #region Interact
         GameManager.CheckIfInteractable("Interact", interactableObject);
-        
+
         if (GameManager.isInteractableObject(interactableObject) && Input.GetKeyDown(KeyCode.E))
             RunDialogue(selectedQuest.questDialogue);
         #endregion
