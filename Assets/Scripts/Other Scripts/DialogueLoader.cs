@@ -40,13 +40,14 @@ public class DialogueLoader : MonoBehaviour
         public Response(string _value)
         {
             value = _value;
+            followUpDialogue = new List<TextRow>();
         }
     }
     #endregion
 
     #region General Variables/Settings
     [Header("General Settings")]
-    public Transform buttonParent;
+    public RectTransform buttonParent;
     public GameObject responseButton;
 
     public GameObject dialoguePanel;
@@ -64,6 +65,8 @@ public class DialogueLoader : MonoBehaviour
     #region Hidden Variables
     public static DialogueLoader singleton;
     [HideInInspector] public TextMeshProUGUI speakerText;
+
+    List<GameObject> loadedButtons = new List<GameObject>();
 
     string receivedInput;
     string current;
@@ -139,7 +142,6 @@ public class DialogueLoader : MonoBehaviour
     }
 
     bool finishedLoadingRow = false;
-    bool finishedLoadingResponse = false;
     bool finishedLoadingFile = false;
 
     IEnumerator RunFile()
@@ -182,8 +184,8 @@ public class DialogueLoader : MonoBehaviour
             if (row.hasPlayerResponse)
             {
                 finishedLoadingRow = false;
-                LoadResponses(row.responses);
-                yield return new WaitWhile(() => !finishedLoadingResponse);
+                StartCoroutine(LoadResponses(row.responses));
+                yield return new WaitWhile(() => !inputReceived);
             }
 
             current = "";
@@ -201,13 +203,16 @@ public class DialogueLoader : MonoBehaviour
     {
         List<Button> instantiateButtons = new List<Button>();
 
-        print("run load response");
+        foreach (GameObject loadedButton in loadedButtons)
+            Destroy(loadedButton);
+        loadedButtons.Clear();
+
         foreach (Response response in responses)
         {
             bool hasFollowupDialogue = response.followUpDialogue.Count != 0;
 
+
             Button button = Instantiate(responseButton.gameObject, buttonParent).GetComponent<Button>();
-            print(button);
             button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = response.value;
             button.onClick.AddListener(() =>
             {
@@ -215,16 +220,17 @@ public class DialogueLoader : MonoBehaviour
                 print(receivedInput);
                 inputReceived = true;
             });
+            loadedButtons.Add(button.gameObject);
 
-            if (hasFollowupDialogue) 
+
+            if (hasFollowupDialogue)
             {
-                finishedLoadingResponse = false;
                 StartCoroutine(LoadRows(response.followUpDialogue));
                 yield return new WaitWhile(() => !finishedLoadingRow);
             }
         }
-
-        finishedLoadingResponse = true;
+        
+        buttonParent.sizeDelta = new Vector2(buttonParent.sizeDelta.x, 300 * loadedButtons.Count);
     }
 
     public IEnumerator LerpText(string a, string b, float t, bool isPlayer)

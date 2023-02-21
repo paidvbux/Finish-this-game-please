@@ -65,9 +65,12 @@ public class BuyStationScript : StationScript
             cart[selectedItem] -= changeAmount;
         else if (cart[selectedItem] <= changeAmount)
         {
+            GameManager.singleton.loadedCartItems.Remove(cartItems[selectedItem].gameObject);
+
             cart.Remove(selectedItem);
             Destroy(cartItems[selectedItem].gameObject);
             cartItems.Remove(selectedItem);
+
         }
         UpdateUIButtons();
         UpdateCartUI();
@@ -87,7 +90,13 @@ public class BuyStationScript : StationScript
             cartItem.amount = changeAmount;
 
             cartItems.Add(selectedItem, cartItem);
+
+            GameManager.singleton.loadedCartItems.Add(cartItem.gameObject);
+
+            RectTransform rect = GameManager.singleton.cartItemUIParent.GetComponent<RectTransform>();
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, 150 * GameManager.singleton.loadedCartItems.Count);
         }
+
         UpdateUIButtons();
         UpdateCartUI();
         UpdateItemUI();
@@ -135,14 +144,24 @@ public class BuyStationScript : StationScript
     {
         GameManager.uiActive = true;
         GameManager.ToggleCursor(true);
+
+        foreach(GameObject loadedShopItem in GameManager.singleton.loadedShopItems)
+            Destroy(loadedShopItem);
+        GameManager.singleton.loadedShopItems.Clear();
+
         foreach (Item item in purchasableItems)
         {
             ShopItemScript shopItem = Instantiate(GameManager.singleton.itemUI, GameManager.singleton.itemUIParent).GetComponent<ShopItemScript>();
             shopItem.item = item;
             shopItem.UpdateUI();
 
+            GameManager.singleton.loadedShopItems.Add(shopItem.gameObject);
+
             shopItems.Add(shopItem);
         }
+
+        RectTransform rect = GameManager.singleton.itemUIParent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 150 * GameManager.singleton.loadedShopItems.Count);
 
         GameManager.shopUI.SetActive(true);
     }

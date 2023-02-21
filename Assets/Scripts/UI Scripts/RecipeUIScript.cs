@@ -45,6 +45,9 @@ public class RecipeUIScript : MonoBehaviour
         }
 
         GameManager.singleton.LoadRecipeResult(itemResult);
+        RectTransform rect = GameManager.singleton._recipeRequirementParent.GetComponent<RectTransform>();
+
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 150 * GameManager.singleton.loadedRecipeItems.Count);
     }
     #endregion
 }

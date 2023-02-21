@@ -143,6 +143,10 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public InteractableObject _interactableObject;
     [HideInInspector] public QuestItem[] _questItems;
     [HideInInspector] public List<RecipeItemUIScript> loadedRecipeItems;
+    [HideInInspector] public List<GameObject> loadedShopItems;
+    [HideInInspector] public List<GameObject> loadedCartItems;
+
+    List<GameObject> loadedRecipeObjects;
     bool acceptedQuest;
     #endregion
 
@@ -213,13 +217,23 @@ public class GameManager : MonoBehaviour
     
     public void LoadRecipeBook()
     {
+        foreach (GameObject loadedRecipeObject in loadedRecipeObjects)
+            Destroy(loadedRecipeObject);
+
+        loadedRecipeObjects.Clear();
+
         foreach (Recipe recipe in unlockedRecipes)
         {
             RecipeUIScript recipeUI = Instantiate(_recipeUIPrefab, _recipeUIParent.position, Quaternion.identity).GetComponent<RecipeUIScript>();
             recipeUI.LoadUI(recipe);
 
+            loadedRecipeObjects.Add(recipeUI.gameObject);
+
             recipeUI.transform.SetParent(_recipeUIParent);
         }
+
+        RectTransform rect = _recipeUIParent.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, loadedRecipeObjects.Count * 200);
     }
     #endregion
 
