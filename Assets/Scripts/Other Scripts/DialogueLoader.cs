@@ -11,7 +11,7 @@ using System.Runtime.Remoting.Messaging;
 public class DialogueLoader : MonoBehaviour
 {
     #region Classes & Enums
-    public enum ResponseType { AcceptQuest, DeclineQuest, None };
+    public enum ResponseType { AcceptQuest, None };
 
     [Serializable]
     public class TextRow
@@ -113,7 +113,7 @@ public class DialogueLoader : MonoBehaviour
         int rowDepth = 0;
         for (int i = 0; i < rowValues.Length; i++)
         {
-            string value = rowValues[i].Replace("\\n","\n").Replace("\t", "");
+            string value = rowValues[i].Replace("\\n","\n").Replace("\t", "").Replace("\r", "");
             int indents = 0;
             int index = 0;
 
@@ -130,21 +130,14 @@ public class DialogueLoader : MonoBehaviour
             bool waitWithPlayerInput = (isPlayerDialogue ? value.Substring(1) : value).StartsWith('|');
             bool hasPlayerResponse = value.StartsWith("~?");
             bool isResponse = value.StartsWith('-');
-            string finalValue = value.Substring((waitWithPlayerInput ? 1 : 0) + (isPlayerDialogue ? 1 : 0) + (hasPlayerResponse ? 1 : 0));
+            string finalValue = value.Substring((waitWithPlayerInput ? 1 : 0) + (isPlayerDialogue ? 1 : 0) + (hasPlayerResponse ? 1 : 0) + (isResponse ? 1 : 0));
 
 
             if (isResponse)
             {
                 ResponseType responseType = ResponseType.None;
-                switch (finalValue.ToLower())
-                {
-                    case "accept":
-                        responseType = ResponseType.AcceptQuest;
-                        break;
-                    case "decline":
-                        responseType = ResponseType.DeclineQuest;
-                        break;
-                }
+                if (finalValue.ToLower() == "accept")
+                    responseType = ResponseType.AcceptQuest;
 
                 responseDepth = indents;
                 Response response = new Response(finalValue, responseType);

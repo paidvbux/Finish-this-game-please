@@ -12,6 +12,8 @@ public class QuestLoader : MonoBehaviour
     public static List<Quest> availableQuests;
     public static List<Quest> dailyQuests;
 
+    public static List<Quest> acceptedQuests = new List<Quest>();
+
     public static int dailyQuestsAvailable;
     #endregion
 

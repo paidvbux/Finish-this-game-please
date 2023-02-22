@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
     public static bool hasInputResponse;
     public List<Recipe> unlockedRecipes;
 
-    public static List<Quest> quests;
     public static QuestItem[] questItems => singleton._questItems;
     public static Transform Player => singleton.player;
 

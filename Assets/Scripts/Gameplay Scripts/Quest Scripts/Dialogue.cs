@@ -9,27 +9,44 @@ public class Dialogue : MonoBehaviour
     [Header("General Settings")]
     public string speakerName;
     public Quest selectedQuest;
+    public TextAsset alreadyAccepted;
     public TextMeshProUGUI dialogueText;
     #endregion
 
     #region Hidden/Private Variables
     [HideInInspector] public bool acceptedQuest;
-    string current = "";
     #endregion
 
     /*******************************************************************/
 
+    #region Unity Runtime Functions
+    void Awake()
+    {
+        acceptedQuest = false;    
+    }
+    #endregion
+
     #region Custom Functions
     public void RunDialogue(TextAsset dialogue)
     {
-        DialogueLoader.singleton.speakerText = dialogueText;
-        DialogueLoader.singleton.SetFile(dialogue);
+        if (!acceptedQuest)
+        {
+            DialogueLoader.singleton.speakerText = dialogueText;
+            DialogueLoader.singleton.selectedQuestGiver = this;
+            DialogueLoader.singleton.SetFile(dialogue);
+        }
+        else
+        {
+            DialogueLoader.singleton.speakerText = dialogueText;
+            DialogueLoader.singleton.selectedQuestGiver = this;
+            DialogueLoader.singleton.SetFile(alreadyAccepted);
+        }
     }
 
     public void AcceptQuest()
     {
-        GameManager.quests.Add(selectedQuest);
-        print($"Added {selectedQuest.name} to quests");
+        QuestLoader.acceptedQuests.Add(selectedQuest);
+        acceptedQuest = true;
     }
     #endregion
 }
