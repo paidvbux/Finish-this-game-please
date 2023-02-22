@@ -51,6 +51,7 @@ public class HarvestQuest : Quest
         requiredQuestItem = GameManager.questItems[randomIndex];
         amountRequired = Random.Range(requiredQuestItem.minQuestRequirement, requiredQuestItem.maxQuestRequirement + 1);
         coinAmount = amountRequired * requiredQuestItem.buyCost;
+        questName = $"Daily - Harvest {amountRequired} {requiredQuestItem}";
         #endregion
     }
 

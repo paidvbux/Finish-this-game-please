@@ -1,4 +1,4 @@
-|Items Needed: <color=#428CF1>4</color> <color=#428CF1>Corn</color>\nReward: <color=#EDBC29>160</color> coins
+Items Needed: <color=#428CF1>4</color> <color=#428CF1>Corn</color>\nReward: <color=#EDBC29>160</color> coins
 ~?Accept?
 	-Accept
 	-Decline

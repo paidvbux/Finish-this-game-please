@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a126aa4ad6bb0b640b120408d0fb6b22, type: 3}
   m_Name: Random Crop Harvest Quest
   m_EditorClassIdentifier: 
-  questName: 
+  questName: Daily - Harvest 4 Corn (Crop)
   questDialogue: {fileID: 4900000, guid: 1c3e1ac81dd36a142b1a6eaecb5ce683, type: 3}
   isItem: 0
   item: {fileID: 0}
-  coinAmount: 120
+  coinAmount: 160
   isRandom: 1
-  requiredQuestItem: {fileID: 11400000, guid: c20e75f1fba794c48bf8bec99493723b, type: 2}
-  amountRequired: 6
+  requiredQuestItem: {fileID: 11400000, guid: cd3b1fbb746acf3479d4886643c6e15e, type: 2}
+  amountRequired: 4

@@ -25,5 +25,11 @@ public class Dialogue : MonoBehaviour
         DialogueLoader.singleton.speakerText = dialogueText;
         DialogueLoader.singleton.SetFile(dialogue);
     }
+
+    public void AcceptQuest()
+    {
+        GameManager.quests.Add(selectedQuest);
+        print($"Added {selectedQuest.name} to quests");
+    }
     #endregion
 }

@@ -6,10 +6,13 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Messaging;
 
 public class DialogueLoader : MonoBehaviour
 {
-    #region Classes
+    #region Classes & Enums
+    public enum ResponseType { AcceptQuest, DeclineQuest, None };
+
     [Serializable]
     public class TextRow
     {
@@ -18,7 +21,6 @@ public class DialogueLoader : MonoBehaviour
         public bool isPlayerDialogue, waitWithPlayerInput, hasPlayerResponse;
 
         public List<Response> responses;
-
 
         public TextRow(int _indents, string _value, bool _isPlayerDialogue, bool _waitWithPlayerInput, bool _hasPlayerResponse)
         {
@@ -36,10 +38,12 @@ public class DialogueLoader : MonoBehaviour
     {
         public string value;
         public List<TextRow> followUpDialogue;
+        public ResponseType responseType;
 
-        public Response(string _value)
+        public Response(string _value, ResponseType _responseType)
         {
             value = _value;
+            responseType = _responseType;
             followUpDialogue = new List<TextRow>();
         }
     }
@@ -65,10 +69,13 @@ public class DialogueLoader : MonoBehaviour
     #region Hidden Variables
     public static DialogueLoader singleton;
     [HideInInspector] public TextMeshProUGUI speakerText;
+    [HideInInspector] public Dialogue selectedQuestGiver;
 
     List<GameObject> loadedButtons = new List<GameObject>();
 
-    string receivedInput;
+    bool finishedLoadingRow = false;
+    bool finishedLoadingFile = false;
+
     string current;
 
     bool inputReceived;
@@ -98,6 +105,8 @@ public class DialogueLoader : MonoBehaviour
 
     void ReadFile()
     {
+        rows.Clear();
+
         string[] rowValues = file.text.Split("\n");
 
         int responseDepth = 0;
@@ -123,10 +132,22 @@ public class DialogueLoader : MonoBehaviour
             bool isResponse = value.StartsWith('-');
             string finalValue = value.Substring((waitWithPlayerInput ? 1 : 0) + (isPlayerDialogue ? 1 : 0) + (hasPlayerResponse ? 1 : 0));
 
+
             if (isResponse)
             {
+                ResponseType responseType = ResponseType.None;
+                switch (finalValue.ToLower())
+                {
+                    case "accept":
+                        responseType = ResponseType.AcceptQuest;
+                        break;
+                    case "decline":
+                        responseType = ResponseType.DeclineQuest;
+                        break;
+                }
+
                 responseDepth = indents;
-                Response response = new Response(finalValue);
+                Response response = new Response(finalValue, responseType);
                 rows[rowDepth].responses.Add(response);
             }
             else
@@ -141,15 +162,12 @@ public class DialogueLoader : MonoBehaviour
         }
     }
 
-    bool finishedLoadingRow = false;
-    bool finishedLoadingFile = false;
-
     IEnumerator RunFile()
     {
+        GameManager.dialogueActive = true;
         finishedLoadingFile = false;
         
         speakerText.gameObject.SetActive(true);
-        dialoguePanel.SetActive(true);
         GameManager.ToggleCursor(true);
 
         StartCoroutine(LoadRows(rows));
@@ -158,6 +176,7 @@ public class DialogueLoader : MonoBehaviour
         speakerText.gameObject.SetActive(false);
         dialoguePanel.SetActive(false);
         GameManager.ToggleCursor(false);
+        GameManager.dialogueActive = false;
     }
 
     IEnumerator LoadRows(List<TextRow> rowsToLoad)
@@ -170,8 +189,7 @@ public class DialogueLoader : MonoBehaviour
             if (row.waitWithPlayerInput && !row.hasPlayerResponse)
             {
                 yield return new WaitWhile(() => {
-                    bool waiting = (hasResponses ? (inputReceived && finishedLerpingText && Input.GetKeyDown
-                        (KeyCode.Mouse0)) : finishedLerpingText && Input.GetKeyDown(KeyCode.Space));
+                    bool waiting = (hasResponses ? (inputReceived && finishedLerpingText && Input.anyKeyDown) : finishedLerpingText && Input.anyKeyDown);
 
                     return !waiting;
                 });
@@ -203,6 +221,8 @@ public class DialogueLoader : MonoBehaviour
     {
         List<Button> instantiateButtons = new List<Button>();
 
+        dialoguePanel.SetActive(true);
+
         foreach (GameObject loadedButton in loadedButtons)
             Destroy(loadedButton);
         loadedButtons.Clear();
@@ -211,17 +231,20 @@ public class DialogueLoader : MonoBehaviour
         {
             bool hasFollowupDialogue = response.followUpDialogue.Count != 0;
 
-
             Button button = Instantiate(responseButton.gameObject, buttonParent).GetComponent<Button>();
             button.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = response.value;
             button.onClick.AddListener(() =>
             {
-                receivedInput = response.value;
-                print(receivedInput);
+                dialoguePanel.SetActive(false);
+                switch (response.responseType) 
+                {
+                    case ResponseType.AcceptQuest:
+                        selectedQuestGiver.AcceptQuest();
+                        break;
+                }
                 inputReceived = true;
             });
             loadedButtons.Add(button.gameObject);
-
 
             if (hasFollowupDialogue)
             {
@@ -258,7 +281,6 @@ public class DialogueLoader : MonoBehaviour
             yield return new WaitForSeconds(t);
         }
         finishedLerpingText = true;
-        inputReceived = true;
     }
     #endregion
 }

@@ -68,12 +68,15 @@ public class PlayerController : MonoBehaviour
         #region Update Movement & Camera
         GameManager.ToggleCursor(GameManager.uiActive);
 
-        UpdateMovement();
+        if (!GameManager.dialogueActive)
+        {
+            UpdateMovement();
 
-        if (GameManager.uiActive)
-            return;
-        if (!rotatingObject)
-            UpdateMouseLook();
+            if (GameManager.uiActive)
+                return;
+            if (!rotatingObject)
+                UpdateMouseLook();
+        }
         #endregion
     }
     #endregion
@@ -104,7 +107,7 @@ public class PlayerController : MonoBehaviour
     void UpdateMovement()
     {
         #region Get Movement Input
-        Vector2 targetDir = GameManager.uiActive ? Vector2.zero : new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        Vector2 targetDir = (GameManager.uiActive || GameManager.dialogueActive) ? Vector2.zero : new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         targetDir.Normalize();
 
         Vector3 velocity;
@@ -125,8 +128,7 @@ public class PlayerController : MonoBehaviour
             #endregion
 
             #region Jump
-            //  Checks if the player wants to jump and jumps if they do.
-            if (Input.GetButton("Jump"))
+            if (!(GameManager.uiActive || GameManager.dialogueActive) && Input.GetButton("Jump"))
                 velocityY = initialJumpSpeed;
             #endregion
         }

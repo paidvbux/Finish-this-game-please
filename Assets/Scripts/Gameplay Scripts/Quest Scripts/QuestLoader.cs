@@ -53,14 +53,17 @@ public class QuestLoader : MonoBehaviour
 
         while (questsGenerated < dailyQuestsAvailable)
         {
-            Quest randomQuest = allRandomQuests[Random.Range(0, allRandomQuests.Length - 1)];
+            int randomIndex = Random.Range(0, allRandomQuests.Length - 1);
+            Quest randomQuest = allRandomQuests[randomIndex];
             
             Quest generatedQuest = null;
 
             if (randomQuest is HarvestQuest)
             {
+                Quest temp = randomQuest;
                 HarvestQuest quest = randomQuest as HarvestQuest;
                 generatedQuest = quest.LoadQuest();
+                allRandomQuests[randomIndex] = temp;
             }
 
             if (attempts++ >= 10) 
@@ -76,7 +79,7 @@ public class QuestLoader : MonoBehaviour
                 attempts = 0;
             }
 
-            questBoards[0].selectedQuest = generatedQuest;
+            questBoards[questsGenerated - 1].selectedQuest = generatedQuest;
         }
     }
     #endregion

@@ -35,9 +35,11 @@ public class GameManager : MonoBehaviour
     public static GameManager singleton;
     public static List<CropScript> crops;
     public static bool uiActive;
+    public static bool dialogueActive;
     public static bool hasInputResponse;
     public List<Recipe> unlockedRecipes;
 
+    public static List<Quest> quests;
     public static QuestItem[] questItems => singleton._questItems;
     public static Transform Player => singleton.player;
 
@@ -159,6 +161,7 @@ public class GameManager : MonoBehaviour
         unlockedRecipes = new List<Recipe>();
 
         uiActive = false;
+        dialogueActive = false;
 
         _interactableObject = new InteractableObject("", null);
 
