@@ -163,9 +163,30 @@ public class DialogueLoader : MonoBehaviour
         speakerText.gameObject.SetActive(true);
         GameManager.ToggleCursor(true);
 
+        Vector3 storedDir = GameManager.singleton.playerCamera.forward;
+
+        float timer = 0;
+        while (timer < 0.5f)
+        {
+            GameManager.singleton.playerCamera.forward = Vector3.Slerp(GameManager.singleton.playerCamera.forward, 
+                speakerText.transform.position - GameManager.singleton.playerCamera.position - Vector3.up, timer);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
         StartCoroutine(LoadRows(rows));
         yield return new WaitWhile(() => !finishedLoadingFile);
 
+        timer = 0;
+        while (timer < 0.5f)
+        {
+            GameManager.singleton.playerCamera.forward = Vector3.Slerp(GameManager.singleton.playerCamera.forward, 
+                storedDir, timer);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        speakerText.text = "";
         speakerText.gameObject.SetActive(false);
         dialoguePanel.SetActive(false);
         GameManager.ToggleCursor(false);

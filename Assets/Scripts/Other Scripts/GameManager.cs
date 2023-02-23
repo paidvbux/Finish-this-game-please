@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
     #region General Variables
     [Header("Important Player Variables")]
     public Transform player;
+    public Transform playerCamera;
     public PlayerController playerController => player.GetComponent<PlayerController>();
     public int coins;
     #endregion
