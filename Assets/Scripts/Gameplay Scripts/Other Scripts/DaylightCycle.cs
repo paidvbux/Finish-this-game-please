@@ -57,6 +57,12 @@ public class DaylightCycle : MonoBehaviour
     {
         if (ticks_float > ticksPerDay)
         {
+            foreach (QuestBoardScript questBoard in QuestLoader.singleton.questBoards) {   
+                if (questBoard.acceptedQuest)
+                    QuestLoader.acceptedQuests.Remove(questBoard.selectedQuest);
+            }
+
+            QuestLoader.singleton.GenerateDailyQuests();
             ticks_float = 0;
             day++;
         }

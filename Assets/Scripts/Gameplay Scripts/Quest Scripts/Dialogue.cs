@@ -11,10 +11,13 @@ public class Dialogue : MonoBehaviour
     public Quest selectedQuest;
     public TextAsset alreadyAccepted;
     public TextMeshProUGUI dialogueText;
+    public GameObject hasQuest;
+    public TriggerScript interactTrigger;
     #endregion
 
     #region Hidden/Private Variables
     [HideInInspector] public bool acceptedQuest;
+    [HideInInspector] public bool talking;
     #endregion
 
     /*******************************************************************/
@@ -23,6 +26,11 @@ public class Dialogue : MonoBehaviour
     void Awake()
     {
         acceptedQuest = false;    
+    }
+
+    protected virtual void Update()
+    {
+        hasQuest.SetActive(!talking && !acceptedQuest && interactTrigger.inTrigger);
     }
     #endregion
 

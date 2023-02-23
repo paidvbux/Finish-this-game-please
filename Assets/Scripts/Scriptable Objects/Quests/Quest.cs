@@ -13,6 +13,6 @@ public class Quest : ScriptableObject
 
     [Header("Reward Settings")]
     public bool isItem;
-    public Item item;
+    public Item[] rewards;
     public int coinAmount;
 }

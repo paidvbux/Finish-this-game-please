@@ -165,11 +165,13 @@ public class DialogueLoader : MonoBehaviour
 
         Vector3 storedDir = GameManager.singleton.playerCamera.forward;
 
+        selectedQuestGiver.talking = true;
+
         float timer = 0;
         while (timer < 0.5f)
         {
             GameManager.singleton.playerCamera.forward = Vector3.Slerp(GameManager.singleton.playerCamera.forward, 
-                speakerText.transform.position - GameManager.singleton.playerCamera.position - Vector3.up, timer);
+                speakerText.transform.position - GameManager.singleton.playerCamera.position, timer);
             timer += Time.deltaTime;
             yield return null;
         }
@@ -187,6 +189,7 @@ public class DialogueLoader : MonoBehaviour
         }
 
         speakerText.text = "";
+        selectedQuestGiver.talking = false;
         speakerText.gameObject.SetActive(false);
         dialoguePanel.SetActive(false);
         GameManager.ToggleCursor(false);

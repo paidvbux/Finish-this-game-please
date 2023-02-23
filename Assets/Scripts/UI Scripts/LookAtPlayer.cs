@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class LookAtPlayer : MonoBehaviour
 {
-    [SerializeField] Vector3 offset;
+    [Header("General Settings")]
+    [SerializeField] bool includesYPosition;
 
     Canvas canvas => GetComponent<Canvas>();
 
@@ -13,11 +14,11 @@ public class LookAtPlayer : MonoBehaviour
         canvas.worldCamera = Camera.main;
     }
 
-    void Update()
+    void LateUpdate()
     {
-        Vector3 position = new Vector3(GameManager.Player.position.x, transform.position.y, GameManager.Player.position.z);
+        Vector3 position = new Vector3(GameManager.singleton.playerCamera.position.x, includesYPosition ? 
+            GameManager.singleton.playerCamera.position.y : 0 + transform.position.y, GameManager.singleton.playerCamera.position.z);
 
-        transform.LookAt(position);
-        transform.localEulerAngles += offset;
+        transform.LookAt(position, Vector3.up);
     }
 }

@@ -12,8 +12,10 @@ public class QuestBoardScript : Dialogue
     /*******************************************************************/
     
     #region Unity Runtime Functions
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         #region Interact
         GameManager.CheckIfInteractable("Interact", interactableObject);
 

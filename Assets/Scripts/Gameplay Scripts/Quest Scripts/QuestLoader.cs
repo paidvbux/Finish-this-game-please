@@ -22,7 +22,7 @@ public class QuestLoader : MonoBehaviour
     #endregion
 
     #region Hidden/Private Variables
-    List<string> dailyQuestNames;
+    List<int> dailyQuestHashCodes;
     #endregion
 
     /*******************************************************************/
@@ -35,9 +35,6 @@ public class QuestLoader : MonoBehaviour
         allQuests = Resources.LoadAll<Quest>("Quests");
         allRandomQuests = Resources.LoadAll<Quest>("Random Quests");
 
-        dailyQuestNames = new List<string>();
-        dailyQuests = new List<Quest>();
-
         dailyQuestsAvailable = questBoards.Count;
     }
     
@@ -48,10 +45,13 @@ public class QuestLoader : MonoBehaviour
     #endregion
 
     #region Custom Functions
-    void GenerateDailyQuests()
+    public void GenerateDailyQuests()
     {
         int questsGenerated = 0;
         int attempts = 0;
+
+        dailyQuestHashCodes = new List<int>();
+        dailyQuests = new List<Quest>();
 
         while (questsGenerated < dailyQuestsAvailable)
         {
@@ -71,9 +71,9 @@ public class QuestLoader : MonoBehaviour
             if (attempts++ >= 10) 
                 break;
 
-            if (generatedQuest != null && !dailyQuestNames.Contains(generatedQuest.name))
+            if (generatedQuest != null && !dailyQuestHashCodes.Contains(generatedQuest.GetHashCode()))
             {
-                dailyQuestNames.Add(generatedQuest.name);
+                dailyQuestHashCodes.Add(generatedQuest.GetHashCode());
                 dailyQuests.Add(generatedQuest);
                 
                 questsGenerated++;
@@ -81,6 +81,7 @@ public class QuestLoader : MonoBehaviour
                 attempts = 0;
             }
 
+            questBoards[questsGenerated - 1].acceptedQuest = false;
             questBoards[questsGenerated - 1].selectedQuest = generatedQuest;
         }
     }

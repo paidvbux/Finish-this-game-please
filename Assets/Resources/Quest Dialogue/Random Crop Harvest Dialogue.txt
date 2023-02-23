@@ -1,4 +1,4 @@
-Items Needed: {1} {2}\nReward: {0} coins
+Items Needed: {1}\nReward: {0} coins
 ~?Accept?
 	-Accept
 	-Decline

@@ -1,0 +1,4 @@
+Items Needed: <color=#428CF1>4 Corn</color>\nReward: <color=#EDBC29>160</color> coins
+~?Accept?
+	-Accept
+	-Decline
