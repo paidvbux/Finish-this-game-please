@@ -67,6 +67,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         #region Update Movement & Camera
+        print(GameManager.uiActive);
         GameManager.ToggleCursor(GameManager.uiActive);
 
         if (!GameManager.dialogueActive)

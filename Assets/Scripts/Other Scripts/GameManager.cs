@@ -158,6 +158,10 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         #region Initialization
+        loadedRecipeObjects = new List<GameObject>();
+        loadedShopItems= new List<GameObject>();
+        loadedCartItems = new List<GameObject>();
+
         unlockedRecipes = new List<Recipe>();
 
         uiActive = false;
@@ -177,7 +181,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if (Input.GetKeyDown(KeyCode.BackQuote))
         {
             menuUI.SetActive(!menuUI.activeSelf);
             uiActive = menuUI.activeSelf;
@@ -220,6 +224,8 @@ public class GameManager : MonoBehaviour
     
     public void LoadRecipeBook()
     {
+        menuUI.SetActive(false);
+
         foreach (GameObject loadedRecipeObject in loadedRecipeObjects)
             Destroy(loadedRecipeObject);
 

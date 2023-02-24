@@ -88,6 +88,7 @@ public class HarvestQuest : Quest
                 if (!generatedIndexes.Contains(randomIndex))
                 {
                     generatedQuestItem = GameManager.questItems[randomIndex];
+                    generatedIndexes.Add(randomIndex);
                     break;
                 }
                 attempts++;
