@@ -47,14 +47,22 @@ public class HarvestQuest : Quest
         #endregion
 
         #region Format Dialogue
-        int hashcodeSum = 0;
+        string combination = "";
+        string questName = "";
         foreach (RequiredQuestItem item in requiredQuestItems)
-            hashcodeSum += item.questItem.itemName.GetHashCode();
+        {
+            questName += $"{item.amountRequired} " + (item.amountRequired == 1 ? 
+                item.questItem.itemName : item.questItem.pluralItemName) + ", ";
+            combination += item.questItem.itemName + ", ";
+        }
 
-        string directory = $"Assets/Resources/Quest Dialogue/Random Harvest Dialogue/{hashcodeSum}";
+        combination = combination.Substring(0, combination.Length - 2);
+        questName = questName.Substring(0, questName.Length - 2);
+
+        string directory = $"Assets/Resources/Quest Dialogue/Random Harvest Dialogue/{combination}";
         if (!Directory.Exists(directory))
             Directory.CreateDirectory(directory);
-        string path = $"Quest Dialogue/Random Harvest Dialogue/{hashcodeSum}/Random Dialogue ({requiredQuestItems.GetHashCode()})";
+        string path = $"Quest Dialogue/Random Harvest Dialogue/{combination}/Random Dialogue [({questName}), {coinAmount}]";
         if (isRandom && Resources.Load<TextAsset>(path) == null)
         {
             string assetPath = $"Assets/Resources/{path}.txt";
@@ -72,8 +80,8 @@ public class HarvestQuest : Quest
         #region Randomize Variables
         int cropAmount = Random.Range(minAmount, maxAmount + 1);
         requiredQuestItems = new List<RequiredQuestItem>();
+        List<string> names = new List<string>();
 
-        List<int> generatedIndexes = new List<int>();
         coinAmount = 0;
         for (int i = 0; i < cropAmount; i++)
         {
@@ -84,11 +92,10 @@ public class HarvestQuest : Quest
             {
                 int randomIndex = Random.Range(0, GameManager.questItems.Length);
 
-                Debug.Log(generatedIndexes.Contains(randomIndex));
-                if (!generatedIndexes.Contains(randomIndex))
+                if (!names.Contains(GameManager.questItems[randomIndex].itemName))
                 {
                     generatedQuestItem = GameManager.questItems[randomIndex];
-                    generatedIndexes.Add(randomIndex);
+                    names.Add(GameManager.questItems[randomIndex].itemName);
                     break;
                 }
                 attempts++;
@@ -106,6 +113,24 @@ public class HarvestQuest : Quest
         }
         string cropName = cropAmount > 1 ? "Crops" : $"{requiredQuestItems[0].amountRequired} {(requiredQuestItems[0].amountRequired == 1 ? requiredQuestItems[0].questItem.itemName : requiredQuestItems[0].questItem.pluralItemName)}";
         questName = $"Daily - Harvest {cropName}";
+
+        RequiredQuestItem[] tempList = new RequiredQuestItem[cropAmount];
+        names.Sort();
+
+        foreach (RequiredQuestItem requiredQuestItem in requiredQuestItems)
+        {
+            for (int i = 0; i < names.Count; i++)
+            {
+                if (requiredQuestItem.questItem.itemName == names[i])
+                {
+                    tempList[i] = requiredQuestItem;
+                    break;
+                }
+            }
+        }
+
+        requiredQuestItems.Clear();
+        requiredQuestItems.AddRange(tempList);
         #endregion
     }
 

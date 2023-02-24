@@ -1,4 +1,0 @@
-Items Needed: <color=#428CF1>5 Corn, 7 Tomatoes</color>\nReward: <color=#EDBC29>340</color> coins
-~?Accept?
-	-Accept
-	-Decline
