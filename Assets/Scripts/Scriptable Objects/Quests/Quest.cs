@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class Quest : ScriptableObject
 {
+    [Serializable]
+    public class Reward
+    {
+        public Item item;
+        public int amount;
+    }
+
     [Header("General Settings")]
     public string questName;
 
@@ -13,6 +20,8 @@ public class Quest : ScriptableObject
 
     [Header("Reward Settings")]
     public bool isItem;
-    public Item[] rewards;
+    public Reward[] rewards;
+    public bool hasRecipeReward;
+    public Recipe[] recipeRewards;
     public int coinAmount;
 }

@@ -11079,6 +11079,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1505093918}
+  - component: {fileID: 1505093920}
   - component: {fileID: 1505093917}
   - component: {fileID: 1505093919}
   m_Layer: 0
@@ -11100,19 +11101,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cfb3ca1c5c15104f833d79d401ad308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unlockedRecipes: []
   player: {fileID: 1070787852}
   playerCamera: {fileID: 1687258585}
   coins: 0
-  resultImage: {fileID: 2082152586}
-  resultNameText: {fileID: 612893023}
-  resultAmountText: {fileID: 1730638923}
-  recipeNameText: {fileID: 1315471361}
-  recipeDescriptionText: {fileID: 974089457}
-  _recipeUIParent: {fileID: 407294231}
-  _recipeUIPrefab: {fileID: 1848879039502603244, guid: cb848c5f52b07cc4b8ed99b84568e9ea, type: 3}
-  _recipeRequirementParent: {fileID: 1848832482}
-  _recipeRequirementUI: {fileID: 3810402294175968032, guid: 331d91737d32ed74e97363e60531dff7, type: 3}
   menuUI: {fileID: 1714156107}
   _interactUI: {fileID: 967481469}
   _interactText: {fileID: 838038224}
@@ -11139,7 +11130,6 @@ MonoBehaviour:
     text: 
     gameObject: {fileID: 0}
   _questItems: []
-  loadedRecipeItems: []
   loadedShopItems: []
   loadedCartItems: []
 --- !u!4 &1505093918
@@ -11243,6 +11233,28 @@ MonoBehaviour:
   ticksPerDay: 1440
   day: 0
   ticks: 0
+--- !u!114 &1505093920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1505093916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 901334659c8b4d245b23462cc21f6a33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resultImage: {fileID: 2082152586}
+  resultNameText: {fileID: 612893023}
+  resultAmountText: {fileID: 1730638923}
+  recipeNameText: {fileID: 1315471361}
+  recipeDescriptionText: {fileID: 974089457}
+  recipeUIParent: {fileID: 407294231}
+  recipeUIPrefab: {fileID: 1848879039502603244, guid: cb848c5f52b07cc4b8ed99b84568e9ea, type: 3}
+  recipeRequirementParent: {fileID: 1848832482}
+  recipeRequirementUI: {fileID: 3810402294175968032, guid: 331d91737d32ed74e97363e60531dff7, type: 3}
+  loadedRecipeItems: []
 --- !u!1 &1554923232
 GameObject:
   m_ObjectHideFlags: 0

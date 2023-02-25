@@ -31,23 +31,23 @@ public class RecipeUIScript : MonoBehaviour
 
     public void LoadRecipeUI()
     {
-        foreach (RecipeItemUIScript loadedRecipeItem in GameManager.singleton.loadedRecipeItems)
+        foreach (RecipeItemUIScript loadedRecipeItem in RecipeBook.singleton.loadedRecipeItems)
             Destroy(loadedRecipeItem.gameObject);
-        GameManager.singleton.loadedRecipeItems.Clear();
+        RecipeBook.singleton.loadedRecipeItems.Clear();
 
         foreach (Recipe.RecipeItem recipeItem in itemsRequired)
         {
-            RecipeItemUIScript recipeUI = Instantiate(GameManager.recipeRequirementUI, GameManager.recipeRequirementParent).GetComponent<RecipeItemUIScript>();
+            RecipeItemUIScript recipeUI = Instantiate(RecipeBook.singleton.recipeRequirementUI, RecipeBook.singleton.recipeRequirementParent).GetComponent<RecipeItemUIScript>();
             recipeUI.item = recipeItem;
             recipeUI.LoadItem();
 
-            GameManager.singleton.loadedRecipeItems.Add(recipeUI);
+            RecipeBook.singleton.loadedRecipeItems.Add(recipeUI);
         }
 
-        GameManager.singleton.LoadRecipeResult(itemResult);
-        RectTransform rect = GameManager.singleton._recipeRequirementParent.GetComponent<RectTransform>();
+        RecipeBook.singleton.LoadRecipeResult(itemResult);
+        RectTransform rect = RecipeBook.singleton.recipeRequirementParent.GetComponent<RectTransform>();
 
-        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 150 * GameManager.singleton.loadedRecipeItems.Count);
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, 150 * RecipeBook.singleton.loadedRecipeItems.Count);
     }
     #endregion
 }

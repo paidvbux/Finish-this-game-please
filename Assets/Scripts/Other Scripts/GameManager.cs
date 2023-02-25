@@ -37,13 +37,9 @@ public class GameManager : MonoBehaviour
     public static bool uiActive;
     public static bool dialogueActive;
     public static bool hasInputResponse;
-    public List<Recipe> unlockedRecipes;
 
     public static QuestItem[] questItems => singleton._questItems;
     public static Transform Player => singleton.player;
-
-    public static Transform recipeRequirementParent => singleton._recipeRequirementParent;
-    public static GameObject recipeRequirementUI => singleton._recipeRequirementUI;
 
     #region Interact UI
     public static GameObject interactUI => singleton._interactUI;
@@ -79,25 +75,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region UI Variables/Settings
-    #region Recipe Book
-    [Header("Recipe Book Settings")]
-    [SerializeField] Image resultImage;
-    [SerializeField] TextMeshProUGUI resultNameText;
-    [SerializeField] TextMeshProUGUI resultAmountText;
-
-    [Space()]
-    [SerializeField] TextMeshProUGUI recipeNameText;
-    [SerializeField] TextMeshProUGUI recipeDescriptionText;
-
-    [Space()]
-    public Transform _recipeUIParent;
-    public GameObject _recipeUIPrefab;
-
-    [Space()]
-    public Transform _recipeRequirementParent;
-    public GameObject _recipeRequirementUI;
-    #endregion
-
     #region Menu UI
     [Header("Menu Settings")]
     public GameObject menuUI;
@@ -144,11 +121,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public BuyStationScript selectedShop;
     [HideInInspector] public InteractableObject _interactableObject;
     [HideInInspector] public QuestItem[] _questItems;
-    [HideInInspector] public List<RecipeItemUIScript> loadedRecipeItems;
     [HideInInspector] public List<GameObject> loadedShopItems;
     [HideInInspector] public List<GameObject> loadedCartItems;
 
-    List<GameObject> loadedRecipeObjects;
     bool acceptedQuest;
     #endregion
 
@@ -158,11 +133,8 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         #region Initialization
-        loadedRecipeObjects = new List<GameObject>();
         loadedShopItems= new List<GameObject>();
         loadedCartItems = new List<GameObject>();
-
-        unlockedRecipes = new List<Recipe>();
 
         uiActive = false;
         dialogueActive = false;
@@ -204,48 +176,6 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region Custom Functions
-    #region Other Functions
-    static void UnlockRecipe(Recipe recipe)
-    {
-        singleton.unlockedRecipes.Add(recipe);
-    }
-    #endregion
-
-    #region Recipe Book Functions
-    public void LoadRecipeResult(Recipe.RecipeItem result)
-    {
-        recipeNameText.text = result.item.name;
-        recipeDescriptionText.text = result.item.description;
-
-        resultImage.sprite = result.item.sprite;
-        resultNameText.text = result.item.name;
-        resultAmountText.text = $"x{result.amount}";
-    }
-    
-    public void LoadRecipeBook()
-    {
-        menuUI.SetActive(false);
-
-        foreach (GameObject loadedRecipeObject in loadedRecipeObjects)
-            Destroy(loadedRecipeObject);
-
-        loadedRecipeObjects.Clear();
-
-        foreach (Recipe recipe in unlockedRecipes)
-        {
-            RecipeUIScript recipeUI = Instantiate(_recipeUIPrefab, _recipeUIParent.position, Quaternion.identity).GetComponent<RecipeUIScript>();
-            recipeUI.LoadUI(recipe);
-
-            loadedRecipeObjects.Add(recipeUI.gameObject);
-
-            recipeUI.transform.SetParent(_recipeUIParent);
-        }
-
-        RectTransform rect = _recipeUIParent.GetComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(rect.sizeDelta.x, loadedRecipeObjects.Count * 200);
-    }
-    #endregion
-
     #region Helper Functions
     public static Outline AddOutline(GameObject obj, OutlineParams outlineParams)
     {
