@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Random Crop Harvest Quest
   m_EditorClassIdentifier: 
   questName: Daily - Harvest Crops
+  description: Harvest some crops.
   questDialogue: {fileID: 4900000, guid: 1c3e1ac81dd36a142b1a6eaecb5ce683, type: 3}
   isItem: 0
   rewards: []
+  hasRecipeReward: 0
+  recipeRewards: []
   coinAmount: 200
   isRandom: 1
   requiredQuestItems:

@@ -136,7 +136,7 @@ public class HarvestQuest : Quest
 
     string Format(string text)
     {
-        string itemList = "<color=#428CF1>";
+        string itemList = "<color=#17A589>";
         for (int i = 0; i < requiredQuestItems.Count; i++)
         {
             itemList += $"{requiredQuestItems[i].amountRequired} {(requiredQuestItems[i].amountRequired == 1 ? requiredQuestItems[i].questItem.itemName : requiredQuestItems[i].questItem.pluralItemName)}";

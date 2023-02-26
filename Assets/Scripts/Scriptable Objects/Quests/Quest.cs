@@ -14,6 +14,7 @@ public class Quest : ScriptableObject
 
     [Header("General Settings")]
     public string questName;
+    public string description;
 
     [Header("Dialogue Settings")]
     public TextAsset questDialogue;

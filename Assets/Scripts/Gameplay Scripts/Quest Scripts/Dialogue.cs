@@ -53,7 +53,7 @@ public class Dialogue : MonoBehaviour
 
     public void AcceptQuest()
     {
-        QuestLoader.acceptedQuests.Add(selectedQuest);
+        QuestManager.acceptedQuests.Add(selectedQuest);
         acceptedQuest = true;
     }
     #endregion

@@ -4,18 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class CartItemScript : MonoBehaviour
+public class ShopItemScript : MonoBehaviour
 {
     #region UI Variables/Settings
     public TextMeshProUGUI nameText;
-    public TextMeshProUGUI amountText;
     public TextMeshProUGUI costText;
     public Image image;
     #endregion
 
     #region Hidden Variables
     [HideInInspector] public Item item;
-    [HideInInspector] public int amount;
     #endregion
 
     /*******************************************************************/
@@ -24,8 +22,7 @@ public class CartItemScript : MonoBehaviour
     public void UpdateUI()
     {
         nameText.text = item.name;
-        amountText.text = $"{amount}";
-        costText.text = $"{item.buyCost * amount}";
+        costText.text = item.buyCost.ToString();
 
         if (item.sprite != null)
             image.sprite = item.sprite;
@@ -33,7 +30,7 @@ public class CartItemScript : MonoBehaviour
 
     public void UpdateCurrentItem()
     {
-        GameManager.UpdateSelectedItem(item);
+        ShopScript.UpdateSelectedItem(item);
     }
     #endregion
 }

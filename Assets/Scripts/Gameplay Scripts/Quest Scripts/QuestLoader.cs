@@ -7,12 +7,7 @@ public class QuestLoader : MonoBehaviour
     #region Static Variables/Settings
     public static QuestLoader singleton;
 
-    public static Quest[] allQuests;
-    public static Quest[] allRandomQuests;
-    public static List<Quest> availableQuests;
     public static List<Quest> dailyQuests;
-
-    public static List<Quest> acceptedQuests = new List<Quest>();
 
     public static int dailyQuestsAvailable;
     #endregion
@@ -31,9 +26,6 @@ public class QuestLoader : MonoBehaviour
     void Awake()
     {
         singleton = this;
-
-        allQuests = Resources.LoadAll<Quest>("Quests");
-        allRandomQuests = Resources.LoadAll<Quest>("Random Quests");
 
         dailyQuestsAvailable = questBoards.Count;
     }
@@ -55,8 +47,8 @@ public class QuestLoader : MonoBehaviour
 
         while (questsGenerated < dailyQuestsAvailable)
         {
-            int randomIndex = Random.Range(0, allRandomQuests.Length - 1);
-            Quest randomQuest = allRandomQuests[randomIndex];
+            int randomIndex = Random.Range(0, QuestManager.allRandomQuests.Length - 1);
+            Quest randomQuest = QuestManager.allRandomQuests[randomIndex];
             
             Quest generatedQuest = null;
 
@@ -65,7 +57,7 @@ public class QuestLoader : MonoBehaviour
                 Quest temp = randomQuest;
                 HarvestQuest quest = randomQuest as HarvestQuest;
                 generatedQuest = quest.LoadQuest();
-                allRandomQuests[randomIndex] = temp;
+                QuestManager.allRandomQuests[randomIndex] = temp;
             }
 
             if (attempts++ >= 10) 

@@ -59,7 +59,7 @@ public class DaylightCycle : MonoBehaviour
         {
             foreach (QuestBoardScript questBoard in QuestLoader.singleton.questBoards) {   
                 if (questBoard.acceptedQuest)
-                    QuestLoader.acceptedQuests.Remove(questBoard.selectedQuest);
+                    QuestManager.acceptedQuests.Remove(questBoard.selectedQuest);
             }
 
             QuestLoader.singleton.GenerateDailyQuests();
