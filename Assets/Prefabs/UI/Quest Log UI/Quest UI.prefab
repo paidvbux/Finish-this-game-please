@@ -137,9 +137,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RecipeUIScript, Assembly-CSharp
-        m_MethodName: LoadRecipeUI
+      - m_Target: {fileID: 6852388686782965052}
+        m_TargetAssemblyTypeName: QuestUI, Assembly-CSharp
+        m_MethodName: LoadQuest
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 18
   m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 1

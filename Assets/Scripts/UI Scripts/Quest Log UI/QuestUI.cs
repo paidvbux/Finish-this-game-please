@@ -6,11 +6,11 @@ using UnityEngine;
 public class QuestUI : MonoBehaviour
 {
     public TextMeshProUGUI nameText;
-    public Quest quest;
+    [HideInInspector] public Quest quest;
 
     public void Initialize(Quest _quest)
     {
-        nameText.text = _quest.name;
+        nameText.text = _quest.questName;
         quest = _quest;
     }
 

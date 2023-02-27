@@ -14,6 +14,8 @@ public class RequiredQuestItem : MonoBehaviour
     {
         image.sprite = requiredItem.questItem.sprite;
         nameText.text = requiredItem.questItem.itemName;
-        countText.text = $"<color=#17A589>{requiredItem.currentAmount}/{requiredItem.amountRequired}</color>";
+        if (requiredItem.amountRequired == requiredItem.currentAmount)
+            countText.text += "<color=#17A589>";
+        countText.text = $"{requiredItem.currentAmount}/{requiredItem.amountRequired}</color>";
     }
 }

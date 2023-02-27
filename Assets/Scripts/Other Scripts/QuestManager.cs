@@ -53,6 +53,25 @@ public class QuestManager : MonoBehaviour
 
         questObjectiveObjects = new List<GameObject>();    
     }
+
+    bool open;
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (open)
+            {
+                GameManager.uiActive = true;
+                LoadQuestLog();
+            }
+            else
+            {
+                GameManager.uiActive = false;
+                CloseQuestLog();
+            }
+            open = !open;
+        }
+    }
     #endregion
 
     #region Custom Functions
