@@ -7,7 +7,6 @@ public class Dialogue : MonoBehaviour
 {
     #region General Variables/Settings
     [Header("General Settings")]
-    public string speakerName;
     public Quest selectedQuest;
     public TextAsset alreadyAccepted;
     public TextMeshProUGUI dialogueText;

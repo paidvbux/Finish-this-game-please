@@ -16,6 +16,9 @@ public class QuestManager : MonoBehaviour
     #endregion
 
     #region Quest UI Settings
+    [SerializeField] TriggerScript selectedTrigger;
+    [SerializeField] Quest selectedQuest;
+
     [Header("Quest UI Settings")]
     [SerializeField] GameObject questLog;
     [SerializeField] GameObject questUI;
@@ -36,6 +39,8 @@ public class QuestManager : MonoBehaviour
     #endregion
 
     #region Hidden Variables
+    [HideInInspector] public RedeemStationScript selectedRedeemStation;
+
     List<GameObject> questObjectiveObjects = new List<GameObject>();
     List<GameObject> questRewardObjects = new List<GameObject>();
     List<GameObject> questObjects = new List<GameObject>();
@@ -54,29 +59,31 @@ public class QuestManager : MonoBehaviour
         questObjectiveObjects = new List<GameObject>();    
     }
 
-    bool open;
+    [HideInInspector] public bool open;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            if (open)
+            if (!open)
             {
-                GameManager.uiActive = true;
                 LoadQuestLog();
             }
             else
             {
-                GameManager.uiActive = false;
                 CloseQuestLog();
             }
-            open = !open;
         }
     }
     #endregion
 
     #region Custom Functions
+    #region Public Functions
+    #region Public UI Functions
     public void LoadQuestLog()
     {
+        GameManager.uiActive = true;
+        open = true;
+
         foreach (Quest quest in acceptedQuests)
         {
             GameObject questObject = Instantiate(questUI, questListParent);
@@ -94,6 +101,15 @@ public class QuestManager : MonoBehaviour
 
     public void CloseQuestLog()
     {
+        GameManager.uiActive = false;
+        open = false;
+
+        if (selectedRedeemStation != null)
+        {
+            selectedRedeemStation.selectedQuest = null;
+            selectedRedeemStation = null;
+        }
+
         questLog.SetActive(false);
 
         foreach (GameObject questObjectiveObject in questObjectiveObjects)
@@ -107,10 +123,52 @@ public class QuestManager : MonoBehaviour
         questRewardObjects.Clear();
         questObjects.Clear();
     }
+    #endregion
+    
+    public void RedeemItems(TriggerScript trigger, Quest quest)
+    {
+        selectedTrigger = trigger;
+        selectedQuest = quest;
 
+        foreach (HarvestQuest.RequiredQuestItem item in (selectedQuest as HarvestQuest).requiredQuestItems)
+        {
+            if (item.currentAmount == item.amountRequired)
+                continue;
+
+            int amountNeeded = item.currentAmount - item.amountRequired;
+
+            foreach (KeyValuePair<GameObject, string> value in selectedTrigger.storedObjects)
+            {
+                if (value.Value == "Crate" && value.Key.TryGetComponent(out CrateScript crate) && item.questItem == crate.storedItem)
+                {
+                    int amount = Mathf.Min(amountNeeded, crate.storedAmount);
+
+                    item.currentAmount += amount;
+                    crate.storedAmount -= amount;
+
+                    if (crate.storedAmount == 0)
+                        crate.storedItem = null;
+                }
+                else if (value.Value == "Dropped Item")
+                {
+                    DroppedItemScript droppedItem = value.Key.GetComponent<DroppedItemScript>();
+                    if (item.questItem != droppedItem.item)
+                        continue;
+                    item.currentAmount++;
+                    Destroy(value.Key);
+                }
+            }
+        }
+    }
+    #endregion
+    
+    #region UI Functions
     public void LoadQuest(Quest quest)
     {
-        questName.text = quest.name;
+        if (selectedRedeemStation != null)
+            selectedRedeemStation.selectedQuest = quest;
+
+        questName.text = quest.questName;
         questDescription.text = quest.description;
 
         LoadQuestObjectives(quest);
@@ -119,6 +177,10 @@ public class QuestManager : MonoBehaviour
 
     void LoadQuestObjectives(Quest quest)
     {
+        foreach (GameObject questObjectiveObject in questObjectiveObjects)
+            Destroy(questObjectiveObject);
+        questObjectiveObjects.Clear();
+
         if (quest is HarvestQuest)
         {
             HarvestQuest harvestQuest = quest as HarvestQuest;
@@ -137,6 +199,10 @@ public class QuestManager : MonoBehaviour
 
     void LoadQuestRewards(Quest quest)
     {
+        foreach (GameObject questRewardObject in questRewardObjects)
+            Destroy(questRewardObject);
+        questRewardObjects.Clear();
+
         foreach (Quest.Reward reward in quest.rewards)
         {
             GameObject questObjectiveUI = Instantiate(questRewardUI, questRewardParent);
@@ -150,5 +216,6 @@ public class QuestManager : MonoBehaviour
 
         rewardAmount.text = $"{quest.coinAmount}";
     }
+    #endregion
     #endregion
 }

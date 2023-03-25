@@ -153,13 +153,9 @@ public class PlayerController : MonoBehaviour
 
     bool isGrounded()
     {
-        Collider[] capsuleHitColliders = new Collider[1];
-        Physics.OverlapCapsuleNonAlloc(transform.position - Vector3.up * 0.8f, transform.position - Vector3.up * 1.05f, 0.25f, capsuleHitColliders, groundMask);
-
-        Collider[] cubeHitColliders = new Collider[1];
-        Physics.OverlapBoxNonAlloc(transform.position - Vector3.up * 0.925f, new Vector3(0.5f, 0.25f, 0.5f), cubeHitColliders, Quaternion.identity, groundMask);
-
-        return capsuleHitColliders[0] != null && capsuleHitColliders[0] == cubeHitColliders[0];
+        Collider[] capsuleHitColliders = Physics.OverlapCapsule(transform.position - Vector3.up * 0.8f, transform.position - Vector3.up * 1.05f, 0.25f, groundMask);
+        Collider[] cubeHitColliders = Physics.OverlapBox(transform.position - Vector3.up * 0.925f, new Vector3(0.5f, 0.25f, 0.5f), Quaternion.identity, groundMask);
+        return capsuleHitColliders.Intersect(cubeHitColliders).Count() != 0;
     }
     #endregion
 }
